@@ -1,11 +1,6 @@
 @RestResource(urlMapping='/clock')
 global class ClockResource {
 
-    @HttpGet
-    global static String hello() {
-        return 'hello';
-    }
-
     @HttpPost
     global static Slack.CommandResponse post() {
 
