@@ -17,6 +17,7 @@
 		<members>SlashclockReport</members>
 		<members>SlackUtil</members>
 		<members>TimeTest</members>
+		<members>DateTimeUtil</members>
 		<name>ApexClass</name>
 	</types>
 	<types>

@@ -6,7 +6,7 @@ public with sharing class SlashclockReport {
         this.items = new List<Item>();
     }
 
-    public void addItem(DateTime startTime, Time duration) {
+    public void addItem(DateTime startTime, DateTime duration) {
         this.items.add(new Item(startTime, duration));
     }
 
@@ -15,29 +15,30 @@ public with sharing class SlashclockReport {
     }
 
     public Item getSummaryItem() {
-        Time duration = Time.newInstance(0, 0, 0, 0);
+        DateTime zero = DateTime.newInstance(0);
+        DateTIme total = DateTime.newInstance(0);
 
         for (Item eachItem : this.items) {
-            duration.addHours(eachItem.getDuration().hour());
-            duration.addMinutes(eachItem.getDuration().minute());
+            total = total.addHours(eachItem.getDuration().hour());
+            total = total.addMinutes(eachItem.getDuration().minute());
         }
 
-        return new Item('SUM', duration);
+        return new Item('SUM', DateTimeUtil.getDuration(zero, total));
     }
 
     public class Item {
 
-        private Time duration;
+        private DateTime duration;
         private String label;
         private DateTime startTime;
 
-        public Item(DateTime startTime, Time duration) {
+        public Item(DateTime startTime, DateTime duration) {
             this.label = null;
             this.startTime = startTime;
             this.duration = duration;
         }
 
-        public Item(String label, Time duration) {
+        public Item(String label, DateTime duration) {
             this.label = label;
             this.startTime = null;
             this.duration = duration;
@@ -50,7 +51,8 @@ public with sharing class SlashclockReport {
          */
         public String formatDuration() {
             Decimal granularDuration =
-                    duration.hour() + (duration.minute() / 60.0);
+                    (this.duration.day() * 24) + duration.hour()
+                            + (duration.minute() / 60.0);
 
             return granularDuration + 'h';
         }
@@ -59,7 +61,7 @@ public with sharing class SlashclockReport {
             return this.startTime.format('EEE');
         }
 
-        public Time getDuration() {
+        public DateTIme getDuration() {
             return this.duration;
         }
 
