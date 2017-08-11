@@ -1,8 +1,12 @@
 global class Slack {
-    global class CommandResponse {
+    global class SlashCommandResponse {
         global String text { get; set; }
 
-        global CommandResponse(String text) {
+        global SlashCommandResponse() {
+            this(null);
+        }
+
+        global SlashCommandResponse(String text) {
             this.text = text;
         }
     }

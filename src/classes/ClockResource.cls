@@ -1,26 +1,16 @@
 @RestResource(urlMapping='/clock')
 global class ClockResource {
 
-    @HttpGet
-    global static String hello() {
-        return 'hello';
-    }
-
     @HttpPost
-    global static Slack.CommandResponse post() {
+    global static Slack.SlashCommandResponse post() {
 
         // Process the request
-        SlackCommand__c command = new SlackCommand__c();
-        //command.Body__c = RestContext.request.requestBody.toString();
-        command.Body__c = JSON.serialize(RestContext.request);
-        command.SlackUserId__c = RestContext.request.params.get('user_id');
-        command.SlackTeamId__c = RestContext.request.params.get('team_id');
-        insert command;
+        SlashCommand__c slash = SlashCommandUtil.parse(RestContext.request);
+        Slashclock.Command command = SlashclockUtil.newCommand(slash);
+        Slashclock.CommandResult result = command.execute();
 
         // Return the response
         RestContext.response.addHeader('Content-Type', 'application/json');
-        Slack.CommandResponse response = new Slack.CommandResponse(
-                'ID: ' + command.Id);
-        return response;
+        return new Slack.SlashCommandResponse(result.getMessage());
     }
 }
