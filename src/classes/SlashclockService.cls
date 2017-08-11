@@ -76,7 +76,22 @@ public with sharing class SlashclockService {
     }
 
     public Time2 getClockedDuration(DateTime startTime, DateTime endTime) {
-        return Time2.newInstance(0, 5, 15, 0, 0);
+        Time2 duration = Time2.newInstance();
+
+        for (TimeEntry__c eachEntry : [
+            SELECT Id, StartTime__c, EndTime__c
+            FROM TimeEntry__c
+            WHERE SlackUserId__c = :this.userId
+                AND SlackTeamId__c = :this.teamId
+                AND StartTime__c < :endTime
+                AND (EndTime__c >= :startTime OR EndTime__c = NULL)
+        ]) {
+            duration = duration.add(
+                    eachEntry.EndTime__c.getTime()
+                            - eachEntry.StartTime__c.getTime());
+        }
+
+        return duration;
     }
 
     public DateTime getDateStartTime(DateTime ref) {

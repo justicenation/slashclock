@@ -15,8 +15,12 @@ public with sharing class Time2 {
         this.remainder = Time.newInstance(hours, minutes, seconds, millis);
     }
 
+    public Time2 add(Long value) {
+        return newInstance(this.getTime() + value);
+    }
+
     public Time2 add(Time2 value) {
-        return newInstance(this.inMillis() + value.inMillis());
+        return this.add(value.getTime());
     }
 
     public Decimal inHours() {
@@ -27,7 +31,7 @@ public with sharing class Time2 {
         return total;
     }
 
-    public Long inMillis() {
+    public Long getTime() {
         return (((this.days * 24 /* hours per day */ + this.remainder.hour())
                 * 60 /* minutes per hour */ + this.remainder.minute())
                 * 60 /* seconds per minute */ + this.remainder.second())
