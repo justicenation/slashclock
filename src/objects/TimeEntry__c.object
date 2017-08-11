@@ -43,24 +43,21 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Slack commands sent to the API</description>
     <enableActivities>false</enableActivities>
-    <enableBulkApi>false</enableBulkApi>
+    <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
     <enableHistory>false</enableHistory>
     <enableReports>false</enableReports>
     <enableSearch>true</enableSearch>
-    <enableSharing>false</enableSharing>
-    <enableStreamingApi>false</enableStreamingApi>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
     <fields>
-        <fullName>Body__c</fullName>
-        <description>Raw body contained in the request from Slack</description>
+        <fullName>EndTIme__c</fullName>
         <externalId>false</externalId>
-        <label>Body</label>
-        <length>32768</length>
+        <label>End TIme</label>
+        <required>false</required>
         <trackTrending>false</trackTrending>
-        <type>LongTextArea</type>
-        <visibleLines>3</visibleLines>
+        <type>DateTime</type>
     </fields>
     <fields>
         <fullName>SlackTeamId__c</fullName>
@@ -82,18 +79,27 @@
         <type>Text</type>
         <unique>false</unique>
     </fields>
-    <label>Slack Command</label>
+    <fields>
+        <fullName>StartTime__c</fullName>
+        <defaultValue>NOW()</defaultValue>
+        <externalId>false</externalId>
+        <label>Start Time</label>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <label>Time Entry</label>
     <listViews>
         <fullName>All</fullName>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>
     <nameField>
-        <displayFormat>SC-{0000000000}</displayFormat>
-        <label>Slack Command Number</label>
+        <displayFormat>TE-{0000000000}</displayFormat>
+        <label>Time Entry Number</label>
         <type>AutoNumber</type>
     </nameField>
-    <pluralLabel>Slack Commands</pluralLabel>
+    <pluralLabel>Time Entries</pluralLabel>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>

@@ -3,14 +3,20 @@
     <types>
         <members>ClockResource</members>
         <members>Slack</members>
+        <members>SlashclockException</members>
+        <members>SlashclockService</members>
+        <members>SlashclockServiceTest</members>
+        <members>TestService</members>
         <name>ApexClass</name>
     </types>
     <types>
-        <members>SlackCommand__c</members>
+        <members>SlashCommand__c</members>
+        <members>TimeEntry__c</members>
         <name>CustomObject</name>
     </types>
     <types>
-        <members>SlackCommand__c</members>
+        <members>SlashCommand__c</members>
+        <members>TimeEntry__c</members>
         <name>CustomTab</name>
     </types>
     <version>39.0</version>

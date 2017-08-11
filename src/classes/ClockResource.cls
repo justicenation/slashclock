@@ -5,9 +5,10 @@ global class ClockResource {
     global static Slack.CommandResponse post() {
 
         // Process the request
-        SlackCommand__c command = new SlackCommand__c();
-        //command.Body__c = RestContext.request.requestBody.toString();
-        command.Body__c = JSON.serialize(RestContext.request);
+        SlashCommand__c command = new SlashCommand__c();
+        command.Request__c = JSON.serialize(RestContext.request);
+        command.Command__c = RestContext.request.params.get('command');
+        command.Text__c = RestContext.request.params.get('text');
         command.SlackUserId__c = RestContext.request.params.get('user_id');
         command.SlackTeamId__c = RestContext.request.params.get('team_id');
         insert command;
