@@ -6,7 +6,7 @@ public with sharing class SlashclockReport {
         this.items = new List<Item>();
     }
 
-    public void addItem(DateTime startTime, DateTime duration) {
+    public void addItem(DateTime startTime, Time2 duration) {
         this.items.add(new Item(startTime, duration));
     }
 
@@ -15,30 +15,28 @@ public with sharing class SlashclockReport {
     }
 
     public Item getSummaryItem() {
-        DateTime zero = DateTime.newInstance(0);
-        DateTIme total = DateTime.newInstance(0);
+        Time2 total = Time2.newInstance();
 
         for (Item eachItem : this.items) {
-            total = total.addHours(eachItem.getDuration().hour());
-            total = total.addMinutes(eachItem.getDuration().minute());
+            total = total.add(eachItem.getDuration());
         }
 
-        return new Item('SUM', DateTimeUtil.getDuration(zero, total));
+        return new Item('SUM', total);
     }
 
     public class Item {
 
-        private DateTime duration;
+        private Time2 duration;
         private String label;
         private DateTime startTime;
 
-        public Item(DateTime startTime, DateTime duration) {
+        public Item(DateTime startTime, Time2 duration) {
             this.label = null;
             this.startTime = startTime;
             this.duration = duration;
         }
 
-        public Item(String label, DateTime duration) {
+        public Item(String label, Time2 duration) {
             this.label = label;
             this.startTime = null;
             this.duration = duration;
@@ -50,18 +48,14 @@ public with sharing class SlashclockReport {
          *         or milliseconds
          */
         public String formatDuration() {
-            Decimal granularDuration =
-                    (this.duration.day() * 24) + duration.hour()
-                            + (duration.minute() / 60.0);
-
-            return granularDuration + 'h';
+            return this.duration.inHours() + 'h';
         }
 
         public String formatStartTime() {
             return this.startTime.format('EEE');
         }
 
-        public DateTIme getDuration() {
+        public Time2 getDuration() {
             return this.duration;
         }
 

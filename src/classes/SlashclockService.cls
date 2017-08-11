@@ -75,11 +75,8 @@ public with sharing class SlashclockService {
         return entry;
     }
 
-    public DateTime getClockedDuration(DateTime startTime, DateTime endTime) {
-        DateTime duration = DateTime.newInstance(0);
-        duration = duration.addHours(8);
-        duration = duration.addMinutes(30);
-        return duration;
+    public Time2 getClockedDuration(DateTime startTime, DateTime endTime) {
+        return Time2.newInstance(0, 5, 15, 0, 0);
     }
 
     public DateTime getDateStartTime(DateTime ref) {
