@@ -86,6 +86,19 @@ public with sharing class SlashclockService {
                 AND StartTime__c < :endTime
                 AND (EndTime__c >= :startTime OR EndTime__c = NULL)
         ]) {
+
+            // Use the range start time if the entry's start time is earlier
+            if (eachEntry.StartTime__c < startTime) {
+                eachEntry.StartTime__c = startTime;
+            }
+
+            // Use the range end time if no end time specified or if
+            // the entry's end time is later
+            if (eachEntry.EndTime__c == null || eachEntry.EndTime__c > endTime) {
+                eachEntry.EndTime__c = endTime;
+            }
+
+            // Add the duration
             duration = duration.add(
                     eachEntry.EndTime__c.getTime()
                             - eachEntry.StartTime__c.getTime());
