@@ -92,9 +92,13 @@ public with sharing class SlashclockService {
                 eachEntry.StartTime__c = startTime;
             }
 
-            // Use the range end time if no end time specified or if
-            // the entry's end time is later
-            if (eachEntry.EndTime__c == null || eachEntry.EndTime__c > endTime) {
+            // Use the range end time if no end time specified
+            if (eachEntry.EndTime__c == null) {
+                eachEntry.EndTime__c = DateTime.now();
+            }
+
+            // Use the range end time if the effective end time is later
+            if (eachEntry.EndTime__c > endTime) {
                 eachEntry.EndTime__c = endTime;
             }
 
