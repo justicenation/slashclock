@@ -75,6 +75,14 @@ public with sharing class SlashclockService {
         return entry;
     }
 
+    public Time getClockedDuration(DateTime startTime, DateTime endTime) {
+        return Time.newInstance(8, 30, 0, 0);
+    }
+
+    public DateTime getDateStartTime(DateTime ref) {
+        return ref;
+    }
+
     /**
      * @return all open time entries for the user in context
      */
@@ -101,7 +109,19 @@ public with sharing class SlashclockService {
         // Initialize the report
         SlashclockReport report = new SlashclockReport();
 
-        // TODO
+        // Initialize the list of days for which we need to aggregate data
+        DateTime lastDayStartTime = this.getDateStartTime(endTime);
+        List<DateTime> reportDays = new List<DateTime> { lastDayStartTime };
+        while (reportDays.size() < 7) {
+            reportDays.add(0, reportDays.get(0).addDays(-1));
+        }
+
+        // Go through every day for which we need to aggregate data
+        for (DateTime eachDay : reportDays) {
+            report.addItem(
+                    eachDay,
+                    this.getClockedDuration(eachDay, eachDay.addDays(1)));
+        }
 
         // Return the compiled report
         return report;

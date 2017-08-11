@@ -25,6 +25,19 @@ public with sharing class SlackUtil {
     }
 
     public static String format(SlashclockReport.Item item) {
-        return 'TODO';
+
+        // Initialize the list of parts expected in a line representing
+        // an item in the report. Each item really only has two parts right
+        // now: day of week, and amount of time.
+        List<String> parts = new List<String>();
+
+        // Add the formatted day of week
+        parts.add(item.getLabel());
+
+        // Add the formatted amount of time
+        parts.add(item.formatDuration());
+
+        // Return the formatted parts
+        return String.join(parts, ' ');
     }
 }
