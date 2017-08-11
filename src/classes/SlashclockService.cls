@@ -1,7 +1,10 @@
 public with sharing class SlashclockService {
 
     public static final String ALREADY_CLOCKED_IN_ERROR =
-            'Uh, you already clocked in earlier.';
+            'Uh, you already clocked in earlier...';
+
+    public static final String CLOCKED_IN_SUCCESS =
+            'You have clocked in.';
 
     /**
      * Slack Team ID
@@ -54,7 +57,21 @@ public with sharing class SlashclockService {
         ];
     }
 
+    public static SlashclockService getInstance(SlashclockService.Key serviceKey) {
+        return getInstance(serviceKey.userId, serviceKey.teamId);
+    }
+
     public static SlashclockService getInstance(String userId, String teamId) {
         return new SlashclockService(userId, teamId);
+    }
+
+    public class Key {
+        public String teamId { get; set; }
+        public String userId { get; set; }
+
+        public Key(String userId, String teamId) {
+            this.userId = userId;
+            this.teamId = teamId;
+        }
     }
 }
