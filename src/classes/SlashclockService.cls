@@ -6,6 +6,12 @@ public with sharing class SlashclockService {
     public static final String CLOCKED_IN_SUCCESS =
             'You have clocked in.';
 
+    public static final String CLOCKED_OUT_SUCCESS =
+            'You have clocked out.';
+
+    public static final String NOT_CLOCKED_IN_ERROR =
+            'You must clock in first!';
+
     /**
      * Slack Team ID
      */
@@ -46,6 +52,30 @@ public with sharing class SlashclockService {
     }
 
     /**
+     * @param endTime
+     *            The time at which the user clocked out
+     *
+     * @return updated time entry
+     */
+    public TimeEntry__c clockOut(DateTime endTime) {
+
+        // Look for existing open entries
+        List<TimeEntry__c> openTimeEntries = this.getOpenTimeEntries();
+        if (openTimeEntries.isEmpty()) {
+            throw new SlashclockException(NOT_CLOCKED_IN_ERROR);
+        }
+
+        // Update and return the open time entry.
+        // TODO: Handle edge case where multiple open entries exist.
+        TimeEntry__c entry =
+                openTimeEntries.get(openTimeEntries.size() - 1);
+        entry.EndTime__c = endTime;
+
+        update entry;
+        return entry;
+    }
+
+    /**
      * @return all open time entries for the user in context
      */
     public List<TimeEntry__c> getOpenTimeEntries() {
@@ -54,6 +84,7 @@ public with sharing class SlashclockService {
             FROM TimeEntry__c
             WHERE SlackUserId__c = :this.userId
                 AND SlackTeamId__c = :this.teamId
+                AND EndTime__c = NULL
         ];
     }
 

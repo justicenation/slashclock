@@ -12,6 +12,7 @@
 		<members>SlashclockUtil</members>
 		<members>ClockResourceTest</members>
 		<members>SlashclockInCommand</members>
+		<members>SlashclockOutCommand</members>
 		<name>ApexClass</name>
 	</types>
 	<types>
