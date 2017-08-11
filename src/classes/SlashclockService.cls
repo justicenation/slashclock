@@ -84,6 +84,7 @@ public with sharing class SlashclockService {
             FROM TimeEntry__c
             WHERE SlackUserId__c = :this.userId
                 AND SlackTeamId__c = :this.teamId
+                AND EndTime__c = NULL
         ];
     }
 
