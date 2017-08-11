@@ -96,6 +96,17 @@ public with sharing class SlashclockService {
         return new SlashclockService(userId, teamId);
     }
 
+    public SlashclockReport report(DateTime endTime) {
+
+        // Initialize the report
+        SlashclockReport report = new SlashclockReport();
+
+        // TODO
+
+        // Return the compiled report
+        return report;
+    }
+
     public class Key {
         public String teamId { get; set; }
         public String userId { get; set; }

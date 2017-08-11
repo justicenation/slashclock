@@ -13,6 +13,9 @@
 		<members>ClockResourceTest</members>
 		<members>SlashclockInCommand</members>
 		<members>SlashclockOutCommand</members>
+		<members>SlashclockReportCommand</members>
+		<members>SlashclockReport</members>
+		<members>SlackUtil</members>
 		<name>ApexClass</name>
 	</types>
 	<types>
