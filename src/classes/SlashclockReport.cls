@@ -1,66 +1,47 @@
 public with sharing class SlashclockReport {
 
-    private List<Item> items;
+    public static String DEFAULT_SUMMARY_SEPARATOR = '--';
+
+    private List<SlashclockReportItem> items;
 
     public SlashclockReport() {
-        this.items = new List<Item>();
+        this.items = new List<SlashclockReportItem>();
     }
 
-    public void addItem(DateTime startTime, Time2 duration) {
-        this.items.add(new Item(startTime, duration));
+    public void addItem(SlashclockReportItem item) {
+        this.items.add(item);
     }
 
-    public List<Item> getItems() {
-        return this.items;
+    public String format() {
+
+        // Initialize the lines to expect in the report
+        List<String> lines = new List<String>();
+
+        // Add the individual items
+        for (SlashclockReportItem eachItem : this.items) {
+            lines.add(eachItem.format());
+        }
+
+        // Add the summary separator and summary item
+        lines.add(DEFAULT_SUMMARY_SEPARATOR);
+        lines.add(this.getSummaryItem().format());
+
+        // Return the lines joined by the line break
+        return String.join(lines, '\n');
     }
 
-    public Item getSummaryItem() {
-        Time2 total = Time2.newInstance();
+    public SlashclockReportItem getSummaryItem() {
 
-        for (Item eachItem : this.items) {
-            total = total.add(eachItem.getDuration());
+        // Initialize the summary item with zero duration
+        SlashclockReportItem summary =
+                SlashclockReportItem.newInstance('*SUM*', Time2.newInstance());
+
+        // Add all of the individual items
+        for (SlashclockReportItem eachItem : this.items) {
+            summary = summary.add(eachItem);
         }
 
-        return new Item('SUM', total);
-    }
-
-    public class Item {
-
-        private Time2 duration;
-        private String label;
-        private DateTime startTime;
-
-        public Item(DateTime startTime, Time2 duration) {
-            this.label = null;
-            this.startTime = startTime;
-            this.duration = duration;
-        }
-
-        public Item(String label, Time2 duration) {
-            this.label = label;
-            this.startTime = null;
-            this.duration = duration;
-        }
-
-        /**
-         * @return the total duration represnted in the report item, in
-         *         number of hours, accounting for minutes but not seconds
-         *         or milliseconds
-         */
-        public String formatDuration() {
-            return this.duration.inHours() + 'h';
-        }
-
-        public String formatStartTime() {
-            return this.startTime.format('EEE');
-        }
-
-        public Time2 getDuration() {
-            return this.duration;
-        }
-
-        public String getLabel() {
-            return this.startTime == null ? this.label : this.formatStartTime();
-        }
+        // Return the summary item
+        return summary;
     }
 }

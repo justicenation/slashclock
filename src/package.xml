@@ -18,6 +18,11 @@
 		<members>SlackUtil</members>
 		<members>TimeTest</members>
 		<members>Time2</members>
+		<members>SlashclockReportItem</members>
+		<members>SlashclockReportSlice</members>
+		<members>SlashclockReportSliceTest</members>
+		<members>SlashclockReportItemTest</members>
+		<members>SlashclockReportTest</members>
 		<name>ApexClass</name>
 	</types>
 	<types>

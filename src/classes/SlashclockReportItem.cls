@@ -10,6 +10,33 @@ public with sharing class SlashclockReportItem {
         this.slicesByTag = new Map<String, SlashclockReportSlice>();
     }
 
+    public SlashclockReportItem add(SlashclockReportItem other) {
+
+        // Initialize the new item, using the current item as the base
+        SlashclockReportItem newItem =
+                SlashclockReportItem.newInstance(this.label, this.duration);
+
+        // Add the existing item's slices
+        for (SlashclockReportSlice eachSlice : this.getSlices()) {
+            newItem.addSlice(eachSlice);
+        }
+
+        // Add the other item's duration
+        newItem.addDuration(other.getDuration());
+
+        // Add the other item's slices
+        for (SlashclockReportSlice eachSlice : other.getSlices()) {
+            newItem.addSlice(eachSlice);
+        }
+
+        // Return the new item
+        return newItem;
+    }
+
+    public void addDuration(Time2 duration) {
+        this.duration = this.duration.add(duration);
+    }
+
     public void addSlice(SlashclockReportSlice slice) {
         if (this.slicesByTag.containsKey(slice.getTag())) {
             this.slicesByTag.get(slice.getTag()).increase(slice.getDuration());
@@ -65,8 +92,16 @@ public with sharing class SlashclockReportItem {
         return '(' + String.join(sliceParts, '; ') + ')';
     }
 
+    public Time2 getDuration() {
+        return this.duration;
+    }
+
     public SlashclockReportSlice getSlice(String tag) {
         return this.slicesByTag.get(tag);
+    }
+
+    public List<SlashclockReportSlice> getSlices() {
+        return this.slicesByTag.values();
     }
 
     public static SlashclockReportItem newInstance(DateTime startTime, String timeZoneSidKey, Time2 duration) {
