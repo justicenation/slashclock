@@ -1,4 +1,4 @@
-public with sharing class Time2 {
+public class Time2 {
 
     private Integer days;
     private Time remainder;
@@ -23,12 +23,8 @@ public with sharing class Time2 {
         return this.add(value.getTime());
     }
 
-    public Decimal inHours() {
-        Decimal total = this.days * 24 + this.remainder.hour();
-        total += this.remainder.minute() / 60.0;
-        total += this.remainder.second() / 60.0 / 60.0;
-        total += this.remainder.millisecond() / 60.0 / 60.0 / 60.0;
-        return total;
+    public String formatH() {
+        return this.hours() + 'h';
     }
 
     public Long getTime() {
@@ -36,6 +32,14 @@ public with sharing class Time2 {
                 * 60 /* minutes per hour */ + this.remainder.minute())
                 * 60 /* seconds per minute */ + this.remainder.second())
                 * 1000 /* ms per second */ + this.remainder.millisecond();
+    }
+
+    public Decimal hours() {
+        Decimal total = this.days * 24 + this.remainder.hour();
+        total += this.remainder.minute() / 60.0;
+        total += this.remainder.second() / 60.0 / 60.0;
+        total += this.remainder.millisecond() / 60.0 / 60.0 / 60.0;
+        return total;
     }
 
     public static Time2 newInstance() {
