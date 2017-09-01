@@ -12,10 +12,14 @@ public with sharing class SlashclockService {
     public static final String NOT_CLOCKED_IN_ERROR =
             'You must clock in first!';
 
+    private Weekday firstDayOfWeek;
+
     /**
      * Slack Team ID
      */
     private String teamId;
+
+    private String timeZoneSidKey;
     
     /**
      * Slack User ID
@@ -24,7 +28,11 @@ public with sharing class SlashclockService {
 
     public SlashclockService(String userId, String teamId) {
         this.userId = userId;
-        this.teamId = teamId;        
+        this.teamId = teamId;
+
+        // TODO: Make dynamic based on Slack user preference
+        this.timeZoneSidKey = 'America/New_York';
+        this.firstDayOfWeek = Weekday.MONDAY;
     }
 
     /**
@@ -111,10 +119,6 @@ public with sharing class SlashclockService {
         return duration;
     }
 
-    public DateTime getDateStartTime(DateTime ref) {
-        return ref;
-    }
-
     /**
      * @return all open time entries for the user in context
      */
@@ -136,23 +140,29 @@ public with sharing class SlashclockService {
         return new SlashclockService(userId, teamId);
     }
 
+    public DateTime getStartOfWeek(DateTime value) {
+        return DateTimeUtil.startOfWeek(
+                value, this.timeZoneSidKey, this.firstDayOfWeek);
+    }
+
     public SlashclockReport report(DateTime endTime) {
 
         // Initialize the report
         SlashclockReport report = new SlashclockReport();
 
         // Initialize the list of days for which we need to aggregate data
-        DateTime lastDayStartTime = this.getDateStartTime(endTime);
-        List<DateTime> reportDays = new List<DateTime> { lastDayStartTime };
+        DateTime startOfWeek = this.getStartOfWeek(endTime);
+        List<DateTime> reportDays = new List<DateTime> { startOfWeek };
         while (reportDays.size() < 7) {
-            reportDays.add(0, reportDays.get(0).addDays(-1));
+            reportDays.add(reportDays.get(reportDays.size() - 1).addDays(1));
         }
 
         // Go through every day for which we need to aggregate data
         for (DateTime eachDay : reportDays) {
-            report.addItem(
+            report.addItem(SlashclockReportItem.newInstance(
                     eachDay,
-                    this.getClockedDuration(eachDay, eachDay.addDays(1)));
+                    this.timeZoneSidKey,
+                    this.getClockedDuration(eachDay, eachDay.addDays(1))));
         }
 
         // Return the compiled report

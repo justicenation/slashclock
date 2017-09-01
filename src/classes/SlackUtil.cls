@@ -6,7 +6,7 @@ public with sharing class SlackUtil {
         List<String> lines = new List<String>();
         
         // Go through every daily item in the report, and format the item
-        for (SlashclockReport.Item eachItem : report.getItems()) {
+        for (SlashclockReportItem eachItem : report.getItems()) {
             lines.add(format(eachItem));
         }
 
@@ -24,20 +24,7 @@ public with sharing class SlackUtil {
         return String.join(lines, '\n');
     }
 
-    public static String format(SlashclockReport.Item item) {
-
-        // Initialize the list of parts expected in a line representing
-        // an item in the report. Each item really only has two parts right
-        // now: day of week, and amount of time.
-        List<String> parts = new List<String>();
-
-        // Add the formatted day of week
-        parts.add(item.getLabel());
-
-        // Add the formatted amount of time
-        parts.add(item.formatDuration());
-
-        // Return the formatted parts
-        return String.join(parts, ' ');
+    public static String format(SlashclockReportItem item) {
+        return item.format();
     }
 }

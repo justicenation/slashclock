@@ -12,6 +12,10 @@ public with sharing class SlashclockReport {
         this.items.add(item);
     }
 
+    public List<SlashclockReportItem> getItems() {
+        return this.items;
+    }
+
     public String format() {
 
         // Initialize the lines to expect in the report

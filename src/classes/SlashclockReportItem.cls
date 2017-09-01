@@ -96,6 +96,10 @@ public with sharing class SlashclockReportItem {
         return this.duration;
     }
 
+    public String getLabel() {
+        return this.label;
+    }
+
     public SlashclockReportSlice getSlice(String tag) {
         return this.slicesByTag.get(tag);
     }
