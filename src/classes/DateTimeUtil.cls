@@ -58,7 +58,7 @@ public with sharing class DateTimeUtil {
 
         // Apply the appropriate time zone offset
         TimeZone zone = TimeZone.getTimeZone(timeZoneSidKey);
-        Integer offset = zone.getOffset(refDate);
+        Integer offset = zone.getOffset(startDate);
 
         return DateTime.newInstance(startOfWeekGmt.getTime() - offset);
     }
