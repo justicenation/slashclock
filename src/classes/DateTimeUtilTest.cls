@@ -115,6 +115,9 @@ private class DateTimeUtilTest {
     }
 
     /**
+     * Make sure that, when `startOfWeek` is invoked at exactly the first minute
+     * of a new week, the same minute is returned.
+     *
      * Given August 28, 2017 12:00am EDT
      * and time zone "America/New_York"
      * and Monday being the start of the week;
@@ -143,6 +146,88 @@ private class DateTimeUtilTest {
         Test.stopTest();
 
         System.assertEquals('2017-08-28T00:00:00-0400',
+                startOfWeek.format(dateFormat, tz),
+                'startOfWeek');
+    }
+
+    /**
+     * Make sure that the correct start of week time is returned during
+     * the week when Boston goes from Eastern Standard Time to
+     * Eastern Daylight Time.
+     *
+     * When local standard time was about to reach
+     * Sunday, March 12, 2017, 2:00:00 am clocks were turned forward 1 hour to 
+     * Sunday, March 12, 2017, 3:00:00 am local daylight time instead.
+     *
+     * Given March 15, 2017 9:30am EDT
+     * and time zone "America/New_York"
+     * and Sunday being the start of the week;
+     * When `startOfWeek` is invoked with the given parameters;
+     * Then 2017-03-12T00:00:00.000-0500 is returned
+     */
+    @isTest
+    private static void startOfWeekFor201703150930edtFirstDaySunday() {
+
+        // Given
+        DateTime refDate = DateTime.newInstanceGmt(2017, 3, 15, 13, 30, 0);
+        String tz = 'America/New_York';
+        String dateFormat = 'yyyy-MM-dd\'T\'HH:mm:ssZ';
+
+        System.assertEquals('2017-03-15T09:30:00-0400',
+                refDate.format(dateFormat, tz),
+                refDate.format());
+
+        // When
+        Test.startTest();
+
+        DateTime startOfWeek =
+                DateTimeUtil.startOfWeek(refDate, tz, Weekday.SUNDAY);
+
+        // Then
+        Test.stopTest();
+
+        System.assertEquals('2017-03-12T00:00:00-0500',
+                startOfWeek.format(dateFormat, tz),
+                'startOfWeek');
+    }
+
+    /**
+     * Make sure that the correct start of week time is returned during
+     * the week when Boston goes from Eastern Daylight Time to
+     * Eastern Standard Time.
+     *
+     * When local daylight time is about to reach
+     * Sunday, November 5, 2017, 2:00:00 am clocks are turned backward 1 hour to 
+     * Sunday, November 5, 2017, 1:00:00 am local standard time instead.
+     *
+     * Given November 8, 2017 9:30am EST
+     * and time zone "America/New_York"
+     * and Sunday being the start of the week;
+     * When `startOfWeek` is invoked with the given parameters;
+     * Then 2017-11-05T00:00:00.000-0400 is returned
+     */
+    @isTest
+    private static void startOfWeekFor20171105930estFirstDaySunday() {
+
+        // Given
+        DateTime refDate = DateTime.newInstanceGmt(2017, 11, 8, 14, 30, 0);
+        String tz = 'America/New_York';
+        String dateFormat = 'yyyy-MM-dd\'T\'HH:mm:ssZ';
+
+        System.assertEquals('2017-11-08T09:30:00-0500',
+                refDate.format(dateFormat, tz),
+                refDate.format());
+
+        // When
+        Test.startTest();
+
+        DateTime startOfWeek =
+                DateTimeUtil.startOfWeek(refDate, tz, Weekday.SUNDAY);
+
+        // Then
+        Test.stopTest();
+
+        System.assertEquals('2017-11-05T00:00:00-0400',
                 startOfWeek.format(dateFormat, tz),
                 'startOfWeek');
     }
