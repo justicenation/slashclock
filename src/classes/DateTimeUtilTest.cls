@@ -113,4 +113,37 @@ private class DateTimeUtilTest {
                 startOfWeek.format(dateFormat, tz),
                 'startOfWeek');
     }
+
+    /**
+     * Given August 28, 2017 12:00am EDT
+     * and time zone "America/New_York"
+     * and Monday being the start of the week;
+     * When `startOfWeek` is invoked with the given parameters;
+     * Then 2017-08-28T04:00:00.000Z is returned
+     */
+    @isTest
+    private static void startOfWeekFor201708280000edtFirstDayMonday() {
+
+        // Given
+        DateTime refDate = DateTime.newInstanceGmt(2017, 8, 28, 4, 0, 0);
+        String tz = 'America/New_York';
+        String dateFormat = 'yyyy-MM-dd\'T\'HH:mm:ssZ';
+
+        System.assertEquals('2017-08-28T00:00:00-0400',
+                refDate.format(dateFormat, tz),
+                refDate.format());
+
+        // When
+        Test.startTest();
+
+        DateTime startOfWeek =
+                DateTimeUtil.startOfWeek(refDate, tz, Weekday.MONDAY);
+
+        // Then
+        Test.stopTest();
+
+        System.assertEquals('2017-08-28T00:00:00-0400',
+                startOfWeek.format(dateFormat, tz),
+                'startOfWeek');
+    }
 }
