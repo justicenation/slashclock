@@ -23,6 +23,9 @@
 		<members>SlashclockReportSliceTest</members>
 		<members>SlashclockReportItemTest</members>
 		<members>SlashclockReportTest</members>
+		<members>DateTimeUtil</members>
+		<members>DateTimeUtilTest</members>
+		<members>Weekday</members>
 		<name>ApexClass</name>
 	</types>
 	<types>
