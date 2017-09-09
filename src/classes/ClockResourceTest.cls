@@ -163,7 +163,7 @@ private class ClockResourceTest {
             WHERE Id = :openEntries[0].Id
         ];
 
-        System.assert(closedEntry.EndTIme__c >= closedEntry.StartTime__c,
+        System.assert(closedEntry.EndTime__c >= closedEntry.StartTime__c,
                 'entry end time should be after start time');
 
         System.assertEquals(SlashclockService.CLOCKED_OUT_SUCCESS, commandRes.text,
@@ -219,7 +219,7 @@ private class ClockResourceTest {
             WHERE Id = :openEntries[0].Id
         ];
 
-        System.assert(closedEntry.EndTIme__c >= closedEntry.StartTime__c,
+        System.assert(closedEntry.EndTime__c >= closedEntry.StartTime__c,
                 'entry end time should be after start time');
 
         System.assertEquals(SlashclockService.CLOCKED_OUT_SUCCESS, firstCommandRes.text,

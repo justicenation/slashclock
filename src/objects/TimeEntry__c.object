@@ -52,7 +52,7 @@
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <fields>
-        <fullName>EndTIme__c</fullName>
+        <fullName>EndTime__c</fullName>
         <externalId>false</externalId>
         <label>End TIme</label>
         <required>false</required>
