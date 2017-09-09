@@ -79,7 +79,7 @@ private class SlashclockReportTest {
             'Tue 7h (1h trails)',
             'Wed 9h (1h cert; 0.5h trails)',
             SlashclockReport.DEFAULT_SUMMARY_SEPARATOR,
-            '*SUM* 24h (1h cert; 1.5h trails)'
+            'SUM 24h (1h cert; 1.5h trails)'
         };
 
         System.assertEquals(String.join(expectedLines, '\n'), formatted);
