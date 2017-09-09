@@ -47,26 +47,17 @@ public with sharing class SlashclockUtil {
         // Initialize the list
         List<SlashclockReportItem> items = new List<SlashclockReportItem>();
 
-        // Figure out the start times for every day in the report range
-        List<DateTime> dailyStartTimes = new List<DateTime> { startTime };
-
-        while (dailyStartTimes.size() < numberOfDays) {
-            dailyStartTimes.add(
-                    dailyStartTimes.get(
-                            dailyStartTimes.size() - 1).addDays(1));
-        }
-
         // Go through all of the days we're tracking and figure out
         // which time entries to incorporate into the day's hours
-        for (DateTime eachStartTime : dailyStartTimes) {
+        for (DateTime t = startTime;
+                items.size() < numberOfDays; t = t.addDays(1)) {
 
-            // Initialize a report item for the start time
+            // Initialize a report item for the day
             SlashclockReportItem item = SlashclockReportItem.newInstance(
-                    eachStartTime, timeZoneSidKey, Time2.newInstance());
+                    t, timeZoneSidKey, Time2.newInstance());
 
             // Incorporate every qualifying time entry into the report item
-            for (TimeEntry__c eachEntry
-                    : qualify(entries, startTime, startTime.addDays(1))) {
+            for (TimeEntry__c eachEntry : qualify(entries, t, t.addDays(1))) {
 
                 // Add the time entry's duration
                 DateTime effectiveEndTime = eachEntry.EndTime__c == null
