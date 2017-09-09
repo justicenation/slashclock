@@ -86,14 +86,7 @@ public with sharing class SlashclockService {
     public Time2 getClockedDuration(DateTime startTime, DateTime endTime) {
         Time2 duration = Time2.newInstance();
 
-        for (TimeEntry__c eachEntry : [
-            SELECT Id, StartTime__c, EndTime__c
-            FROM TimeEntry__c
-            WHERE SlackUserId__c = :this.userId
-                AND SlackTeamId__c = :this.teamId
-                AND StartTime__c < :endTime
-                AND (EndTime__c >= :startTime OR EndTime__c = NULL)
-        ]) {
+        for (TimeEntry__c eachEntry : this.getTimeEntries(startTime, endTime)) {
 
             // Use the range start time if the entry's start time is earlier
             if (eachEntry.StartTime__c < startTime) {
@@ -143,6 +136,19 @@ public with sharing class SlashclockService {
     public DateTime getStartOfWeek(DateTime value) {
         return DateTimeUtil.startOfWeek(
                 value, this.timeZoneSidKey, this.firstDayOfWeek);
+    }
+
+    public List<TimeEntry__c> getTimeEntries(DateTime startTime, DateTime endTime) {
+        return [
+            SELECT Id, StartTime__c, EndTime__c,
+                (SELECT Id, NumberOfMinutes__c, Tag__c FROM TimeSlices__r)
+            FROM TimeEntry__c
+            WHERE SlackUserId__c = :this.userId
+                AND SlackTeamId__c = :this.teamId
+                AND StartTime__c < :endTime
+                AND (EndTime__c >= :startTime OR EndTime__c = NULL)
+            ORDER BY StartTime__c ASC
+        ];
     }
 
     public SlashclockReport report(DateTime endTime) {

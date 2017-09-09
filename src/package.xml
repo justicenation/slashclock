@@ -26,6 +26,7 @@
 		<members>DateTimeUtil</members>
 		<members>DateTimeUtilTest</members>
 		<members>Weekday</members>
+		<members>SlashclockUtilTest</members>
 		<name>ApexClass</name>
 	</types>
 	<types>

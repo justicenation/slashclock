@@ -33,6 +33,10 @@ public with sharing class SlashclockReportItem {
         return newItem;
     }
 
+    public void addDuration(Long duration) {
+        this.duration = this.duration.add(duration);
+    }
+
     public void addDuration(Time2 duration) {
         this.duration = this.duration.add(duration);
     }
