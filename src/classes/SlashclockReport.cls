@@ -38,7 +38,7 @@ public with sharing class SlashclockReport {
 
         // Initialize the summary item with zero duration
         SlashclockReportItem summary =
-                SlashclockReportItem.newInstance('*SUM*', Time2.newInstance());
+                SlashclockReportItem.newInstance('SUM', Time2.newInstance());
 
         // Add all of the individual items
         for (SlashclockReportItem eachItem : this.items) {

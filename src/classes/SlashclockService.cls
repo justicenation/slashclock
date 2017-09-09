@@ -153,22 +153,18 @@ public with sharing class SlashclockService {
 
     public SlashclockReport report(DateTime endTime) {
 
+        // Figure out the start of the week for the given end time
+        DateTime startOfWeek = this.getStartOfWeek(endTime);
+
         // Initialize the report
         SlashclockReport report = new SlashclockReport();
 
-        // Initialize the list of days for which we need to aggregate data
-        DateTime startOfWeek = this.getStartOfWeek(endTime);
-        List<DateTime> reportDays = new List<DateTime> { startOfWeek };
-        while (reportDays.size() < 7) {
-            reportDays.add(reportDays.get(reportDays.size() - 1).addDays(1));
-        }
-
         // Go through every day for which we need to aggregate data
-        for (DateTime eachDay : reportDays) {
-            report.addItem(SlashclockReportItem.newInstance(
-                    eachDay,
-                    this.timeZoneSidKey,
-                    this.getClockedDuration(eachDay, eachDay.addDays(1))));
+        for (SlashclockReportItem eachItem
+                : SlashclockUtil.newDailyReportItems(
+                        startOfWeek, endTime, this.timeZoneSidKey,
+                        this.getTimeEntries(startOfWeek, endTime), 7)) {
+            report.addItem(eachItem);
         }
 
         // Return the compiled report
