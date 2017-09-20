@@ -1,5 +1,7 @@
 public with sharing class DateTimeUtil {
 
+    public static final String GMT_TIME_ZONE_SID_KEY = 'GMT';
+
     public static Date getDate(DateTime value, String timeZoneSidKey) {
         return Date.valueOf(value.format('yyyy-MM-dd', timeZoneSidKey));
     }

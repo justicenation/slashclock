@@ -27,9 +27,13 @@
 		<members>DateTimeUtilTest</members>
 		<members>Weekday</members>
 		<members>SlashclockUtilTest</members>
+		<members>SlashclockInCommandTest</members>
+		<members>SlackService</members>
 		<name>ApexClass</name>
 	</types>
 	<types>
+		<members>Account</members>
+		<members>Contact</members>
 		<members>SlashCommand__c</members>
 		<members>TimeEntry__c</members>
 		<name>CustomObject</name>
