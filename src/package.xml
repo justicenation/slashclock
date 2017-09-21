@@ -29,6 +29,8 @@
 		<members>SlashclockUtilTest</members>
 		<members>SlashclockInCommandTest</members>
 		<members>SlackService</members>
+		<members>TimeUtil</members>
+		<members>TimeUtilTest</members>
 		<name>ApexClass</name>
 	</types>
 	<types>

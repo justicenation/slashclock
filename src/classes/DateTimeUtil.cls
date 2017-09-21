@@ -1,9 +1,7 @@
 public with sharing class DateTimeUtil {
 
     public static final String GMT_TIME_ZONE_SID_KEY = 'GMT';
-
-    public static final String TIME_REGEX = '(\\d{1,2}):(\\d{2}) *(am|pm)';
-
+    
     public static Date getDate(DateTime value, String timeZoneSidKey) {
         return Date.valueOf(value.format('yyyy-MM-dd', timeZoneSidKey));
     }
