@@ -25,6 +25,7 @@ public with sharing class SlackService {
         Contact userContact = new Contact(
                 LastName = userId,
                 AccountId = findOrCreateAccount().Id,
+                TimeZoneSidKey__c = (String)Contact.TimeZoneSidKey__c.getDescribe().getDefaultValue(),
                 SlackUserId__c = userId);
 
         insert userContact;
