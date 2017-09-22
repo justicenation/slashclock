@@ -1,5 +1,7 @@
 public with sharing class DateTimeUtil {
 
+    public static final String GMT_TIME_ZONE_SID_KEY = 'GMT';
+    
     public static Date getDate(DateTime value, String timeZoneSidKey) {
         return Date.valueOf(value.format('yyyy-MM-dd', timeZoneSidKey));
     }
@@ -19,6 +21,16 @@ public with sharing class DateTimeUtil {
 
         // Google says January 4, 1970 fell on a Sunday
         return Math.mod(Date.newInstance(1970, 1, 4).daysBetween(value), 7);
+    }
+
+    public static DateTime newDateTime(
+            Date dateValue, Time timeValue, TimeZone zone) {
+
+        // Calculate the offset as the number of seconds to add to the GMT
+        // date and time defined by the `Date` and `Time` values.
+        Integer offset = -1 * zone.getOffset(dateValue) / 1000 /* ms/sec */;
+        
+        return DateTime.newInstanceGmt(dateValue, timeValue).addSeconds(offset);
     }
 
     public static Date startOfWeek(Date value, Weekday firstDayOfWeek) {
@@ -61,5 +73,22 @@ public with sharing class DateTimeUtil {
         Integer offset = zone.getOffset(startDate);
 
         return DateTime.newInstance(startOfWeekGmt.getTime() - offset);
+    }
+
+    /**
+     * Zero out the seconds and milliseconds portion of a given DateTime
+     * object for consistency of calculation
+     *
+     * @param  value
+     *
+     * @return the DateTime object with zero seconds and milliseconds
+     */
+    public static DateTime truncate(DateTime value) {
+
+        Long numberOfMinutes = value.getTime()
+                / 1000 /* ms/sec */
+                / 60 /* sec/min */;
+
+        return DateTime.newInstance(numberOfMinutes * 60 * 1000);
     }
 }
