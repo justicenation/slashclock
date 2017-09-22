@@ -1,7 +1,5 @@
 public with sharing class SlashclockInCommand implements Slashclock.Command {
 
-
-
     private DateTime startTime;
     private String teamId;
     private String timeZoneSidKey;
@@ -10,7 +8,7 @@ public with sharing class SlashclockInCommand implements Slashclock.Command {
 	public SlashclockInCommand() {
 		this.userId = null;
         this.teamId = null;
-        this.timeZoneSidKey = DateTimeUtil.GMT_TIME_ZONE_SID_KEY;
+        this.timeZoneSidKey = null;
         this.startTime = DateTime.now();
 	}
 
