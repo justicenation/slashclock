@@ -44,20 +44,82 @@
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
     <enableActivities>false</enableActivities>
-    <enableBulkApi>true</enableBulkApi>
+    <enableBulkApi>false</enableBulkApi>
+    <enableChangeDataCapture>false</enableChangeDataCapture>
     <enableFeeds>false</enableFeeds>
     <enableHistory>false</enableHistory>
-    <enableReports>false</enableReports>
+    <enableReports>true</enableReports>
     <enableSearch>true</enableSearch>
-    <enableSharing>true</enableSharing>
-    <enableStreamingApi>true</enableStreamingApi>
+    <enableSharing>false</enableSharing>
+    <enableStreamingApi>false</enableStreamingApi>
+    <fields>
+        <fullName>Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Contact</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Time Entries</relationshipLabel>
+        <relationshipName>TimeEntries</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>DurationHours__c</fullName>
+        <externalId>false</externalId>
+        <formula>( IF( ISBLANK( EndTime__c ) , NOW() , EndTime__c ) - StartTime__c ) * 24 - NumberOfSlicedOutMinutes__c / 60</formula>
+        <label>Duration (Hr)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>DurationMinutes__c</fullName>
+        <externalId>false</externalId>
+        <formula>DurationHours__c * 60</formula>
+        <label>Duration (Min)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
     <fields>
         <fullName>EndTime__c</fullName>
         <externalId>false</externalId>
-        <label>End TIme</label>
+        <label>End Time</label>
         <required>false</required>
         <trackTrending>false</trackTrending>
         <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>NumberOfSlicedMinutes__c</fullName>
+        <externalId>false</externalId>
+        <label>Total Sliced Minutes</label>
+        <summarizedField>TimeSlice__c.NumberOfMinutes__c</summarizedField>
+        <summaryForeignKey>TimeSlice__c.TimeEntry__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>NumberOfSlicedOutMinutes__c</fullName>
+        <externalId>false</externalId>
+        <label>Num Sliced Out Minutes</label>
+        <summarizedField>TimeSlice__c.NumberOfMinutes__c</summarizedField>
+        <summaryFilterItems>
+            <field>TimeSlice__c.Tag__c</field>
+            <operation>equals</operation>
+            <value>out</value>
+        </summaryFilterItems>
+        <summaryForeignKey>TimeSlice__c.TimeEntry__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
     </fields>
     <fields>
         <fullName>SlackTeamId__c</fullName>
@@ -91,6 +153,11 @@
     <label>Time Entry</label>
     <listViews>
         <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>SlackTeamId__c</columns>
+        <columns>SlackUserId__c</columns>
+        <columns>StartTime__c</columns>
+        <columns>EndTime__c</columns>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>
@@ -100,7 +167,39 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Time Entries</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>SlackTeamId__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>SlackUserId__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>StartTime__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>EndTime__c</customTabListAdditionalFields>
+        <searchResultsAdditionalFields>SlackTeamId__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>SlackUserId__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>StartTime__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>EndTime__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
+    <validationRules>
+        <fullName>DurationCoversSlices</fullName>
+        <active>true</active>
+        <description>When a time entry is closed, make sure the duration covers all sliced time. It doesn&apos;t make sense for the total duration of time slices to exceed the time entry&apos;s duration.</description>
+        <errorConditionFormula>AND(
+  NOT( ISBLANK( EndTime__c ) ) ,
+  DurationMinutes__c &lt; NumberOfSlicedMinutes__c
+)</errorConditionFormula>
+        <errorDisplayField>EndTime__c</errorDisplayField>
+        <errorMessage>Duration cannot be shorter than the sum of all time slices</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>EndTime</fullName>
+        <active>true</active>
+        <description>End Time must be after Start Time</description>
+        <errorConditionFormula>IF(
+  ISBLANK( EndTime__c ) ,
+  FALSE ,
+  EndTime__c &lt; StartTime__c
+)</errorConditionFormula>
+        <errorDisplayField>EndTime__c</errorDisplayField>
+        <errorMessage>End Time must be after Start Time</errorMessage>
+    </validationRules>
     <visibility>Public</visibility>
 </CustomObject>
