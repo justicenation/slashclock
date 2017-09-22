@@ -49,5 +49,9 @@
         <members>TimeEntry__c</members>
         <name>CustomTab</name>
     </types>
+    <types>
+        <members>TimeZoneSidKey</members>
+        <name>GlobalValueSet</name>
+    </types>
     <version>40.0</version>
 </Package>
