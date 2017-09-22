@@ -2,11 +2,13 @@ public with sharing class SlashclockOutCommand implements Slashclock.Command {
 
     private DateTime endTime;
     private String teamId;
+    private String timeZoneSidKey;
     private String userId;
 
     public SlashclockOutCommand() {
         this.userId = null;
         this.teamId = null;
+        this.timeZoneSidKey = null;
         this.endTime = DateTime.now();
     }
 
@@ -31,13 +33,42 @@ public with sharing class SlashclockOutCommand implements Slashclock.Command {
         return result;
     }
 
+    public static String getCommandRegex() {
+        return 'out(\\s+.*)?';
+    }
+
+    public static Pattern getPattern() {
+        return Pattern.compile(getCommandRegex());
+    }
+
     public Slashclock.Command load(SlashCommand__c command) {
+
+        // Remember the Slack User ID and Team ID,
+        // then locate the contact and the time zone
         this.userId = command.SlackUserId__c;
         this.teamId = command.SlackTeamId__c;
+
+        Contact userContact = SlackService.getInstance(
+                this.teamId).findOrCreateContact(this.userId);
+
+        this.timeZoneSidKey = userContact.TimeZoneSidKey__c;
+
+        // Load the specific time if specified
+        Matcher matcher = getPattern().matcher(command.Text__c);
+
+        if (matcher.matches() && !String.isEmpty(matcher.group(1))) {
+            this.endTime =
+                    DateTimeUtil.newDateTime(
+                            DateTimeUtil.getDate(this.endTime, this.timeZoneSidKey),
+                            TimeUtil.parseTime(matcher.group(1).trim()),
+                            TimeZone.getTimeZone(this.timeZoneSidKey));
+        }
+
+        // Return the fully loaded SlashClock command!
         return this;
     }
 
     public Boolean matches(SlashCommand__c command) {
-        return command.Text__c.startsWith('out');
+        return getPattern().matcher(command.Text__c).matches();
     }
 }
