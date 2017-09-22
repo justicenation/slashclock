@@ -23,6 +23,16 @@ public with sharing class DateTimeUtil {
         return Math.mod(Date.newInstance(1970, 1, 4).daysBetween(value), 7);
     }
 
+    public static DateTime newDateTime(
+            Date dateValue, Time timeValue, TimeZone zone) {
+
+        // Calculate the offset as the number of seconds to add to the GMT
+        // date and time defined by the `Date` and `Time` values.
+        Integer offset = -1 * zone.getOffset(dateValue) / 1000 /* ms/sec */;
+        
+        return DateTime.newInstanceGmt(dateValue, timeValue).addSeconds(offset);
+    }
+
     public static Date startOfWeek(Date value, Weekday firstDayOfWeek) {
 
         // Figure out the weekday index of the given date

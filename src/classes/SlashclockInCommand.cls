@@ -1,7 +1,6 @@
 public with sharing class SlashclockInCommand implements Slashclock.Command {
 
-    public static final String COMMAND_REGEX =
-            'in( +(\\d{1,2}:\\d{2}{am|pm}))?';
+
 
     private DateTime startTime;
     private String teamId;
@@ -36,21 +35,41 @@ public with sharing class SlashclockInCommand implements Slashclock.Command {
         return result;
     }
 
+    public static String getCommandRegex() {
+        return 'in(\\s+.*)?';
+    }
+
+    public static Pattern getPattern() {
+        return Pattern.compile(getCommandRegex());
+    }
+
     public DateTime getStartTime() {
         return this.startTime;
     }
 
     public Slashclock.Command load(SlashCommand__c command) {
 
-        // Remember the Slack User ID and Team ID
+        // Remember the Slack User ID and Team ID,
+        // then locate the contact and the time zone
         this.userId = command.SlackUserId__c;
         this.teamId = command.SlackTeamId__c;
 
-        // Locate the contact
         Contact userContact = SlackService.getInstance(
                 this.teamId).findOrCreateContact(this.userId);
 
         this.timeZoneSidKey = userContact.TimeZoneSidKey__c;
+
+        // Store a matcher for the command
+        Matcher matcher = getPattern().matcher(command.Text__c);
+
+        // Load the specific time if it exists
+        if (matcher.matches() && !String.isEmpty(matcher.group(1))) {
+            this.startTime =
+                    DateTimeUtil.newDateTime(
+                            DateTimeUtil.getDate(this.startTime, this.timeZoneSidKey),
+                            TimeUtil.parseTime(matcher.group(1).trim()),
+                            TimeZone.getTimeZone(this.timeZoneSidKey));
+        }
         
         // Return the fully loaded SlashClock command!
         return this;
@@ -58,15 +77,7 @@ public with sharing class SlashclockInCommand implements Slashclock.Command {
 
     public Boolean matches(SlashCommand__c command) {
         
-        // Determine whether the command matches our pattern
-        Boolean matches = command.Text__c.startsWith('in');
-
-        // If a match is found, load parmeters from the Slack command
-        if (matches) {
-            this.load(command);
-        }
-
         // Return whether we found a match
-        return matches;
+        return getPattern().matcher(command.Text__c).matches();
     }
 }
