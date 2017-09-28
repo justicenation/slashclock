@@ -10,6 +10,7 @@
         <members>SlackUtil</members>
         <members>SlashCommandUtil</members>
         <members>Slashclock</members>
+        <members>SlashclockCallbackController</members>
         <members>SlashclockException</members>
         <members>SlashclockInCommand</members>
         <members>SlashclockInCommandTest</members>
@@ -32,6 +33,11 @@
         <members>TimeUtilTest</members>
         <members>Weekday</members>
         <name>ApexClass</name>
+    </types>
+    <types>
+        <members>SlashclockHome</members>
+        <members>SlashclockCallback</members>
+        <name>ApexPage</name>
     </types>
     <types>
         <members>TimeEntryTrigger</members>
