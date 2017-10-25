@@ -180,7 +180,7 @@
     <sharingModel>ReadWrite</sharingModel>
     <validationRules>
         <fullName>DurationCoversSlices</fullName>
-        <active>true</active>
+        <active>false</active>
         <description>When a time entry is closed, make sure the duration covers all sliced time. It doesn&apos;t make sense for the total duration of time slices to exceed the time entry&apos;s duration.</description>
         <errorConditionFormula>AND(
   NOT( ISBLANK( EndTime__c ) ) ,
