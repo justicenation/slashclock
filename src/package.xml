@@ -5,7 +5,11 @@
         <members>ClockResourceTest</members>
         <members>DateTimeUtil</members>
         <members>DateTimeUtilTest</members>
+        <members>HttpUtil</members>
+        <members>PageService</members>
         <members>Slack</members>
+        <members>SlackApi</members>
+        <members>SlackApiService</members>
         <members>SlackService</members>
         <members>SlackUtil</members>
         <members>SlashCommandUtil</members>
@@ -32,15 +36,11 @@
         <members>TimeUtil</members>
         <members>TimeUtilTest</members>
         <members>Weekday</members>
-        <members>PageService</members>
-        <members>SlackApi</members>
-        <members>SlackApiService</members>
-        <members>HttpUtil</members>
         <name>ApexClass</name>
     </types>
     <types>
-        <members>SlashclockHome</members>
         <members>SlashclockCallback</members>
+        <members>SlashclockHome</members>
         <name>ApexPage</name>
     </types>
     <types>
