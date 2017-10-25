@@ -44,7 +44,7 @@ public with sharing class SlackApiService {
 
         req.setEndpoint(String.join(new List<String> {
             this.getBaseUrl(),
-            '/oauth.access&',
+            '/oauth.access?',
             HttpUtil.serializeQuery(parameterMap)
         }, ''));
 
@@ -60,6 +60,7 @@ public with sharing class SlackApiService {
         // Initialize the request
         HttpRequest req = new HttpRequest();
         req.setMethod('POST');
+        req.setHeader('ContentType', 'application/x-www-form-urlencoded');
         req.setEndpoint(this.getBaseUrl() + '/team.info');
 
         // Construct the request body
