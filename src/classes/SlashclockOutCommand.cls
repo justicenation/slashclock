@@ -47,11 +47,10 @@ public with sharing class SlashclockOutCommand implements Slashclock.Command {
         // then locate the contact and the time zone
         this.userId = command.SlackUserId__c;
         this.teamId = command.SlackTeamId__c;
-
-        Contact userContact = SlackService.getInstance(
-                this.teamId).findOrCreateContact(this.userId);
-
-        this.timeZoneSidKey = userContact.TimeZoneSidKey__c;
+        
+        SlackService slacker = SlackService.getInstance(this.teamId);
+        Contact userContact = slacker.findOrCreateContact(this.userId);
+        this.timeZoneSidKey = slacker.getTimeZoneSidKey(userContact);
 
         // Load the specific time if specified
         Matcher matcher = getPattern().matcher(command.Text__c);

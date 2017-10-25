@@ -1,5 +1,14 @@
 global class HttpUtil {
 
+    global static final String CONTENT_TYPE_HEADER = 'ContentType';
+
+    global static final String GET_METHOD = 'GET';
+
+    global static final String POST_METHOD = 'POST';
+
+    global static final String X_WWW_FORM_URLENCODED_CONTENT_TYPE =
+            'application/x-www-form-urlencoded';
+
     /**
      * Given a map of name-value pairs, serialize the map into a string
      * that works as a URL query string. This method assumes that the values

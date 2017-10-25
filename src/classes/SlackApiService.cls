@@ -33,7 +33,7 @@ public with sharing class SlackApiService {
 
         // Initialize the request
         HttpRequest req = new HttpRequest();
-        req.setMethod('GET');
+        req.setMethod(HttpUtil.GET_METHOD);
 
         // Construct the endpoint
         Map<String, String> parameterMap = new Map<String, String> {
@@ -59,8 +59,9 @@ public with sharing class SlackApiService {
 
         // Initialize the request
         HttpRequest req = new HttpRequest();
-        req.setMethod('POST');
-        req.setHeader('ContentType', 'application/x-www-form-urlencoded');
+        req.setMethod(HttpUtil.POST_METHOD);
+        req.setHeader(HttpUtil.CONTENT_TYPE_HEADER,
+                HttpUtil.X_WWW_FORM_URLENCODED_CONTENT_TYPE);
         req.setEndpoint(this.getBaseUrl() + '/team.info');
 
         // Construct the request body
@@ -75,5 +76,29 @@ public with sharing class SlackApiService {
 
         return (SlackApi.TeamInfoResponse)JSON.deserialize(
                 res.getBody(), SlackApi.TeamInfoResponse.class);
+    }
+
+    public SlackApi.UsersInfoResponse usersInfo(String userId) {
+
+        // Initialize the request
+        HttpRequest req = new HttpRequest();
+        req.setMethod(HttpUtil.POST_METHOD);
+        req.setHeader(HttpUtil.CONTENT_TYPE_HEADER,
+                HttpUtil.X_WWW_FORM_URLENCODED_CONTENT_TYPE);
+        req.setEndpoint(this.getBaseUrl() + '/users.info');
+
+        // Construct the request body
+        Map<String, String> parameterMap = new Map<String, String> {
+            'token' => this.accessToken,
+            'user' => userId
+        };
+
+        req.setBody(HttpUtil.serializeQuery(parameterMap));
+
+        // Parse and return the response
+        HttpResponse res = new Http().send(req);
+
+        return (SlackApi.UsersInfoResponse)JSON.deserialize(
+                res.getBody(), SlackApi.UsersInfoResponse.class);
     }
 }
