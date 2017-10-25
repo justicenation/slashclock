@@ -64,4 +64,12 @@ public with sharing class SlackService {
 
         return instanceMap.get(teamId);
     }
+
+    public Account storeAccessToken(String accessToken) {
+
+        Account teamAccount = this.findOrCreateAccount();
+        teamAccount.SlackAccessToken__c = accessToken;
+        update teamAccount;
+        return teamAccount;
+    }
 }

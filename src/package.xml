@@ -32,6 +32,10 @@
         <members>TimeUtil</members>
         <members>TimeUtilTest</members>
         <members>Weekday</members>
+        <members>PageService</members>
+        <members>SlackApi</members>
+        <members>SlackApiService</members>
+        <members>HttpUtil</members>
         <name>ApexClass</name>
     </types>
     <types>
