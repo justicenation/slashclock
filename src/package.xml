@@ -49,6 +49,7 @@
     </types>
     <types>
         <members>Account</members>
+        <members>Connection__c</members>
         <members>Contact</members>
         <members>SlashCommand__c</members>
         <members>TimeEntry__c</members>
