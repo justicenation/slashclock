@@ -9,6 +9,21 @@ global class HttpUtil {
     global static final String X_WWW_FORM_URLENCODED_CONTENT_TYPE =
             'application/x-www-form-urlencoded';
 
+    global static Map<String, String> deserializeQuery(String queryString) {
+
+        // Initialize the parameter map
+        Map<String, String> parameters = new Map<String, String>();
+
+        // Break out the query string
+        for (String eachPair : queryString.split('&')) {
+            List<String> parts = eachPair.split('=');
+            parameters.put(parts[0], parts[1]);
+        }
+
+        // Return the map
+        return parameters;
+    }
+
     /**
      * Given a map of name-value pairs, serialize the map into a string
      * that works as a URL query string. This method assumes that the values

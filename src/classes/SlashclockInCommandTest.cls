@@ -24,6 +24,7 @@ private class SlashclockInCommandTest {
         Long defaultStartTime = command.getStartTime().getTime();
 
         // When
+        Test.setMock(HttpCalloutMock.class, new SlashclockMockSuite());
         Test.startTest();
 
         command.load(userCommand);
