@@ -11,7 +11,8 @@ private class SlashclockServiceTest {
     private static void clockInSuccess() {
 
         // Given
-        DateTime startTime = DateTime.now();
+        DateTime commandTime = DateTime.now();
+        DateTime startTime = DateTimeUtil.truncate(commandTime);
         String userId = 'foo';
         String teamId = 'bar';
 
@@ -29,7 +30,7 @@ private class SlashclockServiceTest {
         // When
         Test.startTest();
 
-        SlashclockService.getInstance(userId, teamId).clockIn(startTime);
+        SlashclockService.getInstance(userId, teamId).clockIn(commandTime);
 
         // Then
         Test.stopTest();
