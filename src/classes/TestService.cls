@@ -45,7 +45,18 @@ public with sharing class TestService {
                 Name = this.annotate('Board, Inc.'),
                 SlackTeamId__c = 'board');
 
-        insert new List<Account> { acme, cee, board };
+        Account bar = new Account(
+                Name = this.annotate('Bar Service'),
+                SlackTeamId__c = 'bar');
+
+        insert new List<Account> { acme, cee, board, bar };
+
+        // Create contacts
+        Contact flip = new Contact(
+                AccountId = board.Id,
+                FirstName = 'Baxter',
+                LastName = this.annotate('Flip'),
+                SlackUserId__c = 'flip');
 
         // Create time entries
         TimeEntry__c emcee20170704 = new TimeEntry__c(
