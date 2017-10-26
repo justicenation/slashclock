@@ -27,4 +27,8 @@ public with sharing class SlackUtil {
     public static String format(SlashclockReportItem item) {
         return item.format();
     }
+
+    public static String getWorkspaceUrl(String domain) {
+        return 'https://' + domain + '.slack.com';
+    }
 }

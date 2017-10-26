@@ -24,6 +24,7 @@ private class SlashclockInCommandTest {
         Long defaultStartTime = command.getStartTime().getTime();
 
         // When
+        Test.setMock(HttpCalloutMock.class, new SlashclockMockSuite());
         Test.startTest();
 
         command.load(userCommand);
@@ -70,6 +71,7 @@ private class SlashclockInCommandTest {
                 americaNewYork).getTime();
 
         // When
+        Test.setMock(HttpCalloutMock.class, new SlashclockMockSuite());
         Test.startTest();
 
         command.load(userCommand);
@@ -83,5 +85,10 @@ private class SlashclockInCommandTest {
                 DateTime.newInstance(expectedStartTime),
                 DateTime.newInstance(actualStartTime),
                 'SlashclockInCommand.startTime');
+    }
+
+    @testSetup
+    private static void setup() {
+        TestService.getInstance().setup();
     }
 }

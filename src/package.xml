@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
+        <members>AbstractSmartMockSuite</members>
         <members>ClockResource</members>
         <members>ClockResourceTest</members>
+        <members>DatabaseUtil</members>
         <members>DateTimeUtil</members>
         <members>DateTimeUtilTest</members>
+        <members>HttpUtil</members>
+        <members>PageService</members>
         <members>Slack</members>
+        <members>SlackApi</members>
+        <members>SlackApiService</members>
+        <members>SlackApiUsersInfoAcmeBunnyMock</members>
+        <members>SlackApiUsersInfoBarFooMock</members>
+        <members>SlackApiUsersInfoBoardFlipMock</members>
         <members>SlackService</members>
         <members>SlackUtil</members>
         <members>SlashCommandUtil</members>
         <members>Slashclock</members>
+        <members>SlashclockCallbackController</members>
         <members>SlashclockException</members>
         <members>SlashclockInCommand</members>
         <members>SlashclockInCommandTest</members>
+        <members>SlashclockMockSuite</members>
         <members>SlashclockOutCommand</members>
         <members>SlashclockReport</members>
         <members>SlashclockReportCommand</members>
@@ -25,13 +36,21 @@
         <members>SlashclockServiceTest</members>
         <members>SlashclockUtil</members>
         <members>SlashclockUtilTest</members>
+        <members>SmartMock</members>
+        <members>SmartMockService</members>
         <members>TestService</members>
         <members>Time2</members>
         <members>TimeTest</members>
         <members>TimeUtil</members>
         <members>TimeUtilTest</members>
+        <members>UpdateJob</members>
         <members>Weekday</members>
         <name>ApexClass</name>
+    </types>
+    <types>
+        <members>SlashclockCallback</members>
+        <members>SlashclockHome</members>
+        <name>ApexPage</name>
     </types>
     <types>
         <members>TimeEntryTrigger</members>
@@ -39,6 +58,7 @@
     </types>
     <types>
         <members>Account</members>
+        <members>Connection__c</members>
         <members>Contact</members>
         <members>SlashCommand__c</members>
         <members>TimeEntry__c</members>
@@ -52,6 +72,12 @@
     <types>
         <members>TimeZoneSidKey</members>
         <name>GlobalValueSet</name>
+    </types>
+    <types>
+        <members>SlackApiUsersInfoAcmeBunnyMock</members>
+        <members>SlackApiUsersInfoBarFooMock</members>
+        <members>SlackApiUsersInfoBoardFlipMock</members>
+        <name>StaticResource</name>
     </types>
     <version>40.0</version>
 </Package>

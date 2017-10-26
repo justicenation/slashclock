@@ -14,6 +14,14 @@ public with sharing class TestService {
         this.annotation = annotation;
     }
 
+    public String annotate(String value) {
+        return value + ' (' + this.getAnnotation() + ')';
+    }
+
+    public String getAnnotation() {
+        return this.annotation;
+    }
+
     public static TestService getInstance() {
         return new TestService(Test.isRunningTest());
     }
@@ -23,6 +31,32 @@ public with sharing class TestService {
      * and integration tests.
      */
     public void setup() {
+
+        // Create accounts
+        Account acme = new Account(
+                Name = this.annotate('Acme Corporation'),
+                SlackTeamId__c = 'acme');
+
+        Account cee = new Account(
+                Name = this.annotate('Cerebro, Inc.'),
+                SlackTeamId__c = 'cee');
+
+        Account board = new Account(
+                Name = this.annotate('Board, Inc.'),
+                SlackTeamId__c = 'board');
+
+        Account bar = new Account(
+                Name = this.annotate('Bar Service'),
+                SlackTeamId__c = 'bar');
+
+        insert new List<Account> { acme, cee, board, bar };
+
+        // Create contacts
+        Contact flip = new Contact(
+                AccountId = board.Id,
+                FirstName = 'Baxter',
+                LastName = this.annotate('Flip'),
+                SlackUserId__c = 'flip');
 
         // Create time entries
         TimeEntry__c emcee20170704 = new TimeEntry__c(
