@@ -71,6 +71,7 @@ private class SlashclockInCommandTest {
                 americaNewYork).getTime();
 
         // When
+        Test.setMock(HttpCalloutMock.class, new SlashclockMockSuite());
         Test.startTest();
 
         command.load(userCommand);
