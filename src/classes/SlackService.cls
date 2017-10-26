@@ -74,6 +74,27 @@ public with sharing class SlackService {
      *
      * @return the time zone SID key (e.g., "America/New_York")
      */
+    public String getTimeZoneSidKey(String userId) {
+
+        // Get the time zone from Slack
+        SlackApiService teamSlackApi = SlackApiService.getInstance(
+                this.findOrCreateAccount().SlackAccessToken__c);
+
+        SlackApi.UsersInfoResponse usersInfo = teamSlackApi.usersInfo(userId);
+
+        // Return the user's time zone
+        return usersInfo.user.tz;
+    }
+
+    /**
+     * Get the time zone for a given Slack user, preferably from Slack if
+     * possible but if not then whatever is on file for the user.
+     * If the time zone obtained from Slack is different than what's on file
+     * for the user, the information in Salesforce should be updated
+     * to match the user's Slack configuration.
+     *
+     * @return the time zone SID key (e.g., "America/New_York")
+     */
     public String getTimeZoneSidKey(Contact userContact) {
 
         // Get the time zone from Slack

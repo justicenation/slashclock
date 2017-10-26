@@ -53,8 +53,15 @@ public with sharing class SlashclockInCommand implements Slashclock.Command {
         this.teamId = command.SlackTeamId__c;
         
         SlackService slacker = SlackService.getInstance(this.teamId);
+        this.timeZoneSidKey = slacker.getTimeZoneSidKey(this.userId);
+
+        // Update the contact's time zone if it's determined to be
         Contact userContact = slacker.findOrCreateContact(this.userId);
-        this.timeZoneSidKey = slacker.getTimeZoneSidKey(userContact);
+
+        if (userContact.TimeZoneSidKey__c != this.timeZoneSidKey) {
+            userContact.TimeZoneSidKey__c = this.timeZoneSidKey;
+            DatabaseUtil.updateLater(userContact);
+        }
 
         // Store a matcher for the command
         Matcher matcher = getPattern().matcher(command.Text__c);

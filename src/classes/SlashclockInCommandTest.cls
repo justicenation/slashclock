@@ -85,4 +85,9 @@ private class SlashclockInCommandTest {
                 DateTime.newInstance(actualStartTime),
                 'SlashclockInCommand.startTime');
     }
+
+    @testSetup
+    private static void setup() {
+        TestService.getInstance().setup();
+    }
 }

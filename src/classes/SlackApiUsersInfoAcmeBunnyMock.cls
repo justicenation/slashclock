@@ -6,7 +6,7 @@ public with sharing class SlackApiUsersInfoAcmeBunnyMock implements SmartMock {
 
         // Examine the request, looking for the presence of the expected
         // access token and and the user ID
-        if (req.getEndpoint().startsWith('https://slack.com/api/users.info')
+        if (req.getEndpoint().equals('https://slack.com/api/users.info')
                 && req.getBody() != null) {
             Map<String, String> parameters =
                     HttpUtil.deserializeQuery(req.getBody());
