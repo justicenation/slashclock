@@ -87,7 +87,7 @@ public with sharing class SlackService {
         // zone is different
         if (usersInfo.user.tz != userContact.TimeZoneSidKey__c) {
             userContact.TimeZoneSidKey__c = usersInfo.user.tz;
-            update userContact;
+            DatabaseUtil.updateLater(userContact);
         }
 
         // Return the user's time zone

@@ -4,6 +4,7 @@
         <members>AbstractSmartMockSuite</members>
         <members>ClockResource</members>
         <members>ClockResourceTest</members>
+        <members>DatabaseUtil</members>
         <members>DateTimeUtil</members>
         <members>DateTimeUtilTest</members>
         <members>HttpUtil</members>
@@ -40,6 +41,7 @@
         <members>TimeTest</members>
         <members>TimeUtil</members>
         <members>TimeUtilTest</members>
+        <members>UpdateJob</members>
         <members>Weekday</members>
         <name>ApexClass</name>
     </types>
