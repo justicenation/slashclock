@@ -43,7 +43,7 @@ public class Time2 {
         Decimal total = this.days * 24 + this.remainder.hour();
         total += this.remainder.minute() / 60.0;
         total += this.remainder.second() / 60.0 / 60.0;
-        total += this.remainder.millisecond() / 60.0 / 60.0 / 60.0;
+        total += this.remainder.millisecond() / 1000.0 / 60.0 / 60.0;
         return total;
     }
 
