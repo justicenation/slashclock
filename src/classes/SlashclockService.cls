@@ -133,6 +133,17 @@ public with sharing class SlashclockService {
         return new SlashclockService(userId, teamId);
     }
 
+    public TimeEntry__c getLastTimeEntry() {
+        return [
+            SELECT Id
+            FROM TimeEntry__c
+            WHERE SlackUserId__c = :this.userId
+                AND SlackTeamId__c = :this.teamId
+            ORDER BY StartTime__c DESC
+            LIMIT 1
+        ];
+    }
+
     public DateTime getStartOfWeek(DateTime value) {
         return DateTimeUtil.startOfWeek(
                 value, this.timeZoneSidKey, this.firstDayOfWeek);
@@ -171,8 +182,14 @@ public with sharing class SlashclockService {
         return report;
     }
 
-    public void slice(Decimal numberOfMinutes, String tag) {
-        
+    public TimeSlice__c slice(Decimal numberOfMinutes, String tag) {
+        TimeSlice__c slice = new TimeSlice__c(
+                TimeEntry__c = this.getLastTimeEntry().Id,
+                NumberOfMinutes__c = numberOfMinutes,
+                Tag__c = tag);
+
+        insert slice;
+        return slice;
     }
 
     public class Key {
