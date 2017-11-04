@@ -47,6 +47,14 @@ public class Time2 {
         return total;
     }
 
+    public Decimal minutes() {
+        Decimal hours = this.days * 24 + this.remainder.hour();
+        Decimal minutes = hours * 60 + this.remainder.minute();
+        return minutes
+                + this.remainder.second() / 60.0
+                + this.remainder.millisecond() / 1000.0 / 60.0;
+    }
+
     public static Time2 newInstance() {
         return newInstance(0, 0, 0, 0, 0);
     }
