@@ -41,12 +41,12 @@
         <members>SmartMockService</members>
         <members>TestService</members>
         <members>Time2</members>
+        <members>Time2Test</members>
         <members>TimeTest</members>
         <members>TimeUtil</members>
         <members>TimeUtilTest</members>
         <members>UpdateJob</members>
         <members>Weekday</members>
-        <members>Time2Test</members>
         <name>ApexClass</name>
     </types>
     <types>
