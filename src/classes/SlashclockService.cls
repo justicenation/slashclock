@@ -171,6 +171,10 @@ public with sharing class SlashclockService {
         return report;
     }
 
+    public void slice(Decimal numberOfMinutes, String tag) {
+        
+    }
+
     public class Key {
         public String teamId { get; set; }
         public String userId { get; set; }
