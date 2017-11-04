@@ -27,6 +27,11 @@ public class Time2 {
         return this.hours() + 'h';
     }
 
+    public static Matcher getMatcher(String value) {
+        String regex = '([0-9.]+\\s+hours?)?\\s*([0-9.]+\\s+minutes?)?\\s*([0-9.]+\\s+seconds?)?';
+        return Pattern.compile(regex).matcher(value);
+    }
+
     public Long getTime() {
         return (((this.days * 24 /* hours per day */ + this.remainder.hour())
                 * 60 /* minutes per hour */ + this.remainder.minute())
@@ -52,6 +57,10 @@ public class Time2 {
         return new Time2(days, hours, minutes, seconds, millis);
     }
 
+    public static Time2 newInstance(Decimal totalMillis) {
+        return newInstance(totalMillis.longValue());
+    }
+
     public static Time2 newInstance(Long totalMillis) {
 
         // Truncate up to find useful values up each order of magnitude
@@ -71,5 +80,54 @@ public class Time2 {
         // Return the Time2 object
         return new Time2(
                 days, Time.newInstance(hours, minutes, seconds, millis));
+    }
+
+    /**
+     * Parse an increment of time, such as the following.
+     *
+     * - 10 seconds
+     * - 17 minutes
+     * - 1 hour
+     * - 2.5 hours
+     *
+     * @param value
+     *
+     * @return the time increment as a `Time2` object
+     *
+     * @see https://get.slack.help/hc/en-us/articles/208423427-set-a-reminder
+     */
+    public static Time2 parse(String value) {
+
+        // Initialize duration values
+        Decimal hours = 0;
+        Decimal minutes = 0;
+        Decimal seconds = 0;
+
+        // Define the regex used to parse the time.
+        // Assume times would be given in order of magnitude, starting
+        // with the largest unit.
+        Matcher matcher = getMatcher(value);
+
+        if (matcher.matches()) {
+
+            // Read the number of hours
+            if (!String.isEmpty(matcher.group(1))) {
+                hours = Decimal.valueOf(matcher.group(1).split('\\s')[0]);
+            }
+
+            // Read the number of minutes
+            if (!String.isEmpty(matcher.group(2))) {
+                minutes = Decimal.valueOf(matcher.group(2).split('\\s')[0]);
+            }
+
+            // Read the number of seconds
+            if (!String.isEmpty(matcher.group(3))) {
+                seconds = Decimal.valueOf(matcher.group(3).split('\\s')[0]);
+            }
+        }
+
+        // Return the parsed time
+        return Time2.newInstance(
+                ((hours * 60 + minutes) * 60 + seconds) * 1000);
     }
 }
