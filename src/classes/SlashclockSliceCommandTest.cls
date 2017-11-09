@@ -79,7 +79,55 @@ private class SlashclockSliceCommandTest {
      */
     @isTest
     private static void sliceOpenEntry30Minutes() {
-        System.assert(false, 'TODO');
+        
+        // Given
+        TimeEntry__c givenEntry = [
+            SELECT Id,
+                (
+                    SELECT Id, NumberOfMinutes__c, Tag__c
+                    FROM TimeSlices__r
+                )
+            FROM TimeEntry__c
+            WHERE SlackUserId__c = 'bugs'
+            AND SlackTeamId__c = 'acme'
+            ORDER BY StartTime__c DESC
+            LIMIT 1
+        ];
+
+        System.assertEquals(0, givenEntry.TimeSlices__r.size(),
+                'given entry should have no slices');
+
+        // When
+        Test.startTest();
+
+        SlashCommand__c inboundCommand = new SlashCommand__c(
+                Command__c = 'slice 30 minutes test',
+                SlackTeamId__c = 'acme',
+                SlackUserId__c = 'bugs');
+
+        SlashclockUtil.newCommand(inboundCommand).execute();
+
+        // Then
+        Test.stopTest();
+
+        TimeEntry__c thenEntry = [
+            SELECT Id,
+                (
+                    SELECT Id, NumberOfMinutes__c, Tag__c
+                    FROM TimeSlices__r
+                )
+            FROM TimeEntry__c
+            WHERE Id = :givenEntry.Id
+        ];
+
+        System.assertEquals(1 ,thenEntry.TimeSlices__r.size(),
+                'then entry should have one slice');
+
+        System.assertEquals(30, thenEntry.TimeSlices__r[0].NumberOfMinutes__c,
+                Schema.SObjectType.TimeSlice__c.fields.NumberOfMinutes__c.label);
+
+        System.assertEquals('test', thenEntry.TimeSlices__r[0].Tag__c,
+                Schema.SObjectType.TimeSlice__c.fields.Tag__c.label);
     }
 
     /**
