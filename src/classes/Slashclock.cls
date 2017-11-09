@@ -21,6 +21,10 @@ public with sharing class Slashclock {
             return this.message;
         }
 
+        public Boolean isSuccess() {
+            return this.success;
+        }
+
         public void setMessage(String value) {
             this.message = value;
         }

@@ -3,7 +3,8 @@ public with sharing class SlashclockUtil {
         return new List<Slashclock.Command> {
             new SlashclockInCommand(),
             new SlashclockOutCommand(),
-            new SlashclockReportCommand()
+            new SlashclockReportCommand(),
+            new SlashclockSliceCommand()
         };
     }
 

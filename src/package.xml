@@ -34,12 +34,15 @@
         <members>SlashclockReportTest</members>
         <members>SlashclockService</members>
         <members>SlashclockServiceTest</members>
+        <members>SlashclockSliceCommand</members>
+        <members>SlashclockSliceCommandTest</members>
         <members>SlashclockUtil</members>
         <members>SlashclockUtilTest</members>
         <members>SmartMock</members>
         <members>SmartMockService</members>
         <members>TestService</members>
         <members>Time2</members>
+        <members>Time2Test</members>
         <members>TimeTest</members>
         <members>TimeUtil</members>
         <members>TimeUtilTest</members>
@@ -55,6 +58,10 @@
     <types>
         <members>TimeEntryTrigger</members>
         <name>ApexTrigger</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>CustomLabels</name>
     </types>
     <types>
         <members>Account</members>
