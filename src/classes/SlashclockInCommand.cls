@@ -82,6 +82,6 @@ public with sharing class SlashclockInCommand implements Slashclock.Command {
     public Boolean matches(SlashCommand__c command) {
         
         // Return whether we found a match
-        return getPattern().matcher(command.Text__c).matches();
+        return command.Text__c.startsWith('in');
     }
 }

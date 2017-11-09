@@ -76,6 +76,8 @@ private class SlashclockSliceCommandTest {
      * When a new "slice" command is executed for 30 minutes tagged "test";
      * Then a new time slice should be created under the open time entry
      * showing 30 minutes tagged "test"
+     *
+     * @see https://api.slack.com/slash-commands
      */
     @isTest
     private static void sliceOpenEntry30Minutes() {
@@ -101,7 +103,8 @@ private class SlashclockSliceCommandTest {
         Test.startTest();
 
         SlashCommand__c inboundCommand = new SlashCommand__c(
-                Command__c = 'slice 30 minutes test',
+                Command__c = '/clock',
+                Text__c = 'slice 30 minutes test',
                 SlackTeamId__c = 'acme',
                 SlackUserId__c = 'bugs');
 

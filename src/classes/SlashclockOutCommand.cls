@@ -75,6 +75,6 @@ public with sharing class SlashclockOutCommand implements Slashclock.Command {
     }
 
     public Boolean matches(SlashCommand__c command) {
-        return getPattern().matcher(command.Text__c).matches();
+        return command.Text__c.startsWith('out');
     }
 }
