@@ -35,6 +35,7 @@
         <members>SlashclockService</members>
         <members>SlashclockServiceTest</members>
         <members>SlashclockSliceCommand</members>
+        <members>SlashclockSliceCommandTest</members>
         <members>SlashclockUtil</members>
         <members>SlashclockUtilTest</members>
         <members>SmartMock</members>
