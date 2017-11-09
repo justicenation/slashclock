@@ -28,6 +28,11 @@ public with sharing class SlashclockSliceCommand implements Slashclock.Command {
         catch (SlashclockException caught) {
             result.setMessage(caught.getMessage());
         }
+        catch (System.DmlException caught) {
+
+            // TODO: Replace with more user-friendly error
+            result.setMessage(caught.getMessage());
+        }
 
         // Return the result
         return result;
