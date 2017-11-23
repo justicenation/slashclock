@@ -18,7 +18,8 @@ public with sharing class SlashclockUtil {
             new SlashclockOutCommand(),
             new SlashclockReportCommand(),
             new SlashclockSliceCommand(),
-            new SlashclockEntriesCommand()
+            new SlashclockEntriesCommand(),
+            new SlashclockStrikeCommand()
         };
     }
 

@@ -24,4 +24,12 @@
         <shortDescription>SlashclockSliceSuccess</shortDescription>
         <value>Time sliced!</value>
     </labels>
+    <labels>
+        <fullName>SlashclockStrikeSuccess</fullName>
+        <categories>slashclock</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>SlashclockStrikeSuccess</shortDescription>
+        <value>Entry deleted.\n{0}</value>
+    </labels>
 </CustomLabels>
