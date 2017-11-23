@@ -1,10 +1,18 @@
 public with sharing class SlashclockUtil {
+
+    public static String formatEntry(
+            TimeEntry__c entry, Integer index, String timeZoneSidKey) {
+        System.assert(false, 'TODO');
+        return null;
+    }
+
     public static List<Slashclock.Command> getKnownCommands() {
         return new List<Slashclock.Command> {
             new SlashclockInCommand(),
             new SlashclockOutCommand(),
             new SlashclockReportCommand(),
-            new SlashclockSliceCommand()
+            new SlashclockSliceCommand(),
+            new SlashclockEntriesCommand()
         };
     }
 

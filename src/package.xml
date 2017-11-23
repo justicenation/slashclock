@@ -20,6 +20,8 @@
         <members>SlashCommandUtil</members>
         <members>Slashclock</members>
         <members>SlashclockCallbackController</members>
+        <members>SlashclockEntriesCommand</members>
+        <members>SlashclockEntriesCommandTest</members>
         <members>SlashclockException</members>
         <members>SlashclockInCommand</members>
         <members>SlashclockInCommandTest</members>

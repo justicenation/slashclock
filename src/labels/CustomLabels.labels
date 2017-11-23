@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
     <labels>
+        <fullName>SlashclockEntriesNoEntries</fullName>
+        <categories>slashclock</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>SlashclockEntriesNoEntries</shortDescription>
+        <value>I couldn&apos;t find any time entries for you from the last seven days!</value>
+    </labels>
+    <labels>
+        <fullName>SlashclockEntriesOpening</fullName>
+        <categories>slashclock</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>SlashclockEntriesOpening</shortDescription>
+        <value>Here&apos;s what you&apos;ve clocked over the last seven days.</value>
+    </labels>
+    <labels>
         <fullName>SlashclockSliceSuccess</fullName>
         <categories>slashclock</categories>
         <language>en_US</language>
