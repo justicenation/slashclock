@@ -2,7 +2,6 @@ public with sharing class SlashclockUtil {
 
     public static String formatEntry(
             TimeEntry__c entry, Integer index, String timeZoneSidKey) {
-        System.assert(false, 'TODO');
         return null;
     }
 
