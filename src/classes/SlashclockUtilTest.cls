@@ -2,6 +2,54 @@
 private class SlashclockUtilTest {
 
     @isTest
+    private static void formatEntry() {
+
+        // Given
+        TimeEntry__c openEntry = new TimeEntry__c(
+                SlackUserId__c = 'em',
+                SlackTeamId__c = 'cee',
+                StartTime__c = DateTime.newInstanceGmt(2017, 11, 21, 3, 0, 0),
+                EndTime__c = null);
+
+        TimeEntry__c closedEntry = new TimeEntry__c(
+                SlackUserId__c = 'em',
+                SlackTeamId__c = 'cee',
+                StartTime__c = DateTime.newInstanceGmt(2017, 11, 20, 3, 0, 0),
+                EndTime__c = DateTime.newInstanceGmt(2017, 11, 20, 11, 30, 0));
+
+        Integer index = 2;
+
+        String newYorkTimeZoneSidKey = 'America/New_York';
+        String kolkataTimeZoneSidKey = 'Asia/Kolkata';
+
+        // When
+        Test.startTest();
+
+        String openEntryNewYorkTime = SlashclockUtil.formatEntry(
+                openEntry, index, newYorkTimeZoneSidKey);
+        
+        String openEntryKolkataTime = SlashclockUtil.formatEntry(
+                openEntry, index, kolkataTimeZoneSidKey);
+        
+        String closedEntryNewYorkTime = SlashclockUtil.formatEntry(
+                closedEntry, index, newYorkTimeZoneSidKey);
+        
+        String closedEntryKolkataTime = SlashclockUtil.formatEntry(
+                closedEntry, index, kolkataTimeZoneSidKey);
+
+        // Then
+        Test.stopTest();
+
+        System.assertEquals('2. Mon 11/20 10:00pm - now', openEntryNewYorkTime);
+
+        System.assertEquals('2. Tue 11/21 8:30am - now', openEntryKolkataTime);
+
+        System.assertEquals('2. Sun 11/19 10:00pm - 6:30am', closedEntryNewYorkTime);
+
+        System.assertEquals('2. Mon 11/20 8:30am - 5:00pm', closedEntryKolkataTime);
+    }
+
+    @isTest
     private static void emcee20170703SevenDayReportItems() {
 
         // Given

@@ -1,10 +1,25 @@
 public with sharing class SlashclockUtil {
+
+    public static String formatEntry(
+            TimeEntry__c entry, Integer index, String timeZoneSidKey) {
+        return String.join(new List<String> {
+            index + '.',
+            entry.StartTime__c.format('EEE M/d h:mma', timeZoneSidKey),
+            '-',
+            entry.EndTime__c == null
+                    ? 'now'
+                    : entry.EndTime__c.format('h:mma', timeZoneSidKey)
+        }, ' ').replace('AM', 'am').replace('PM', 'pm');
+    }
+
     public static List<Slashclock.Command> getKnownCommands() {
         return new List<Slashclock.Command> {
             new SlashclockInCommand(),
             new SlashclockOutCommand(),
             new SlashclockReportCommand(),
-            new SlashclockSliceCommand()
+            new SlashclockSliceCommand(),
+            new SlashclockEntriesCommand(),
+            new SlashclockStrikeCommand()
         };
     }
 

@@ -20,6 +20,8 @@
         <members>SlashCommandUtil</members>
         <members>Slashclock</members>
         <members>SlashclockCallbackController</members>
+        <members>SlashclockEntriesCommand</members>
+        <members>SlashclockEntriesCommandTest</members>
         <members>SlashclockException</members>
         <members>SlashclockInCommand</members>
         <members>SlashclockInCommandTest</members>
@@ -36,6 +38,8 @@
         <members>SlashclockServiceTest</members>
         <members>SlashclockSliceCommand</members>
         <members>SlashclockSliceCommandTest</members>
+        <members>SlashclockStrikeCommand</members>
+        <members>SlashclockStrikeCommandTest</members>
         <members>SlashclockUtil</members>
         <members>SlashclockUtilTest</members>
         <members>SmartMock</members>

@@ -83,6 +83,57 @@ public with sharing class SlashclockService {
         return entry;
     }
 
+    /**
+     * Given a list of time entries, format the time entries for display as
+     * a successful response to a `/clock entries` command
+     *
+     * @param entries
+     *
+     * @return a string that can be displayed prettily in Slack
+     */
+    public String formatEntries(List<TimeEntry__c> entries) {
+
+        // Initialize the lines in the response
+        List<String> lines = new List<String>();
+
+        // If no entries are given, the command should return a notification
+        // that there are no entries to display.
+        if (entries.isEmpty()) {
+            lines.add(Label.SlashclockEntriesNoEntries);
+        }
+        else {
+            lines.add(Label.SlashclockEntriesOpening);
+
+            for (TimeEntry__c eachEntry : entries) {
+                lines.add(this.formatEntry(eachEntry, lines.size()));
+            }
+        }
+
+        // Return the lines 
+        return String.join(lines, '\n');
+    }
+
+    /**
+     * Given a time entry and its index position within a list of time entries,
+     * format a string to return that can be displayed in a list appropriate
+     * for use with the `/clock entries` command.
+     *
+     * The line can be broken down into four parts.
+     *
+     * - The index number
+     * - The start date (in the user's local time zone)
+     * - The start time (in the user's local time zone)
+     * - The end date (in the user's local time zone) which may not be shown
+     * - The end time (in the user's local time zone)
+     *
+     * @param entry
+     *
+     * @return a formatted string showing the entry's info and its index
+     */
+    public String formatEntry(TimeEntry__c entry, Integer index) {
+        return SlashclockUtil.formatEntry(entry, index, this.timeZoneSidKey);
+    }
+
     public Time2 getClockedDuration(DateTime startTime, DateTime endTime) {
         Time2 duration = Time2.newInstance();
 
@@ -122,6 +173,17 @@ public with sharing class SlashclockService {
             WHERE SlackUserId__c = :this.userId
                 AND SlackTeamId__c = :this.teamId
                 AND EndTime__c = NULL
+        ];
+    }
+
+    public List<TimeEntry__c> getTimeEntriesSince(DateTime startTime) {
+        return [
+            SELECT Id, StartTime__c, EndTime__c
+            FROM TimeEntry__c
+            WHERE SlackUserId__c = :this.userId
+                AND SlackTeamId__c = :this.teamId
+                AND StartTime__c >= :startTime
+            ORDER BY StartTime__c DESC
         ];
     }
 
