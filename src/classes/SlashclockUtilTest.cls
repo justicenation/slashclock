@@ -40,13 +40,13 @@ private class SlashclockUtilTest {
         // Then
         Test.stopTest();
 
-        System.assertEquals('2. Mon 11/20 10:00pm to now', openEntryNewYorkTime);
+        System.assertEquals('2. Mon 11/20 10:00pm - now', openEntryNewYorkTime);
 
-        System.assertEquals('2. Tue 11/21 8:30am to now', openEntryKolkataTime);
+        System.assertEquals('2. Tue 11/21 8:30am - now', openEntryKolkataTime);
 
-        System.assertEquals('2. Sun 11/20 10:00pm to 6:30am', closedEntryNewYorkTime);
+        System.assertEquals('2. Sun 11/19 10:00pm - 6:30am', closedEntryNewYorkTime);
 
-        System.assertEquals('2. Mon 11/20 8:30am to 5:00pm', closedEntryKolkataTime);
+        System.assertEquals('2. Mon 11/20 8:30am - 5:00pm', closedEntryKolkataTime);
     }
 
     @isTest
