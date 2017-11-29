@@ -1,9 +1,15 @@
 public with sharing class SlackUtil {
 
+    public static String bold(String value) {
+        return '*' + value + '*';
+    }
+
     public static String format(SlashclockReport report) {
 
         // Initialize the lines of text to render
         List<String> lines = new List<String>();
+
+        lines.add(Label.SlashclockReportOpening);
         
         // Go through every daily item in the report, and format the item
         for (SlashclockReportItem eachItem : report.getItems()) {
@@ -11,14 +17,10 @@ public with sharing class SlackUtil {
         }
 
         // Add the summary line break
-        lines.add('==========');
+        lines.add(SlashclockReport.DEFAULT_SUMMARY_SEPARATOR);
 
         // Add the formatted summary line
         lines.add(format(report.getSummaryItem()));
-
-        // Add the code block escape lines
-        lines.add('```');
-        lines.add(0, '```');
 
         // Return the formatted
         return String.join(lines, '\n');
