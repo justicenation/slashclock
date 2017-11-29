@@ -128,7 +128,7 @@ private class SlashclockReportItemTest {
         // Then
         Test.stopTest();
 
-        System.assertEquals('noop 3h', formatted);
+        System.assertEquals('noop *3h*', formatted);
     }
 
     @isTest
@@ -158,7 +158,7 @@ private class SlashclockReportItemTest {
         // Then
         Test.stopTest();
 
-        System.assertEquals('Fri 3h (1h TEST)', formatted);
+        System.assertEquals('Fri *3h* (1h TEST)', formatted);
     }
 
     @isTest
@@ -194,7 +194,7 @@ private class SlashclockReportItemTest {
         // Then
         Test.stopTest();
 
-        System.assertEquals('Fri 3h (2h TEST)', formatted);
+        System.assertEquals('Fri *3h* (2h TEST)', formatted);
     }
 
     @isTest
@@ -230,6 +230,6 @@ private class SlashclockReportItemTest {
         // Then
         Test.stopTest();
 
-        System.assertEquals('Fri 3h (1.5h bar; 1h foo)', formatted);
+        System.assertEquals('Fri *3h* (1.5h bar; 1h foo)', formatted);
     }
 }
