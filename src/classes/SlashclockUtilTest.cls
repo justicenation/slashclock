@@ -86,13 +86,13 @@ private class SlashclockUtilTest {
 
         System.assertEquals(7, items.size(), 'number of report items');
 
-        System.assertEquals('Mon 0h', items[0].format());
-        System.assertEquals('Tue 9h', items[1].format());
-        System.assertEquals('Wed 9.5h (1.5h apex)', items[2].format());
-        System.assertEquals('Thu 0h', items[3].format());
-        System.assertEquals('Fri 0h', items[4].format());
-        System.assertEquals('Sat 0h', items[5].format());
-        System.assertEquals('Sun 0h', items[6].format());
+        System.assertEquals('Mon *0h*', items[0].format());
+        System.assertEquals('Tue *9h*', items[1].format());
+        System.assertEquals('Wed *9.5h* (1.5h apex)', items[2].format());
+        System.assertEquals('Thu *0h*', items[3].format());
+        System.assertEquals('Fri *0h*', items[4].format());
+        System.assertEquals('Sat *0h*', items[5].format());
+        System.assertEquals('Sun *0h*', items[6].format());
     }
 
     @testSetup
