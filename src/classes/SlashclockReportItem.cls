@@ -67,7 +67,7 @@ public with sharing class SlashclockReportItem {
 
         // Initialize the known parts of the string
         List<String> itemParts = new List<String> {
-            this.label, this.duration.formatH()
+            this.label, SlackUtil.bold(this.duration.formatH())
         };
 
         // Add a part for the slices if we have any slices

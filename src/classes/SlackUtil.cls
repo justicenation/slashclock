@@ -1,5 +1,9 @@
 public with sharing class SlackUtil {
 
+    public static String bold(String value) {
+        return '*' + value + '*';
+    }
+
     public static String format(SlashclockReport report) {
 
         // Initialize the lines of text to render
@@ -15,10 +19,6 @@ public with sharing class SlackUtil {
 
         // Add the formatted summary line
         lines.add(format(report.getSummaryItem()));
-
-        // Add the code block escape lines
-        lines.add('```');
-        lines.add(0, '```');
 
         // Return the formatted
         return String.join(lines, '\n');
