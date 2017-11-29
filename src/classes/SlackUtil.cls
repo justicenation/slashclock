@@ -17,7 +17,7 @@ public with sharing class SlackUtil {
         }
 
         // Add the summary line break
-        lines.add('==========');
+        lines.add(SlashclockReport.DEFAULT_SUMMARY_SEPARATOR);
 
         // Add the formatted summary line
         lines.add(format(report.getSummaryItem()));
