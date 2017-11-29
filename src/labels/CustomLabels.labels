@@ -17,6 +17,14 @@
         <value>Here&apos;s what you&apos;ve clocked over the last seven days.</value>
     </labels>
     <labels>
+        <fullName>SlashclockReportOpening</fullName>
+        <categories>slashclock</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>SlashclockEntriesOpening</shortDescription>
+        <value>Below are your stats for the week.</value>
+    </labels>
+    <labels>
         <fullName>SlashclockSliceSuccess</fullName>
         <categories>slashclock</categories>
         <language>en_US</language>

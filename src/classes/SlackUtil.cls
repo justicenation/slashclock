@@ -8,6 +8,8 @@ public with sharing class SlackUtil {
 
         // Initialize the lines of text to render
         List<String> lines = new List<String>();
+
+        lines.add(Label.SlashclockReportOpening);
         
         // Go through every daily item in the report, and format the item
         for (SlashclockReportItem eachItem : report.getItems()) {
