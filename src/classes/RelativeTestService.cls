@@ -27,6 +27,10 @@ public class RelativeTestService {
 
     public void setup() {
 
+        Datetime twoDaysAgo = this.reference.addDays(-2);
+        Datetime oneDaysAgo = this.reference.addDays(-1);
+        Datetime thirtyMinutesAgo = this.reference.addMinutes(-30);
+
         // Create accounts
         Account board = new Account(
                 Name = 'Board, Inc. (TEST)',
@@ -43,18 +47,30 @@ public class RelativeTestService {
                 LastName = 'Flip (TEST)',
                 SlackUserId__c = 'flip');
 
+        Contact kick = new Contact(
+                AccountId = board.Id,
+                FirstName = 'Dynamo',
+                LastName = 'Kick (TEST)',
+                SlackuserId__c = 'kick');
+
         insert new List<Contact> {
+            kick,
             flip
         };
 
         // Create time entries
+        TimeEntry__c kickboard2DaysAgo = new TimeEntry__c(
+                StartTime__c = twoDaysAgo,
+                SlackUserId__c = 'kick',
+                SlackTeamId__c = 'board');
 
         TimeEntry__c flipboard30mAgo = new TimeEntry__c(
-                StartTime__c = this.reference.addMinutes(-30),
+                StartTime__c = thirtyMinutesAgo,
                 SlackUserId__c = 'flip',
                 SlackTeamId__c = 'board');
 
         insert new List<TimeEntry__c> {
+            kickboard2DaysAgo,
             flipboard30mAgo
         };
     }

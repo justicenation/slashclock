@@ -168,7 +168,7 @@ public with sharing class SlashclockService {
      */
     public List<TimeEntry__c> getOpenTimeEntries() {
         return [
-            SELECT Id
+            SELECT Id, StartTime__c
             FROM TimeEntry__c
             WHERE SlackUserId__c = :this.userId
                 AND SlackTeamId__c = :this.teamId
@@ -204,6 +204,10 @@ public with sharing class SlashclockService {
             ORDER BY StartTime__c DESC
             LIMIT 1
         ];
+    }
+
+    public String getTimeZoneSidKey() {
+        return this.timeZoneSidKey;
     }
 
     public DateTime getStartOfWeek(DateTime value) {

@@ -54,6 +54,8 @@
         <members>TimeUtilTest</members>
         <members>UpdateJob</members>
         <members>Weekday</members>
+        <members>SlashclockOutCommandMock</members>
+        <members>SmartHttpCalloutMock</members>
         <name>ApexClass</name>
     </types>
     <types>
