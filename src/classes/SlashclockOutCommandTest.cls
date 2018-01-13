@@ -50,11 +50,10 @@ private class SlashclockOutCommandTest {
         System.assert(command.matches(slashCommand),
                 'must match slash command');
 
-        command.load(slashCommand);
-
         // When
         Test.startTest();
 
+        command.load(slashCommand);
         command.execute();
 
         // Then
