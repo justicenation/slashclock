@@ -13,12 +13,12 @@
         <members>Slack</members>
         <members>SlackApi</members>
         <members>SlackApiService</members>
+        <members>SlackApiServiceUsersInfoMock</members>
         <members>SlackApiUsersInfoAcmeBunnyMock</members>
         <members>SlackApiUsersInfoBarFooMock</members>
         <members>SlackApiUsersInfoBoardFlipMock</members>
         <members>SlackService</members>
         <members>SlackUtil</members>
-        <members>SlashCommandUtil</members>
         <members>Slashclock</members>
         <members>SlashclockCallbackController</members>
         <members>SlashclockEntriesCommand</members>
@@ -28,6 +28,7 @@
         <members>SlashclockInCommandTest</members>
         <members>SlashclockMockSuite</members>
         <members>SlashclockOutCommand</members>
+        <members>SlashclockOutCommandMock</members>
         <members>SlashclockOutCommandTest</members>
         <members>SlashclockReport</members>
         <members>SlashclockReportCommand</members>
@@ -44,6 +45,8 @@
         <members>SlashclockStrikeCommandTest</members>
         <members>SlashclockUtil</members>
         <members>SlashclockUtilTest</members>
+        <members>SlashCommandUtil</members>
+        <members>SmartHttpCalloutMock</members>
         <members>SmartMock</members>
         <members>SmartMockService</members>
         <members>TestService</members>
@@ -54,8 +57,6 @@
         <members>TimeUtilTest</members>
         <members>UpdateJob</members>
         <members>Weekday</members>
-        <members>SlashclockOutCommandMock</members>
-        <members>SmartHttpCalloutMock</members>
         <name>ApexClass</name>
     </types>
     <types>
