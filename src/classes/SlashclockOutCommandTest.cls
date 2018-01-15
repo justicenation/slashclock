@@ -1,21 +1,17 @@
 @isTest
 private class SlashclockOutCommandTest {
 
-    /**
-     * The time at which data was set up for this test class.
-     */
-    private static DateTime setupTime = DateTime.now();
-
-    private static TimeZone setupTimeZone = UserInfo.getTimeZone();
-
-    private static RelativeTestService relativeTest = RelativeTestService.getInstance(
-            setupTime, setupTimeZone.getID());
-
     @testSetup
     private static void setup() {
+        DateTime setupTime = DateTime.now();
+        TimeZone setupTimeZone = UserInfo.getTimeZone();
+
+        RelativeTestService relativeTest =
+                RelativeTestService.getInstance(
+                        setupTime, setupTimeZone.getID());
+
         relativeTest.setup();
     }
-
 
     @isTest
     private static void clockOutFiveThirtyPm() {
