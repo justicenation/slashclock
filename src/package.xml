@@ -23,6 +23,7 @@
         <members>SlashclockCallbackController</members>
         <members>SlashclockContentName</members>
         <members>SlashclockContentService</members>
+        <members>SlashclockContentUtil</members>
         <members>SlashclockEntriesCommand</members>
         <members>SlashclockEntriesCommandTest</members>
         <members>SlashclockException</members>
