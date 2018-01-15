@@ -14,6 +14,7 @@ public with sharing class SlashclockUtil {
 
     public static List<Slashclock.Command> getKnownCommands() {
         return new List<Slashclock.Command> {
+            new SlashclockHelpCommand(),
             new SlashclockInCommand(),
             new SlashclockOutCommand(),
             new SlashclockReportCommand(),

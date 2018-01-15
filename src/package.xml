@@ -24,6 +24,8 @@
         <members>SlashclockEntriesCommand</members>
         <members>SlashclockEntriesCommandTest</members>
         <members>SlashclockException</members>
+        <members>SlashclockHelpCommand</members>
+        <members>SlashclockHelpCommandTest</members>
         <members>SlashclockInCommand</members>
         <members>SlashclockInCommandTest</members>
         <members>SlashclockMockSuite</members>
