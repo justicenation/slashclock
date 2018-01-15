@@ -28,7 +28,29 @@ public with sharing class SlashclockHelpCommand implements Slashclock.Command {
         return result;
     }
 
+    public static String getCommandRegex() {
+        return 'help(\\s+(.+))?';
+    }
+
+    public static Pattern getPattern() {
+        return Pattern.compile(getCommandRegex());
+    }
+
     public Slashclock.Command load(SlashCommand__c command) {
+
+        // Grab the subcommand text if available
+        Matcher matcher = getPattern().matcher(command.Text__c);
+
+        // Load the specific time if it exists
+        if (matcher.matches()) {
+
+            // Store the subcommand if one was provided
+            if (!String.isEmpty(matcher.group(2))) {
+                this.subcommandText = matcher.group(2);
+            }
+        }
+
+        // Return the fully loaded command
         return this;
     }
 
