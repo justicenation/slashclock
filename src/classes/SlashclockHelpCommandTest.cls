@@ -6,7 +6,40 @@ private class SlashclockHelpCommandTest {
      */
     @isTest
     private static void clockHelp() {
-        System.assert(false, 'TODO');
+        
+        // Given
+        String slackUserId = 'em';
+        String slackTeamId = 'cee';
+
+        SlashclockService slashclock =
+                SlashclockService.getInstance(slackUserId, slackTeamId);
+
+        SlashCommand__c slashCommand = new SlashCommand__c(
+                SlackUserId__c = slackUserId,
+                SlackTeamId__c = slackTeamId,
+                Text__c = 'help');
+
+        SlashclockHelpCommand command = new SlashclockHelpCommand();
+
+        System.assert(command.matches(slashCommand),
+                'must match slash command');
+
+        // When
+        Test.startTest();
+
+        command.load(slashCommand);
+        Slashclock.CommandResult result = command.execute();
+
+        // Then
+        Test.stopTest();
+
+        System.assertEquals(true, result.isSuccess(), 'result.isSuccess()');
+
+        System.assertEquals(
+                SlashclockContentService.getInstance().getContent(
+                        SlashclockContentName.HELP_COMMAND),
+                result.getMessage(),
+                'result.getMessage()');
     }
 
     /**
@@ -55,5 +88,10 @@ private class SlashclockHelpCommandTest {
     @isTest
     private static void clockHelpStrike() {
         System.assert(false, 'TODO');
+    }
+
+    @testSetup
+    private static void setup() {
+        TestService.getInstance().setup();
     }
 }

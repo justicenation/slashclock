@@ -21,6 +21,8 @@
         <members>SlackUtil</members>
         <members>Slashclock</members>
         <members>SlashclockCallbackController</members>
+        <members>SlashclockContentName</members>
+        <members>SlashclockContentService</members>
         <members>SlashclockEntriesCommand</members>
         <members>SlashclockEntriesCommandTest</members>
         <members>SlashclockException</members>
