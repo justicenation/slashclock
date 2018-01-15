@@ -94,8 +94,7 @@
         <members>SlashclockContent</members>
         <members>SlashclockContent/HelpCommand</members>
         <members>SlashclockContent/HelpEntriesCommand</members>
-        <members>SlashclockContent/HelpInCommand</members>
-        <members>SlashclockContent/HelpOutCommand</members>
+        <members>SlashclockContent/HelpInOutCommand</members>
         <members>SlashclockContent/HelpReportCommand</members>
         <members>SlashclockContent/HelpSliceCommand</members>
         <members>SlashclockContent/HelpStrikeCommand</members>

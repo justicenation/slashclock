@@ -1,0 +1,15 @@
+/clock *in* and /clock *out* do what you think they do! Whenever you're ready to start and stop working, use these commands to tracking the time you've spent on work! See example commands for clocking in at 8:30am in the morning and for clocking in at 1:00pm in the afternoon.
+
+/clock in 8:30am
+/clock out 12:00pm
+
+/clock in 1:00pm
+/clock out 5:00pm
+
+If you had a rough day and you'd forgotten to track some time from yesterday, you can add the special "yesterday" keyword to travel back in time to yesterday, and retroactively clock in or clock out.
+
+/clock in _yesterday_ 8:30am
+/clock out _yesterday_ 12:00pm
+
+/clock in _yesterday_ 1:00pm
+/clock out _yesterday_ 5:00pm

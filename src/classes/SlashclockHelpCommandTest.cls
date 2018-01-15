@@ -76,7 +76,7 @@ private class SlashclockHelpCommandTest {
         System.assertEquals(true, result.isSuccess(), 'result.isSuccess()');
 
         System.assertEquals(
-                'Content for */clock help in*',
+                'Content for */clock help in and out*',
                 result.getMessage(),
                 'result.getMessage()');
     }
@@ -116,7 +116,7 @@ private class SlashclockHelpCommandTest {
         System.assertEquals(true, result.isSuccess(), 'result.isSuccess()');
 
         System.assertEquals(
-                'Content for */clock help out*',
+                'Content for */clock help in and out*',
                 result.getMessage(),
                 'result.getMessage()');
     }
