@@ -19,7 +19,7 @@ private class SlashclockOutCommandTest {
 
     @isTest
     private static void clockOutFiveThirtyPm() {
-        Test.setMock(HttpCalloutMock.class, new SlashclockOutCommandMock());
+        Test.setMock(HttpCalloutMock.class, new SlackApiServiceMockSuite());
         
         // Given
         String slackUserId = 'kick';
