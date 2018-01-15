@@ -34,7 +34,7 @@ public with sharing class SlashclockOutCommand implements Slashclock.Command {
     }
 
     public static String getCommandRegex() {
-        return 'out(\\s+.*)?';
+        return 'out(\\s+(yesterday\\s+)?(.+))?';
     }
 
     public static Pattern getPattern() {
@@ -62,11 +62,17 @@ public with sharing class SlashclockOutCommand implements Slashclock.Command {
         // Load the specific time if specified
         Matcher matcher = getPattern().matcher(command.Text__c);
 
-        if (matcher.matches() && !String.isEmpty(matcher.group(1))) {
+        if (matcher.matches() && !String.isEmpty(matcher.group(3))) {
+
+            // Determine what the correct offset is to pass to `addDays`
+            // to calculate the correct date
+            Integer offset = String.isEmpty(matcher.group(2)) ? 0 : -1;
+
+            // Derive the correct end time
             this.endTime =
                     DateTimeUtil.newDateTime(
-                            DateTimeUtil.getDate(this.endTime, this.timeZoneSidKey),
-                            TimeUtil.parseTime(matcher.group(1).trim()),
+                            DateTimeUtil.getDate(this.endTime, this.timeZoneSidKey).addDays(offset),
+                            TimeUtil.parseTime(matcher.group(3).trim()),
                             TimeZone.getTimeZone(this.timeZoneSidKey));
         }
 

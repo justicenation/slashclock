@@ -87,6 +87,110 @@ private class SlashclockInCommandTest {
                 'SlashclockInCommand.startTime');
     }
 
+    @isTest
+    private static void clockInEightThirtyAm() {
+        Test.setMock(HttpCalloutMock.class, new SlackApiServiceMockSuite());
+        
+        // Given
+        String slackUserId = 'em';
+        String slackTeamId = 'cee';
+
+        SlashclockService slashclock =
+                SlashclockService.getInstance(slackUserId, slackTeamId);
+
+        List<TimeEntry__c> openEntries = slashclock.getOpenTimeEntries();
+
+        System.assertEquals(0, openEntries.size(), 'openEntries.size()');
+
+        Datetime clockInTime = DatetimeUtil.newDatetime(
+                Date.today(),
+                Time.newInstance(8, 30, 0, 0),
+                slashclock.getTimeZoneSidKey());
+
+        SlashCommand__c slashCommand = new SlashCommand__c(
+                SlackUserId__c = slackUserId,
+                SlackTeamId__c = slackTeamId,
+                Text__c = 'in 8:30am');
+
+        SlashclockInCommand command = new SlashclockInCommand();
+
+        System.assert(command.matches(slashCommand),
+                'must match slash command');
+
+        // When
+        Test.startTest();
+
+        command.load(slashCommand);
+        command.execute();
+
+        // Then
+        Test.stopTest();
+
+        TimeEntry__c openEntry = [
+            SELECT Id, StartTime__c
+            FROM TimeEntry__c
+            WHERE
+                SlackUserId__c = :slackUserId AND
+                SlackTeamId__c = :slackTeamId AND
+                EndTime__c = NULL
+        ];
+
+        System.assertEquals(clockInTime, openEntry.StartTime__c,
+                Schema.SObjectType.TimeEntry__c.fields.StartTime__c.label);
+    }
+
+    @isTest
+    private static void clockInYesterdayEightThirtyAm() {
+        Test.setMock(HttpCalloutMock.class, new SlackApiServiceMockSuite());
+        
+        // Given
+        String slackUserId = 'em';
+        String slackTeamId = 'cee';
+
+        SlashclockService slashclock =
+                SlashclockService.getInstance(slackUserId, slackTeamId);
+
+        List<TimeEntry__c> openEntries = slashclock.getOpenTimeEntries();
+
+        System.assertEquals(0, openEntries.size(), 'openEntries.size()');
+
+        Datetime clockInTime = DatetimeUtil.newDatetime(
+                Date.today().addDays(-1),
+                Time.newInstance(8, 30, 0, 0),
+                slashclock.getTimeZoneSidKey());
+
+        SlashCommand__c slashCommand = new SlashCommand__c(
+                SlackUserId__c = slackUserId,
+                SlackTeamId__c = slackTeamId,
+                Text__c = 'in yesterday 8:30am');
+
+        SlashclockInCommand command = new SlashclockInCommand();
+
+        System.assert(command.matches(slashCommand),
+                'must match slash command');
+
+        // When
+        Test.startTest();
+
+        command.load(slashCommand);
+        command.execute();
+
+        // Then
+        Test.stopTest();
+
+        TimeEntry__c openEntry = [
+            SELECT Id, StartTime__c
+            FROM TimeEntry__c
+            WHERE
+                SlackUserId__c = :slackUserId AND
+                SlackTeamId__c = :slackTeamId AND
+                EndTime__c = NULL
+        ];
+
+        System.assertEquals(clockInTime, openEntry.StartTime__c,
+                Schema.SObjectType.TimeEntry__c.fields.StartTime__c.label);
+    }
+
     @testSetup
     private static void setup() {
         TestService.getInstance().setup();

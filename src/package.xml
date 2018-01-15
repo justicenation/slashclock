@@ -9,15 +9,16 @@
         <members>DateTimeUtilTest</members>
         <members>HttpUtil</members>
         <members>PageService</members>
+        <members>RelativeTestService</members>
         <members>Slack</members>
         <members>SlackApi</members>
         <members>SlackApiService</members>
+        <members>SlackApiServiceMockSuite</members>
         <members>SlackApiUsersInfoAcmeBunnyMock</members>
         <members>SlackApiUsersInfoBarFooMock</members>
         <members>SlackApiUsersInfoBoardFlipMock</members>
         <members>SlackService</members>
         <members>SlackUtil</members>
-        <members>SlashCommandUtil</members>
         <members>Slashclock</members>
         <members>SlashclockCallbackController</members>
         <members>SlashclockEntriesCommand</members>
@@ -27,6 +28,7 @@
         <members>SlashclockInCommandTest</members>
         <members>SlashclockMockSuite</members>
         <members>SlashclockOutCommand</members>
+        <members>SlashclockOutCommandTest</members>
         <members>SlashclockReport</members>
         <members>SlashclockReportCommand</members>
         <members>SlashclockReportItem</members>
@@ -42,6 +44,9 @@
         <members>SlashclockStrikeCommandTest</members>
         <members>SlashclockUtil</members>
         <members>SlashclockUtilTest</members>
+        <members>SlashCommandUtil</members>
+        <members>SmartHttpCalloutMock</members>
+        <members>SmartHttpCalloutMockSuite</members>
         <members>SmartMock</members>
         <members>SmartMockService</members>
         <members>TestService</members>

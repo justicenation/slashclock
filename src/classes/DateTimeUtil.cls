@@ -5,6 +5,16 @@ public with sharing class DateTimeUtil {
     public static Date getDate(DateTime value, String timeZoneSidKey) {
         return Date.valueOf(value.format('yyyy-MM-dd', timeZoneSidKey));
     }
+    
+    public static Time getTime(DateTime value, String timeZoneSidKey) {
+        List<String> timeParts = value.format('H,m,s,S', timeZoneSidKey).split(',');
+
+        return Time.newInstance(
+                Integer.valueOf(timeParts[0]),
+                Integer.valueOf(timeParts[1]),
+                Integer.valueOf(timeParts[2]),
+                Integer.valueOf(timeParts[3]));
+    }
 
     /**
      * @return an integer representing the day of week
@@ -31,6 +41,12 @@ public with sharing class DateTimeUtil {
         Integer offset = -1 * zone.getOffset(dateValue) / 1000 /* ms/sec */;
         
         return DateTime.newInstanceGmt(dateValue, timeValue).addSeconds(offset);
+    }
+
+    public static Datetime newDatetime(
+            Date dateValue, Time timeValue, String timeZoneSidKey) {
+        return newDateTime(
+                dateValue, timeValue, TimeZone.getTimeZone(timeZoneSidKey));
     }
 
     public static Date startOfWeek(Date value, Weekday firstDayOfWeek) {
