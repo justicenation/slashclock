@@ -47,6 +47,7 @@
         <members>SlashclockUtilTest</members>
         <members>SlashCommandUtil</members>
         <members>SmartHttpCalloutMock</members>
+        <members>SmartHttpCalloutMockSuite</members>
         <members>SmartMock</members>
         <members>SmartMockService</members>
         <members>TestService</members>
