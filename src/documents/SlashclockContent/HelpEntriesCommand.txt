@@ -1,1 +1,14 @@
-TODO
+/clock *entries* lists all of the time entries you've logged over the last seven days. For example, if you type the command on a Monday, you could see something like the following.
+
+> Here's what you've clocked over the last seven days.
+> 1. Mon 1/15 9:30am - 1:15pm
+> 2. Fri 1/12 4:30pm - 5:00pm
+> 3. Fri 1/12 9:00am - 3:30pm
+> 4. Thu 1/11 10:15am - 9:30pm
+> 5. Thu 1/11 8:30am - 9:00am
+> 6. Wed 1/10 11:00am - 12:30pm
+> 7. Wed 1/10 9:00am - 10:30am
+> 8. Tue 1/9 1:15pm - 5:30pm
+> 9. Tue 1/9 9:45am - 1:00pm
+
+The numbers can be used with the /clock *strike* command to delete inaccurate entries.
