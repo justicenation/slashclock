@@ -36,8 +36,7 @@ private class SlashclockHelpCommandTest {
         System.assertEquals(true, result.isSuccess(), 'result.isSuccess()');
 
         System.assertEquals(
-                SlashclockContentService.getInstance().getContent(
-                        SlashclockContentName.HELP_COMMAND),
+                'Content for */clock help*',
                 result.getMessage(),
                 'result.getMessage()');
     }

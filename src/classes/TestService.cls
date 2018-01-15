@@ -91,5 +91,16 @@ public with sharing class TestService {
         insert new List<TimeSlice__c> {
             emcee20170705slice
         };
+
+        // Create documents
+        Id contentFolderId =
+                SlashclockContentService.getInstance().getContentFolderId();
+
+        insert new List<Document> {
+            new Document(
+                    FolderId = contentFolderId,
+                    Name = SlashclockContentName.HELP_COMMAND.name(),
+                    Body = Blob.valueOf('Content for */clock help*'))
+        };
     }
 }

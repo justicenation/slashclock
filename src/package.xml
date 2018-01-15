@@ -19,6 +19,7 @@
         <members>SlackApiUsersInfoBoardFlipMock</members>
         <members>SlackService</members>
         <members>SlackUtil</members>
+        <members>SlashCommandUtil</members>
         <members>Slashclock</members>
         <members>SlashclockCallbackController</members>
         <members>SlashclockContentName</members>
@@ -49,7 +50,6 @@
         <members>SlashclockStrikeCommandTest</members>
         <members>SlashclockUtil</members>
         <members>SlashclockUtilTest</members>
-        <members>SlashCommandUtil</members>
         <members>SmartHttpCalloutMock</members>
         <members>SmartHttpCalloutMockSuite</members>
         <members>SmartMock</members>
@@ -89,6 +89,11 @@
         <members>SlashCommand__c</members>
         <members>TimeEntry__c</members>
         <name>CustomTab</name>
+    </types>
+    <types>
+        <members>SlashclockContent</members>
+        <members>SlashclockContent/HelpCommand</members>
+        <name>Document</name>
     </types>
     <types>
         <members>TimeZoneSidKey</members>

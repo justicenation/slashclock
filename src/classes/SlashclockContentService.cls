@@ -3,6 +3,8 @@
  * sent in response to more verbose commands such as `/clock help`
  */
 public with sharing class SlashclockContentService {
+    
+    public static final String folderName = 'Slashclock Content';
 
     /**
      * Assume this is a singleton service
@@ -17,7 +19,21 @@ public with sharing class SlashclockContentService {
      * @return the expected content, formatted as Slack-flavored Markdown
      */
     public String getContent(SlashclockContentName contentName) {
-        return null;
+        return [
+            SELECT Id, Body
+            FROM Document
+            WHERE
+                FolderId = :this.getContentFolderId() AND
+                Name = :contentName.name()
+        ].Body.toString();
+    }
+
+    public Id getContentFolderId() {
+        return [
+            SELECT Id
+            FROM Folder
+            WHERE Name = :folderName
+        ].Id;
     }
 
     public static SlashclockContentService getInstance() {
