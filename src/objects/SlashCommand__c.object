@@ -55,7 +55,7 @@
     <enableStreamingApi>false</enableStreamingApi>
     <fields>
         <fullName>Command__c</fullName>
-        <description>Exact slash command, issued by the user. For example, "/clock", "/join".</description>
+        <description>Exact slash command, issued by the user. For example, &quot;/clock&quot;, &quot;/join&quot;.</description>
         <externalId>false</externalId>
         <label>Command</label>
         <length>40</length>

@@ -37,7 +37,7 @@ private class SlashclockUnknownCommandTest {
         System.assertEquals(false, result.isSuccess(), 'result.isSuccess()');
 
         System.assertEquals(
-                'Unknown command, yo!',
+                'Unknown command, /clock foo!',
                 result.getMessage(),
                 'result.getMessage()');
     }

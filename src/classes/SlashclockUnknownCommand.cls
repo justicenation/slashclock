@@ -1,5 +1,11 @@
 public class SlashclockUnknownCommand implements Slashclock.Command {
 
+    private String commandText;
+
+    public SlashclockUnknownCommand() {
+        this.commandText = null;
+    }
+
     public Slashclock.CommandResult execute() {
 
         // Initialize the result
@@ -12,14 +18,37 @@ public class SlashclockUnknownCommand implements Slashclock.Command {
                 SlashclockContentService.getInstance();
 
         result.setMessage(
-                slashclockContent.getContent(
-                        SlashclockContentName.UNKNOWN_COMMAND));
+                SlashclockContentUtil.place(
+                        new List<String> { this.commandText },
+                        slashclockContent.getContent(
+                                SlashclockContentName.UNKNOWN_COMMAND)));
 
         // Return the result
         return result;
     }
 
+    public static String getCommandRegex() {
+        return '((.+?)(\\s+.*)?)?';
+    }
+
+    public static Pattern getPattern() {
+        return Pattern.compile(getCommandRegex());
+    }
+
     public Slashclock.Command load(SlashCommand__c command) {
+
+        // Default the command text for the later parameterization
+        this.commandText = command.Command__c;
+
+        // Figure out whether a command was issued
+        Matcher matcher = getPattern().matcher(command.Text__c);
+
+        if (matcher.matches()) {
+            if (!String.isEmpty(matcher.group(2))) {
+                this.commandText += ' ' + matcher.group(2);
+            }
+        }
+
         return this;
     }
 
