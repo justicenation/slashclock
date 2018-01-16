@@ -1,4 +1,4 @@
-/clock *entries* lists all of the time entries you've logged over the last seven days. For example, if you type the command on a Monday, you could see something like the following.
+:information_source: /clock *entries* lists all of the time entries you've logged over the last seven days. For example, if you type the command on a Monday, you could see something like the following.
 
 > Here's what you've clocked over the last seven days.
 > 1. Mon 1/15 9:30am - 1:15pm

@@ -1,4 +1,4 @@
-/clock *report* gives you a day-by-day summary of all the time you've clocked for the current week. If you want to see what happened last week, you can add the "last week" keyword to the command. The the commands below!
+:information_source: /clock *report* gives you a day-by-day summary of all the time you've clocked for the current week. If you want to see what happened last week, you can add the "last week" keyword to the command. The the commands below!
 
-/clock report
-/clock report last week
+    /clock report
+    /clock report last week
