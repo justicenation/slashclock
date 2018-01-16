@@ -7,8 +7,13 @@ public class SlashclockUnknownCommand implements Slashclock.Command {
 
         result.setSuccess(false);  // If we got here, things are not okay
 
-        // TODO: Do the command
+        // Set the error message
+        SlashclockContentService slashclockContent =
+                SlashclockContentService.getInstance();
 
+        result.setMessage(
+                slashclockContent.getContent(
+                        SlashclockContentName.UNKNOWN_COMMAND));
 
         // Return the result
         return result;
