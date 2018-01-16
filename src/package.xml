@@ -48,6 +48,8 @@
         <members>SlashclockSliceCommandTest</members>
         <members>SlashclockStrikeCommand</members>
         <members>SlashclockStrikeCommandTest</members>
+        <members>SlashclockUnknownCommand</members>
+        <members>SlashclockUnknownCommandTest</members>
         <members>SlashclockUtil</members>
         <members>SlashclockUtilTest</members>
         <members>SmartHttpCalloutMock</members>
