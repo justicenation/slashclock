@@ -91,5 +91,36 @@ public with sharing class TestService {
         insert new List<TimeSlice__c> {
             emcee20170705slice
         };
+
+        // Create documents
+        Id contentFolderId =
+                SlashclockContentService.getInstance().getContentFolderId();
+
+        insert new List<Document> {
+            new Document(
+                    FolderId = contentFolderId,
+                    Name = SlashclockContentName.HELP_IN_OUT_COMMAND.name(),
+                    Body = Blob.valueOf('Content for */clock help in and out*')),
+            new Document(
+                    FolderId = contentFolderId,
+                    Name = SlashclockContentName.HELP_REPORT_COMMAND.name(),
+                    Body = Blob.valueOf('Content for */clock help report*')),
+            new Document(
+                    FolderId = contentFolderId,
+                    Name = SlashclockContentName.HELP_SLICE_COMMAND.name(),
+                    Body = Blob.valueOf('Content for */clock help slice*')),
+            new Document(
+                    FolderId = contentFolderId,
+                    Name = SlashclockContentName.HELP_ENTRIES_COMMAND.name(),
+                    Body = Blob.valueOf('Content for */clock help entries*')),
+            new Document(
+                    FolderId = contentFolderId,
+                    Name = SlashclockContentName.HELP_STRIKE_COMMAND.name(),
+                    Body = Blob.valueOf('Content for */clock help strike*')),
+            new Document(
+                    FolderId = contentFolderId,
+                    Name = SlashclockContentName.HELP_COMMAND.name(),
+                    Body = Blob.valueOf('Content for */clock help*'))
+        };
     }
 }

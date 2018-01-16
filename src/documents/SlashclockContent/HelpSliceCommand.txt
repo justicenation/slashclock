@@ -1,0 +1,9 @@
+:information_source: /clock *slice* allows you to tag chunks of time within a time entry, in case you need more granular detail on what you're doing at work. For instance, if your primary focus is project A, but you're also supposed to be 25% allocated to support project B, you may want to slice your time to see how much you _actually_ spent on one project vs. the other.
+
+    /clock slice 15 minutes skunkworks
+    /clock slice 30 minutes phoenix
+    /clock slice 1 hour alpha
+    /clock slice 1.5 hours omega
+    /clock slice 2 hours endgame
+
+After you're done slicing up your time, try /clock *report* to see how it looks!

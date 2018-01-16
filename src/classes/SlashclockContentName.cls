@@ -1,0 +1,8 @@
+public enum SlashclockContentName {
+    HELP_COMMAND,
+    HELP_ENTRIES_COMMAND,
+    HELP_IN_OUT_COMMAND,
+    HELP_REPORT_COMMAND,
+    HELP_SLICE_COMMAND,
+    HELP_STRIKE_COMMAND
+}

@@ -1,0 +1,11 @@
+:information_source: /clock *strike* allows you to delete a time entry from your history. For example, if you clocked in by mistake, the command below will delete the open time entry you just created.
+
+    /clock strike
+
+For more surgical edits to time entries from today or from yesterday, take a look at your history with /clock *entries* and then add the numeric index to delete a specific entry.
+
+    /clock strike 2
+    /clock strike 3
+    /clock strike 5
+
+Please be careful! After deleting one entry, the indexes _will_ shift. So it's best to check /clock *entries* after each entry is struck to make sure you're targeting the right one.
