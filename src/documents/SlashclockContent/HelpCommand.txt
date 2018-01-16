@@ -1,4 +1,4 @@
-:information_source: *slashClock* helps you track your time, clocking in, clocking out and running reports. For more detailed help on specific /clock commands, try the following.
+:information_source: *slashClock* helps you track your time, clocking in, clocking out and running reports. For more detailed help on specific commands, try the following.
 
     /clock help *entries*
     /clock help *in*
