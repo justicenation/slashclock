@@ -120,7 +120,11 @@ public with sharing class TestService {
             new Document(
                     FolderId = contentFolderId,
                     Name = SlashclockContentName.HELP_COMMAND.name(),
-                    Body = Blob.valueOf('Content for */clock help*'))
+                    Body = Blob.valueOf('Content for */clock help*')),
+            new Document(
+                    FolderId = contentFolderId,
+                    Name = SlashclockContentName.UNKNOWN_COMMAND.name(),
+                    Body = Blob.valueOf('Unknown command, yo!'))
         };
     }
 }
