@@ -20,7 +20,8 @@ public with sharing class SlashclockUtil {
             new SlashclockReportCommand(),
             new SlashclockSliceCommand(),
             new SlashclockEntriesCommand(),
-            new SlashclockStrikeCommand()
+            new SlashclockStrikeCommand(),
+            new SlashclockUnknownCommand()
         };
     }
 

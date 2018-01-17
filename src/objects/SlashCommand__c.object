@@ -55,7 +55,7 @@
     <enableStreamingApi>false</enableStreamingApi>
     <fields>
         <fullName>Command__c</fullName>
-        <description>Exact slash command, issued by the user</description>
+        <description>Exact slash command, issued by the user. For example, &quot;/clock&quot;, &quot;/join&quot;.</description>
         <externalId>false</externalId>
         <label>Command</label>
         <length>40</length>
@@ -115,7 +115,7 @@
         <type>LongTextArea</type>
         <visibleLines>3</visibleLines>
     </fields>
-    <label>Slack Command</label>
+    <label>Slash Command</label>
     <listViews>
         <fullName>All</fullName>
         <filterScope>Everything</filterScope>
@@ -123,10 +123,10 @@
     </listViews>
     <nameField>
         <displayFormat>SC-{0000000000}</displayFormat>
-        <label>Slack Command Number</label>
+        <label>Slash Command Number</label>
         <type>AutoNumber</type>
     </nameField>
-    <pluralLabel>Slack Commands</pluralLabel>
+    <pluralLabel>Slash Commands</pluralLabel>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>

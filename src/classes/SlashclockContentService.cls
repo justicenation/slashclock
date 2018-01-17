@@ -4,7 +4,7 @@
  */
 public with sharing class SlashclockContentService {
     
-    public static final String folderName = 'Slashclock Content';
+    public static final String folderName = 'slashClock Content';
 
     /**
      * Assume this is a singleton service
