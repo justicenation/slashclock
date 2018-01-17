@@ -41,11 +41,13 @@ public class SlashclockUnknownCommand implements Slashclock.Command {
         this.commandText = command.Command__c;
 
         // Figure out whether a command was issued
-        Matcher matcher = getPattern().matcher(command.Text__c);
+        if (!String.isEmpty(command.Text__c)) {
+            Matcher matcher = getPattern().matcher(command.Text__c);
 
-        if (matcher.matches()) {
-            if (!String.isEmpty(matcher.group(2))) {
-                this.commandText += ' ' + matcher.group(2);
+            if (matcher.matches()) {
+                if (!String.isEmpty(matcher.group(2))) {
+                    this.commandText += ' ' + matcher.group(2);
+                }
             }
         }
 
