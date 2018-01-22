@@ -6,8 +6,8 @@ global class ClockResource {
 
         // Process the request
         SlashCommand__c slash = SlashCommandUtil.parse(RestContext.request);
-        Slashclock.Command command = SlashclockUtil.newCommand(slash);
-        Slashclock.CommandResult result = command.execute();
+        SlashclockService slashclock = SlashclockService.getInstance(slash);
+        Slashclock.CommandResult result = slashclock.execute(slash);
 
         // Return the response
         RestContext.response.addHeader('Content-Type', 'application/json');

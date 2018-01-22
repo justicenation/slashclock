@@ -49,7 +49,7 @@
     <enableChangeDataCapture>false</enableChangeDataCapture>
     <enableFeeds>false</enableFeeds>
     <enableHistory>false</enableHistory>
-    <enableReports>false</enableReports>
+    <enableReports>true</enableReports>
     <enableSearch>true</enableSearch>
     <enableSharing>false</enableSharing>
     <enableStreamingApi>false</enableStreamingApi>
@@ -58,6 +58,37 @@
         <description>Exact slash command, issued by the user. For example, &quot;/clock&quot;, &quot;/join&quot;.</description>
         <externalId>false</externalId>
         <label>Command</label>
+        <length>40</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>ErrorMessage__c</fullName>
+        <description>Exception.getMessage()</description>
+        <externalId>false</externalId>
+        <label>Error Message</label>
+        <length>32768</length>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>ErrorStackTraceString__c</fullName>
+        <description>Exception.getStackTraceString()</description>
+        <externalId>false</externalId>
+        <label>Error Stack Trace</label>
+        <length>32768</length>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>ErrorTypeName__c</fullName>
+        <description>Exception.getTypeName()</description>
+        <externalId>false</externalId>
+        <label>Error Type Name</label>
         <length>40</length>
         <required>false</required>
         <trackTrending>false</trackTrending>

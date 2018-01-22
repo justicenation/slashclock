@@ -5,5 +5,6 @@ public enum SlashclockContentName {
     HELP_REPORT_COMMAND,
     HELP_SLICE_COMMAND,
     HELP_STRIKE_COMMAND,
-    UNKNOWN_COMMAND
+    UNKNOWN_COMMAND,
+    UNKNOWN_ERROR
 }

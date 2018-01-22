@@ -27,6 +27,7 @@
         <members>SlashclockContentUtil</members>
         <members>SlashclockEntriesCommand</members>
         <members>SlashclockEntriesCommandTest</members>
+        <members>SlashclockErrorTest</members>
         <members>SlashclockException</members>
         <members>SlashclockHelpCommand</members>
         <members>SlashclockHelpCommandTest</members>
@@ -100,11 +101,17 @@
         <members>SlashclockContent/HelpReportCommand</members>
         <members>SlashclockContent/HelpSliceCommand</members>
         <members>SlashclockContent/HelpStrikeCommand</members>
+        <members>SlashclockContent/UnknownCommand</members>
+        <members>SlashclockContent/UnknownError</members>
         <name>Document</name>
     </types>
     <types>
         <members>TimeZoneSidKey</members>
         <name>GlobalValueSet</name>
+    </types>
+    <types>
+        <members>SlashCommand__c-Slash Command Layout</members>
+        <name>Layout</name>
     </types>
     <types>
         <members>SlackApiUsersInfoAcmeBunnyMock</members>

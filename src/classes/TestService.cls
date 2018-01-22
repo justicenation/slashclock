@@ -124,7 +124,11 @@ public with sharing class TestService {
             new Document(
                     FolderId = contentFolderId,
                     Name = SlashclockContentName.UNKNOWN_COMMAND.name(),
-                    Body = Blob.valueOf('Unknown command, {0}!'))
+                    Body = Blob.valueOf('Unknown command, {0}!')),
+            new Document(
+                    FolderId = contentFolderId,
+                    Name = SlashclockContentName.UNKNOWN_ERROR.name(),
+                    Body = Blob.valueOf('Bad command: {0}'))
         };
     }
 }
