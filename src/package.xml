@@ -110,6 +110,10 @@
         <name>GlobalValueSet</name>
     </types>
     <types>
+        <members>SlashCommand__c-Slash Command Layout</members>
+        <name>Layout</name>
+    </types>
+    <types>
         <members>SlackApiUsersInfoAcmeBunnyMock</members>
         <members>SlackApiUsersInfoBarFooMock</members>
         <members>SlackApiUsersInfoBoardFlipMock</members>
