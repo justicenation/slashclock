@@ -65,6 +65,37 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>ErrorMessage__c</fullName>
+        <description>Exception.getMessage()</description>
+        <externalId>false</externalId>
+        <label>Error Message</label>
+        <length>32768</length>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>ErrorStackTraceString__c</fullName>
+        <description>Exception.getStackTraceString()</description>
+        <externalId>false</externalId>
+        <label>Error Stack Trace</label>
+        <length>32768</length>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>ErrorTypeName__c</fullName>
+        <description>Exception.getTypeName()</description>
+        <externalId>false</externalId>
+        <label>Error Type Name</label>
+        <length>40</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Request__c</fullName>
         <description>Serialized request as received by Salesforce</description>
         <externalId>false</externalId>

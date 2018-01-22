@@ -106,6 +106,15 @@ public with sharing class SlashclockService {
             result = command.execute();
         }
         catch(System.Exception caught) {
+
+            // Log the command for further investigation
+            inbound.ErrorMessage__c = caught.getMessage();
+            inbound.ErrorStackTraceString__c = caught.getStackTraceString();
+            inbound.ErrorTypeName__c = caught.getTypeName();
+
+            insert inbound;
+
+            // Set the result
             result.setSuccess(false);
 
             SlashclockContentService content =

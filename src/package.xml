@@ -101,6 +101,8 @@
         <members>SlashclockContent/HelpReportCommand</members>
         <members>SlashclockContent/HelpSliceCommand</members>
         <members>SlashclockContent/HelpStrikeCommand</members>
+        <members>SlashclockContent/UnknownCommand</members>
+        <members>SlashclockContent/UnknownError</members>
         <name>Document</name>
     </types>
     <types>
