@@ -47,7 +47,7 @@ public with sharing class SlashclockErrorTest {
         System.assertEquals(false, result.isSuccess(), 'result.isSuccess()');
 
         System.assertEquals(
-                'Bad commmand: /clock in xyz',
+                'Bad command: /clock in xyz',
                 result.getMessage(),
                 'result.getMessage()');
     }

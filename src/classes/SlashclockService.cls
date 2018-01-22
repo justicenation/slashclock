@@ -84,6 +84,42 @@ public with sharing class SlashclockService {
     }
 
     /**
+     * Execute an inbound slash command, and return the command result.
+     * In case the command fails for an unknown reason, meaning that
+     * an unhandled exception was encountered, the inbound command
+     * should be logged so that a notification can be generated to
+     * the product owner.
+     *
+     * @param inbound The inbound slash command
+     *
+     * @return the result of processing the slash command, with a user-friendly
+     *         message to be sent back to the Slack client
+     */
+    public Slashclock.CommandResult execute(SlashCommand__c inbound) {
+
+        // Construct the command
+        Slashclock.CommandResult result = new Slashclock.CommandResult();
+
+        // Execute the command and catch any unexpected exceptions
+        try {
+            Slashclock.Command command = SlashclockUtil.newCommand(inbound);
+            result = command.execute();
+        }
+        catch(System.Exception caught) {
+            result.setSuccess(false);
+
+            SlashclockContentService content =
+                    SlashclockContentService.getInstance();
+            
+            result.setMessage(content.getContent(
+                    SlashclockContentName.UNKNOWN_ERROR,
+                    new List<String> { SlackUtil.format(inbound) }));
+        }
+
+        return result;
+    }
+
+    /**
      * Given a list of time entries, format the time entries for display as
      * a successful response to a `/clock entries` command
      *
@@ -185,6 +221,10 @@ public with sharing class SlashclockService {
                 AND StartTime__c >= :startTime
             ORDER BY StartTime__c DESC
         ];
+    }
+
+    public static SlashclockService getInstance(SlashCommand__c command) {
+        return getInstance(command.SlackUserId__c, command.SlackTeamId__c);
     }
 
     public static SlashclockService getInstance(SlashclockService.Key serviceKey) {

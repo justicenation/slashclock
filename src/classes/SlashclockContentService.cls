@@ -28,6 +28,11 @@ public with sharing class SlashclockContentService {
         ].Body.toString();
     }
 
+    public String getContent(
+            SlashclockContentName contentName, List<String> params) {
+        return SlashclockContentUtil.place(params, this.getcontent(contentName));
+    }
+
     public Id getContentFolderId() {
         return [
             SELECT Id
