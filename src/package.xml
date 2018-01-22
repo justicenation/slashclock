@@ -27,6 +27,7 @@
         <members>SlashclockContentUtil</members>
         <members>SlashclockEntriesCommand</members>
         <members>SlashclockEntriesCommandTest</members>
+        <members>SlashclockErrorTest</members>
         <members>SlashclockException</members>
         <members>SlashclockHelpCommand</members>
         <members>SlashclockHelpCommandTest</members>
