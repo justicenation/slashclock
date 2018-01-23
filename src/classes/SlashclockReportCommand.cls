@@ -26,6 +26,11 @@ public with sharing class SlashclockReportCommand implements Slashclock.Command 
             this.endTime = slashclock.getStartOfWeek(
                     this.endTime).addSeconds(-1);
         }
+        else {
+
+            // TODO: Make the scale configurable per user
+            this.endTime = DatetimeUtil.setScale(this.endTime, 6);
+        }
 
         // Generate the report
         SlashclockReport report = slashclock.report(this.endTime);
