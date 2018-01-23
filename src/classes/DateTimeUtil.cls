@@ -66,7 +66,20 @@ public with sharing class DateTimeUtil {
      * @return the value, rounded up to the next whole increment
      */
     public static Datetime setScale(Datetime value, Integer scale) {
-        return value;
+        
+        // Figure out the base number of minutes we're starting with
+        Long seconds = value.getTime() / 1000;
+        Long minutes = seconds / 60;
+
+        // Round up
+        Long remainder = Math.mod(minutes, scale);
+        
+        if (remainder > 0) {
+            minutes = minutes + scale - remainder;
+        }
+
+        // Return the value rounded up
+        return Datetime.newInstance(minutes * 60 * 1000);
     }
 
     public static Date startOfWeek(Date value, Weekday firstDayOfWeek) {
