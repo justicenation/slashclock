@@ -2,6 +2,129 @@
 private class DateTimeUtilTest {
 
     @isTest
+    private static void setScale3() {
+
+        // Given
+        Map<Datetime, Datetime> expectedMap = new Map<Datetime, Datetime> {
+            Datetime.newInstanceGmt(2018, 1, 23, 12, 0, 0) =>
+            Datetime.newInstanceGmt(2018, 1, 23, 12, 0, 0),
+            
+            Datetime.newInstanceGmt(2018, 1, 23, 23, 58, 30) =>
+            Datetime.newInstanceGmt(2018, 1, 24, 0, 0, 0),
+            
+            Datetime.newInstanceGmt(2018, 1, 23, 23, 59, 0) =>
+            Datetime.newInstanceGmt(2018, 1, 24, 0, 0, 0),
+            
+            Datetime.newInstanceGmt(2018, 1, 23, 12, 30, 0) =>
+            Datetime.newInstanceGmt(2018, 1, 23, 12, 30, 0)
+        };
+
+        Integer scale = 3;  // for this test
+
+        // When
+        Test.startTest();
+
+        Map<Datetime, Datetime> actualMap = new Map<Datetime, Datetime>();
+
+        for (Datetime eachGivenValue : expectedMap.keySet()) {
+            actualMap.put(eachGivenValue,
+                    DatetimeUtil.setScale(eachGivenValue, scale));
+        }
+
+        // Then
+        Test.stopTest();
+
+        for (Datetime eachGivenValue : expectedMap.keySet()) {
+            Datetime expected = expectedMap.get(eachGivenValue);
+            Datetime actual = actualMap.get(eachGivenValue);
+
+            System.assertEquals(expected, actual, eachGivenValue);
+        }
+    }
+
+    @isTest
+    private static void setScale6() {
+
+        // Given
+        Map<Datetime, Datetime> expectedMap = new Map<Datetime, Datetime> {
+            Datetime.newInstanceGmt(2018, 1, 23, 12, 0, 0) =>
+            Datetime.newInstanceGmt(2018, 1, 23, 12, 0, 0),
+            
+            Datetime.newInstanceGmt(2018, 1, 23, 23, 58, 30) =>
+            Datetime.newInstanceGmt(2018, 1, 24, 0, 0, 0),
+            
+            Datetime.newInstanceGmt(2018, 1, 23, 23, 49, 0) =>
+            Datetime.newInstanceGmt(2018, 1, 23, 23, 54, 0),
+            
+            Datetime.newInstanceGmt(2018, 1, 23, 12, 30, 0) =>
+            Datetime.newInstanceGmt(2018, 1, 23, 12, 30, 0)
+        };
+
+        Integer scale = 6;  // for this test
+
+        // When
+        Test.startTest();
+
+        Map<Datetime, Datetime> actualMap = new Map<Datetime, Datetime>();
+
+        for (Datetime eachGivenValue : expectedMap.keySet()) {
+            actualMap.put(eachGivenValue,
+                    DatetimeUtil.setScale(eachGivenValue, scale));
+        }
+
+        // Then
+        Test.stopTest();
+
+        for (Datetime eachGivenValue : expectedMap.keySet()) {
+            Datetime expected = expectedMap.get(eachGivenValue);
+            Datetime actual = actualMap.get(eachGivenValue);
+
+            System.assertEquals(expected, actual, eachGivenValue);
+        }
+    }
+
+    @isTest
+    private static void setScale15() {
+
+        // Given
+        Map<Datetime, Datetime> expectedMap = new Map<Datetime, Datetime> {
+            Datetime.newInstanceGmt(2018, 1, 23, 12, 0, 0) =>
+            Datetime.newInstanceGmt(2018, 1, 23, 12, 0, 0),
+            
+            Datetime.newInstanceGmt(2018, 1, 23, 23, 58, 30) =>
+            Datetime.newInstanceGmt(2018, 1, 24, 0, 0, 0),
+            
+            Datetime.newInstanceGmt(2018, 1, 23, 23, 1, 0) =>
+            Datetime.newInstanceGmt(2018, 1, 23, 23, 15, 0),
+            
+            Datetime.newInstanceGmt(2018, 1, 23, 12, 35, 0) =>
+            Datetime.newInstanceGmt(2018, 1, 23, 12, 45, 0)
+        };
+
+        Integer scale = 15;  // for this test
+
+        // When
+        Test.startTest();
+
+        Map<Datetime, Datetime> actualMap = new Map<Datetime, Datetime>();
+
+        for (Datetime eachGivenValue : expectedMap.keySet()) {
+            actualMap.put(eachGivenValue,
+                    DatetimeUtil.setScale(eachGivenValue, scale));
+        }
+
+        // Then
+        Test.stopTest();
+
+        for (Datetime eachGivenValue : expectedMap.keySet()) {
+            Datetime expected = expectedMap.get(eachGivenValue);
+            Datetime actual = actualMap.get(eachGivenValue);
+
+            System.assertEquals(expected, actual, eachGivenValue);
+        }
+    }
+
+    @isTest
     private static void getWeekday() {
 
         // Given
