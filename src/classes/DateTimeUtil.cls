@@ -49,6 +49,26 @@ public with sharing class DateTimeUtil {
                 dateValue, timeValue, TimeZone.getTimeZone(timeZoneSidKey));
     }
 
+    /**
+     * This functions similar to the `Decimal.setScale(Integer)` method,
+     * where a given `Datetime` value is always rounded up to the nearest
+     * increment of the given scale in minutes.
+     *
+     * For example, if the scale is 3 minutes, and the given value has a time
+     * component of 2:46pm, the returned value should bumped up to 2:48pm.
+     * if the given scale was instead 15 minutes, for the same given value
+     * the returned value should be bumped up to 3:00pm.
+     *
+     * @param value The `Datetime` value to round
+     *
+     * @param scale The number of minutes per increment
+     *
+     * @return the value, rounded up to the next whole increment
+     */
+    public static Datetime setScale(Datetime value, Integer scale) {
+        return value;
+    }
+
     public static Date startOfWeek(Date value, Weekday firstDayOfWeek) {
 
         // Figure out the weekday index of the given date
