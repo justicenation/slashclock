@@ -69,10 +69,16 @@ private class SlashclockEntriesCommandTest {
         // When
         Test.startTest();
 
-        insert new TimeSlice__c(
-                NumberOfMinutes__c = 30,
-                Tag__c = 'fun',
-                TimeEntry__c = givenEntries[0].Id);
+        Slashclock.Command sliceCommand = new SlashclockSliceCommand();
+
+        sliceCommand.load(
+                new SlashCommand__c(
+                        SlackUserId__c = skate.SlackUserId__c,
+                        SlackTeamId__c = skate.Account.SlackTeamId__c,
+                        Text__c = 'slice 30 minutes fun',
+                        Command__c = '/clock'));
+
+        Slashclock.CommandResult sliceResult = sliceCommand.execute();
 
         // Then
         Test.stopTest();
