@@ -6,6 +6,21 @@ public class SlashclockSliceList {
         this.slicesByTag = new Map<String, SlashclockReportSlice>();
     }
 
+    public SlashclockSliceList(List<TimeSlice__c> timeSlices) {
+
+        // Start with the defaults
+        this();
+
+        // Add every time slice
+        for (TimeSlice__c eachSlice : timeSlices) {
+            this.add(eachSlice);
+        }
+    }
+
+    public void add(TimeSlice__c timeSlice) {
+        this.add(SlashclockReportSlice.newInstance(timeSlice));
+    }
+
     public void add(SlashclockReportSlice slice) {
         if (this.slicesByTag.containsKey(slice.getTag())) {
             this.slicesByTag.get(slice.getTag()).increase(slice.getDuration());

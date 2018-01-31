@@ -185,7 +185,19 @@ public with sharing class SlashclockService {
      * @return a formatted string showing the entry's info and its index
      */
     public String formatEntry(TimeEntry__c entry, Integer index) {
-        return SlashclockUtil.formatEntry(entry, index, this.timeZoneSidKey);
+        
+        // Always start with the standard entry details
+        String value = SlashclockUtil.formatEntry(entry, index, this.timeZoneSidKey);
+
+        // Add slice information if slices are present
+        if (entry.TimeSlices__r.size() > 0) {
+            SlashclockSliceList slices =
+                    new SlashclockSliceList(entry.TimeSlices__r);
+            
+            value += ' ' + slices.format();
+        }
+
+        return value;
     }
 
     public Time2 getClockedDuration(DateTime startTime, DateTime endTime) {

@@ -22,6 +22,24 @@ private class SlashclockEntriesCommandTest {
             WHERE LastName = 'Skate (TEST)'
         ];
 
+        List<TimeEntry__c> givenEntries = [
+            SELECT
+                StartTime__c,
+                EndTime__c,
+                Id
+            FROM TimeEntry__c
+            WHERE
+                SlackTeamId__c = :skate.Account.SlackTeamId__c AND
+                SlackUserId__c = :skate.SlackUserId__c
+            ORDER BY StartTime__c DESC
+        ];
+
+        List<TimeSlice__c> givenSlices = [
+            SELECT Id
+            FROM TimeSlice__c
+            WHERE TimeEntry__c IN :givenEntries
+        ];
+
         Slashclock.Command givenCommand = new SlashclockEntriesCommand();
         
         givenCommand.load(
@@ -51,19 +69,24 @@ private class SlashclockEntriesCommandTest {
         // When
         Test.startTest();
 
-        Slashclock.Command sliceCommand = new SlashclockSliceCommand();
-
-        sliceCommand.load(
-                new SlashCommand__c(
-                        SlackUserId__c = skate.SlackUserId__c,
-                        SlackTeamId__c = skate.Account.SlackTeamId__c,
-                        Text__c = 'slice 30 minutes fun',
-                        Command__c = '/clock'));
-
-        Slashclock.CommandResult sliceResult = sliceCommand.execute();
+        insert new TimeSlice__c(
+                NumberOfMinutes__c = 30,
+                Tag__c = 'fun',
+                TimeEntry__c = givenEntries[0].Id);
 
         // Then
         Test.stopTest();
+
+        List<TimeSlice__c> thenSlices = [
+            SELECT
+                NumberOfMinutes__c,
+                Tag__c,
+                Id
+            FROM TimeSlice__c
+            WHERE TimeEntry__c IN :givenEntries
+        ];
+
+        System.assertEquals(1, thenSlices.size(), 'number of slices');
 
         Slashclock.Command thenCommand = new SlashclockEntriesCommand();
         
@@ -86,13 +109,13 @@ private class SlashclockEntriesCommandTest {
         String thenEntry1Ending = '10:15am - 5:45pm (0.5h fun)';
 
         System.assert(
-                givenMessageParts.get(1).endsWith(thenEntry1Ending),
-                givenMessageParts.get(1) + ' should end with ' + thenEntry1Ending);
+                thenMessageParts.get(1).endsWith(thenEntry1Ending),
+                thenMessageParts.get(1) + ' should end with ' + thenEntry1Ending);
 
         String thenEntry2Ending = '9:15am - 9:45am';
 
         System.assert(
-                givenMessageParts.get(2).endsWith(thenEntry2Ending),
-                givenMessageParts.get(2) + ' should end with ' + thenEntry2Ending);
+                thenMessageParts.get(2).endsWith(thenEntry2Ending),
+                thenMessageParts.get(2) + ' should end with ' + thenEntry2Ending);
     }
 }
