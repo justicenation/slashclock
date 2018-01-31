@@ -35,6 +35,15 @@ public with sharing class SlashclockService {
         this.firstDayOfWeek = Weekday.MONDAY;
     }
 
+    public SlashclockService(Contact userContact) {
+        this.userId = userContact.SlackUserId__c;
+        this.teamId = userContact.SlackTeamId__c;
+        this.timeZoneSidKey = userContact.TimeZoneSidKey__c;
+        
+        // TODO: Make dynamic based on Slack user preference
+        this.firstDayOfWeek = Weekday.MONDAY;
+    }
+
     /**
      * @param startTime
      *            The time at which the user clocked in
@@ -242,6 +251,10 @@ public with sharing class SlashclockService {
 
     public static SlashclockService getInstance(String userId, String teamId) {
         return new SlashclockService(userId, teamId);
+    }
+
+    public static SlashclockService getInstance(Contact userContact) {
+        return new SlashclockService(userContact);
     }
 
     public TimeEntry__c getLastTimeEntry() {

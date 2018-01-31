@@ -42,10 +42,10 @@ private class SlashclockEntriesCommandTest {
 
         System.assert(
                 givenMessageParts.get(1).endsWith('10:15am - 5:45pm'),
-                givenMessageParts.get(1) + ' should end without slices');
+                givenMessageParts.get(1) + ' should end with ' + '10:15am - 5:45pm');
 
         System.assert(
-                givenMessageParts.get(2).endsWith('9:15am - 9:45pm'),
-                givenMessageParts.get(2) + ' should end without slices');
+                givenMessageParts.get(2).endsWith('9:15am - 9:45am'),
+                givenMessageParts.get(2) + ' should end with ' + '9:15am - 9:45am');
     }
 }

@@ -194,6 +194,17 @@
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>SlackTeamId__c</fullName>
+        <caseSensitive>false</caseSensitive>
+        <externalId>false</externalId>
+        <formula>Account.SlackTeamId__c</formula>
+        <label>Slack Team ID</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>SlackUserId__c</fullName>
         <caseSensitive>false</caseSensitive>
         <externalId>true</externalId>

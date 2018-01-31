@@ -48,7 +48,11 @@ public with sharing class SlackService {
 
         // Look for a existing contact
         List<Contact> userContacts = [
-            SELECT Id, SlackUserId__c, TimeZoneSidKey__c
+            SELECT
+                SlackTeamId__c,
+                SlackUserId__c,
+                TimeZoneSidKey__c,
+                Id
             FROM Contact
             WHERE AccountId = :findOrCreateAccount().Id
                 AND SlackUserId__c = :userId

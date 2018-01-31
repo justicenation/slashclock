@@ -14,12 +14,12 @@ public with sharing class SlashclockEntriesCommand implements Slashclock.Command
      */
     private Integer numberOfDays;
 
-    private String teamId;
-    private String userId;
+    private Contact userContact;
 
     public SlashclockEntriesCommand() {
-        this.userId = null;
-        this.teamId = null;
+        this.userContact = null;
+
+        // TODO: Make configurable
         this.numberOfDays = 7;
         this.currentTime = DateTime.now();
     }
@@ -32,7 +32,7 @@ public with sharing class SlashclockEntriesCommand implements Slashclock.Command
         // Clock in via service
         try {
             SlashclockService slashclock =
-                    SlashclockService.getInstance(this.userId, this.teamId);
+                    SlashclockService.getInstance(this.userContact);
 
             List<TimeEntry__c> entries = slashclock.getTimeEntriesSince(
                     this.currentTime.addDays(-1 * numberOfDays));
@@ -50,14 +50,9 @@ public with sharing class SlashclockEntriesCommand implements Slashclock.Command
 
     public Slashclock.Command load(SlashCommand__c command) {
 
-        // Remember the Slack User ID and Team ID,
-        // then locate the contact and the time zone
-        this.userId = command.SlackUserId__c;
-        this.teamId = command.SlackTeamId__c;
-        
-        // Figure out the time zone
-        SlackService slacker = SlackService.getInstance(this.teamId);
-        Contact userContact = slacker.findOrCreateContact(this.userId);
+        // Locate the contact and the time zone
+        SlackService slacker = SlackService.getInstance(command.SlackTeamId__c);
+        this.userContact = slacker.findOrCreateContact(command.SlackUserId__c);
         
         // Return the fully loaded SlashClock command!
         return this;
