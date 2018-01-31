@@ -39,6 +39,7 @@
         <members>SlashclockHelpCommandTest</members>
         <members>SlashclockInCommand</members>
         <members>SlashclockInCommandTest</members>
+        <members>SlashclockLosAngelesTest</members>
         <members>SlashclockMockSuite</members>
         <members>SlashclockOutCommand</members>
         <members>SlashclockOutCommandTest</members>
