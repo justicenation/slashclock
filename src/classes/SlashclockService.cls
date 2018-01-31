@@ -35,6 +35,15 @@ public with sharing class SlashclockService {
         this.firstDayOfWeek = Weekday.MONDAY;
     }
 
+    public SlashclockService(Contact userContact) {
+        this.userId = userContact.SlackUserId__c;
+        this.teamId = userContact.SlackTeamId__c;
+        this.timeZoneSidKey = userContact.TimeZoneSidKey__c;
+        
+        // TODO: Make dynamic based on Slack user preference
+        this.firstDayOfWeek = Weekday.MONDAY;
+    }
+
     /**
      * @param startTime
      *            The time at which the user clocked in
@@ -176,7 +185,19 @@ public with sharing class SlashclockService {
      * @return a formatted string showing the entry's info and its index
      */
     public String formatEntry(TimeEntry__c entry, Integer index) {
-        return SlashclockUtil.formatEntry(entry, index, this.timeZoneSidKey);
+        
+        // Always start with the standard entry details
+        String value = SlashclockUtil.formatEntry(entry, index, this.timeZoneSidKey);
+
+        // Add slice information if slices are present
+        if (entry.TimeSlices__r.size() > 0) {
+            SlashclockSliceList slices =
+                    new SlashclockSliceList(entry.TimeSlices__r);
+            
+            value += ' ' + slices.format();
+        }
+
+        return value;
     }
 
     public Time2 getClockedDuration(DateTime startTime, DateTime endTime) {
@@ -223,7 +244,11 @@ public with sharing class SlashclockService {
 
     public List<TimeEntry__c> getTimeEntriesSince(DateTime startTime) {
         return [
-            SELECT Id, StartTime__c, EndTime__c
+            SELECT
+                (SELECT Id, NumberOfMinutes__c, Tag__c FROM TimeSlices__r),
+                EndTime__c,
+                StartTime__c,
+                Id
             FROM TimeEntry__c
             WHERE SlackUserId__c = :this.userId
                 AND SlackTeamId__c = :this.teamId
@@ -242,6 +267,10 @@ public with sharing class SlashclockService {
 
     public static SlashclockService getInstance(String userId, String teamId) {
         return new SlashclockService(userId, teamId);
+    }
+
+    public static SlashclockService getInstance(Contact userContact) {
+        return new SlashclockService(userContact);
     }
 
     public TimeEntry__c getLastTimeEntry() {

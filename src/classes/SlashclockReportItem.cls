@@ -2,12 +2,12 @@ public with sharing class SlashclockReportItem {
 
     private Time2 duration;
     private String label;
-    private Map<String, SlashclockReportSlice> slicesByTag;
+    private SlashclockSliceList slices;
 
     private SlashclockReportItem(String label, Time2 duration) {
         this.label = label;
         this.duration = duration;
-        this.slicesByTag = new Map<String, SlashclockReportSlice>();
+        this.slices = new SlashclockSliceList();
     }
 
     public SlashclockReportItem add(SlashclockReportItem other) {
@@ -42,12 +42,7 @@ public with sharing class SlashclockReportItem {
     }
 
     public void addSlice(SlashclockReportSlice slice) {
-        if (this.slicesByTag.containsKey(slice.getTag())) {
-            this.slicesByTag.get(slice.getTag()).increase(slice.getDuration());
-        }
-        else {
-            this.slicesByTag.put(slice.getTag(), slice);
-        }
+        this.slices.add(slice);
     }
 
     /**
@@ -71,29 +66,12 @@ public with sharing class SlashclockReportItem {
         };
 
         // Add a part for the slices if we have any slices
-        if (slicesByTag.size() > 0) {
-            itemParts.add(formatSlices(this.slicesByTag));
+        if (slices.size() > 0) {
+            itemParts.add(this.slices.format());
         }
 
         // Return the parts joined by spaces
         return String.join(itemParts, ' ');
-    }
-
-    public static String formatSlices(Map<String, SlashclockReportSlice> slicesByTag) {
-
-        // Initialize the formatted slice parts to join and return
-        List<String> sliceParts = new List<String>();
-        
-        List<String> sliceTags = new List<String>(slicesByTag.keySet());
-        sliceTags.sort();
-
-        for (String tag : sliceTags) {
-            SlashclockReportSlice eachSlice = slicesByTag.get(tag);
-            sliceParts.add(eachSlice.format());
-        }
-
-        // Join and return the formatted slices
-        return '(' + String.join(sliceParts, '; ') + ')';
     }
 
     public Time2 getDuration() {
@@ -105,11 +83,11 @@ public with sharing class SlashclockReportItem {
     }
 
     public SlashclockReportSlice getSlice(String tag) {
-        return this.slicesByTag.get(tag);
+        return this.slices.get(tag);
     }
 
     public List<SlashclockReportSlice> getSlices() {
-        return this.slicesByTag.values();
+        return this.slices.values();
     }
 
     public static SlashclockReportItem newInstance(DateTime startTime, String timeZoneSidKey, Time2 duration) {

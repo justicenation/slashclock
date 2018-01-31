@@ -30,6 +30,18 @@ public class RelativeTestService {
         Datetime twoDaysAgo = this.reference.addDays(-2);
         Datetime oneDaysAgo = this.reference.addDays(-1);
         Datetime thirtyMinutesAgo = this.reference.addMinutes(-30);
+        
+        Date yesterday = this.referenceDate.addDays(-1);
+        
+        Datetime yesterdayNineFifteen =
+                DateTimeUtil.newDatetime(
+                        yesterday, Time.newInstance(9, 15, 0, 0),
+                        this.timeZoneSidKey);
+        
+        Datetime yesterdayTenFifteen =
+                DateTimeUtil.newDatetime(
+                        yesterday, Time.newInstance(10, 15, 0, 0),
+                        this.timeZoneSidKey);
 
         // Create accounts
         Account board = new Account(
@@ -53,7 +65,15 @@ public class RelativeTestService {
                 LastName = 'Kick (TEST)',
                 SlackuserId__c = 'kick');
 
+        Contact skate = new Contact(
+                AccountId = board.Id,
+                FirstName = 'Slick',
+                LastName = 'Skate (TEST)',
+                SlackUserId__c = 'skate',
+                TimeZoneSidKey__c = this.timeZoneSidKey);
+
         insert new List<Contact> {
+            skate,
             kick,
             flip
         };
@@ -69,7 +89,21 @@ public class RelativeTestService {
                 SlackUserId__c = 'flip',
                 SlackTeamId__c = 'board');
 
+        TimeEntry__c skateboardYesterdayNineFifteen = new TimeEntry__c(
+                StartTime__c = yesterdayNineFifteen,
+                EndTime__c = yesterdayNineFifteen.addMinutes(30),
+                SlackUserId__c = 'skate',
+                SlackTeamId__c = 'board');
+
+        TimeEntry__c skateboardYesterdayTenFifteen = new TimeEntry__c(
+                StartTime__c = yesterdayTenFifteen,
+                EndTime__c = yesterdayTenFifteen.addHours(7).addMinutes(30),
+                SlackUserId__c = 'skate',
+                SlackTeamId__c = 'board');
+
         insert new List<TimeEntry__c> {
+            skateboardYesterdayNineFifteen,
+            skateboardYesterdayTenFifteen,
             kickboard2DaysAgo,
             flipboard30mAgo
         };
