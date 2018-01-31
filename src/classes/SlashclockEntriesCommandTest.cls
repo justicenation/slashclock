@@ -47,5 +47,52 @@ private class SlashclockEntriesCommandTest {
         System.assert(
                 givenMessageParts.get(2).endsWith('9:15am - 9:45am'),
                 givenMessageParts.get(2) + ' should end with ' + '9:15am - 9:45am');
+
+        // When
+        Test.startTest();
+
+        Slashclock.Command sliceCommand = new SlashclockSliceCommand();
+
+        sliceCommand.load(
+                new SlashCommand__c(
+                        SlackUserId__c = skate.SlackUserId__c,
+                        SlackTeamId__c = skate.Account.SlackTeamId__c,
+                        Text__c = 'slice 30 minutes fun',
+                        Command__c = '/clock'));
+
+        Slashclock.CommandResult sliceResult = sliceCommand.execute();
+
+        // Then
+        Test.stopTest();
+
+        Slashclock.Command thenCommand = new SlashclockEntriesCommand();
+        
+        thenCommand.load(
+                new SlashCommand__c(
+                        SlackUserId__c = skate.SlackUserId__c,
+                        SlackTeamId__c = skate.Account.SlackTeamId__c,
+                        Text__c = 'entries',
+                        Command__c = '/clock'));
+
+        Slashclock.CommandResult thenResult = thenCommand.execute();
+
+        List<String> thenMessageParts = thenResult.getMessage().split('\n');
+
+        System.assertEquals(
+                'Here\'s what you\'ve clocked over the last seven days.',
+                thenMessageParts.get(0),
+                'thenMessageParts.get(0)');
+
+        String thenEntry1Ending = '10:15am - 5:45pm (0.5h fun)';
+
+        System.assert(
+                givenMessageParts.get(1).endsWith(thenEntry1Ending),
+                givenMessageParts.get(1) + ' should end with ' + thenEntry1Ending);
+
+        String thenEntry2Ending = '9:15am - 9:45am';
+
+        System.assert(
+                givenMessageParts.get(2).endsWith(thenEntry2Ending),
+                givenMessageParts.get(2) + ' should end with ' + thenEntry2Ending);
     }
 }
