@@ -47,6 +47,7 @@
         <members>SlashclockServiceTest</members>
         <members>SlashclockSliceCommand</members>
         <members>SlashclockSliceCommandTest</members>
+        <members>SlashclockSliceList</members>
         <members>SlashclockStrikeCommand</members>
         <members>SlashclockStrikeCommandTest</members>
         <members>SlashclockUnknownCommand</members>

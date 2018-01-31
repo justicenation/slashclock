@@ -232,7 +232,11 @@ public with sharing class SlashclockService {
 
     public List<TimeEntry__c> getTimeEntriesSince(DateTime startTime) {
         return [
-            SELECT Id, StartTime__c, EndTime__c
+            SELECT
+                (SELECT Id, NumberOfMinutes__c, Tag__c FROM TimeSlices__r),
+                EndTime__c,
+                StartTime__c,
+                Id
             FROM TimeEntry__c
             WHERE SlackUserId__c = :this.userId
                 AND SlackTeamId__c = :this.teamId
