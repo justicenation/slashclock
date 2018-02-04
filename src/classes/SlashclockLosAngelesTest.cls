@@ -24,11 +24,27 @@ private class SlashclockLosAngelesTest {
                 Command__c = '/clock',
                 Text__c = 'in 9:15am');
 
+        User apiGuestUser = [
+            SELECT Id
+            FROM User
+            WHERE ProfileId IN (
+                SELECT Id
+                FROM Profile
+                WHERE Name = 'API Profile'
+            )
+        ];
+
         // When
+        Test.setMock(
+                HttpCalloutMock.class,
+                new SlashclockLosAngelesMockSuite());
         Test.startTest();
 
-        Slashclock.CommandResult result =
-                SlashclockService.getInstance(inbound).execute(inbound);
+        Slashclock.CommandResult result = null;
+
+        System.runAs(apiGuestUser) {
+            result = SlashclockService.getInstance(inbound).execute(inbound);
+        }
 
         // Then
         Test.stopTest();

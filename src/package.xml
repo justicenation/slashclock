@@ -23,6 +23,7 @@
         <members>SlackApiUsersInfoAcmeBunnyMock</members>
         <members>SlackApiUsersInfoBarFooMock</members>
         <members>SlackApiUsersInfoBoardFlipMock</members>
+        <members>SlackApiUsersInfoSurferSilverMock</members>
         <members>SlackService</members>
         <members>SlackUtil</members>
         <members>SlashCommandUtil</members>
@@ -39,6 +40,7 @@
         <members>SlashclockHelpCommandTest</members>
         <members>SlashclockInCommand</members>
         <members>SlashclockInCommandTest</members>
+        <members>SlashclockLosAngelesMockSuite</members>
         <members>SlashclockLosAngelesTest</members>
         <members>SlashclockMockSuite</members>
         <members>SlashclockOutCommand</members>
