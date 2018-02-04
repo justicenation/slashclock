@@ -6,9 +6,67 @@
 @isTest
 private class SlashclockLosAngelesTest {
 
+    /**
+     * New Slack user in the America/Los_Angeles time zone clocks in
+     * at 9:15am local time
+     */
     @isTest
     private static void clockInAsNewUser() {
-        System.assert(false, 'TODO');
+        
+        // Given
+        Datetime refDatetime = Datetime.now();
+
+        Date refDate = DatetimeUtil.getDate(refDatetime, 'America/Los_Angeles');
+
+        SlashCommand__c inbound = new SlashCommand__c(
+                SlackUserId__c = 'silver',
+                SlackTeamId__c = 'surfer',
+                Command__c = '/clock',
+                Text__c = 'in 9:15am');
+
+        // When
+        Test.startTest();
+
+        Slashclock.CommandResult result =
+                SlashclockService.getInstance(inbound).execute(inbound);
+
+        // Then
+        Test.stopTest();
+
+        Contact thenUserContact = [
+            SELECT
+                TimeZoneSidKey__c,
+                Id
+            FROM Contact
+            WHERE
+                SlackTeamId__c = 'surfer' AND
+                SlackUserId__c = 'silver'
+        ];
+
+        System.assertEquals(
+                'America/Los_Angeles',
+                thenUserContact.TimeZoneSidKey__c,
+                Schema.SObjectType.Contact.fields.TimeZoneSidKey__c.label);
+
+        Datetime expectedStartTime =
+                DatetimeUtil.newDatetime(
+                        refDate, Time.newInstance(9, 15, 0, 0),
+                        'America/Los_Angeles');
+
+        List<TimeEntry__c> thenEntries = [
+            SELECT
+                StartTime__c,
+                Id
+            FROM TimeEntry__c
+            WHERE Contact__c = :thenUserContact.Id
+        ];
+
+        System.assertEquals(1, thenEntries.size(), 'thenEntries.size()');
+
+        System.assertEquals(
+                expectedStartTime,
+                thenEntries[0].StartTime__c,
+                Schema.SObjectType.TimeEntry__c.fields.StartTime__c.label);
     }
 
     @isTest
