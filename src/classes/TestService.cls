@@ -22,6 +22,21 @@ public with sharing class TestService {
         return this.annotation;
     }
 
+    public Contact getContact(String lastName) {
+        return [
+            SELECT
+                AccountId,
+                Email,
+                FirstName,
+                LastName,
+                SlackUserId__c,
+                TimeZoneSidKey__c,
+                Id
+            FROM Contact
+            WHERE LastName = :lastName
+        ];
+    }
+
     public static TestService getInstance() {
         return new TestService(Test.isRunningTest());
     }

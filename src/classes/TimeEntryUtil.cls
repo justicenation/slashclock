@@ -2,7 +2,7 @@ public class TimeEntryUtil {
 
     public static TimeEntry__c verifyEndTimeZone(
             TimeEntry__c record, String timeZoneSidKey) {
-        return record.HasVerifiedEndTimeZone__c
+        return record.HasVerifiedEndTimeZone__c || record.EndTime__c == null
                 ? record
                 : verifyTimeZone(record, timeZoneSidKey,
                         TimeEntry__c.EndTime__c,
@@ -12,7 +12,7 @@ public class TimeEntryUtil {
 
     public static TimeEntry__c verifyStartTimeZone(
             TimeEntry__c record, String timeZoneSidKey) {
-        return record.HasVerifiedStartTimeZone__c
+        return record.HasVerifiedStartTimeZone__c || record.StartTime__c == null
                 ? record
                 : verifyTimeZone(record, timeZoneSidKey,
                         TimeEntry__c.StartTime__c,
@@ -40,7 +40,7 @@ public class TimeEntryUtil {
         }
 
         // Return the updated records
-        return records;
+        return verified;
     }
 
     public static TimeEntry__c verifyTimeZone(
