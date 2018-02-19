@@ -78,11 +78,11 @@ private class DatetimeUtilAdjustTest {
             Datetime.newInstanceGmt(2017, 3, 12, 7, 0, 0) =>
                     Datetime.newInstanceGmt(2017, 3, 11, 19, 0, 0),
             Datetime.newInstanceGmt(2017, 7, 4, 16, 0, 0) =>
-                    Datetime.newInstanceGmt(2017, 7, 4, 8, 0, 0),
+                    Datetime.newInstanceGmt(2017, 7, 4, 4, 0, 0),
             Datetime.newInstanceGmt(2017, 11, 5, 6, 0, 0) =>
-                    Datetime.newInstanceGmt(2017, 11, 4, 22, 0, 0),
+                    Datetime.newInstanceGmt(2017, 11, 4, 17, 0, 0),
             Datetime.newInstanceGmt(2017, 12, 25, 17, 0, 0) =>
-                    Datetime.newInstanceGmt(2017, 12, 25, 9, 0, 0)
+                    Datetime.newInstanceGmt(2017, 12, 25, 4, 0, 0)
         };
 
         // When
@@ -93,7 +93,7 @@ private class DatetimeUtilAdjustTest {
         for (Datetime eachKey : expectedMap.keySet()) {
             actualMap.put(eachKey,
                     DatetimeUtil.adjust(
-                            eachKey, americaNewYork, asiaTaipei));
+                            eachKey, asiaTaipei, americaNewYork));
         }
 
         // Then
