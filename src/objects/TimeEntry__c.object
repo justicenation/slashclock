@@ -89,12 +89,46 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>EndTimeZoneSidKey__c</fullName>
+        <description>The time zone in which the End Time was entered</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The time zone in which the End Time was entered</inlineHelpText>
+        <label>End Time Zone</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetName>TimeZoneSidKey</valueSetName>
+        </valueSet>
+    </fields>
+    <fields>
         <fullName>EndTime__c</fullName>
         <externalId>false</externalId>
         <label>End Time</label>
         <required>false</required>
         <trackTrending>false</trackTrending>
         <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>HasVerifiedEndTimeZone__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Whether the End Time Zone has been verified with the source of truth for the user&apos;s time zone</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Whether the End Time Zone has been verified with the source of truth for the user&apos;s time zone</inlineHelpText>
+        <label>Verified End Time Zone</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>HasVerifiedStartTimeZone__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Whether the Start Time Zone has been verified with the source of truth for the user&apos;s time zone</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Whether the Start Time Zone has been verified with the source of truth for the user&apos;s time zone</inlineHelpText>
+        <label>Verified Start Time Zone</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>NumberOfSlicedMinutes__c</fullName>
@@ -140,6 +174,20 @@
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>StartTimeZoneSidKey__c</fullName>
+        <description>The time zone in which the Start Time was entered</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The time zone in which the Start Time was entered</inlineHelpText>
+        <label>Start Time Zone</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetName>TimeZoneSidKey</valueSetName>
+        </valueSet>
     </fields>
     <fields>
         <fullName>StartTime__c</fullName>

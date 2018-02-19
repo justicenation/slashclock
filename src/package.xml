@@ -61,6 +61,8 @@
         <members>TestService</members>
         <members>Time2</members>
         <members>Time2Test</members>
+        <members>TimeEntryDataService</members>
+        <members>TimeEntryUtil</members>
         <members>TimeTest</members>
         <members>TimeUtil</members>
         <members>TimeUtilTest</members>

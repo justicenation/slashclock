@@ -1,6 +1,31 @@
 public with sharing class DateTimeUtil {
 
     public static final String GMT_TIME_ZONE_SID_KEY = 'GMT';
+
+    /**
+     * Given a `Datetime` value, adjust the value by applying an offset to
+     * correct for a time zone difference between an old, assumed time zone
+     * and a new, accurate time zone.
+     *
+     * For example, for a value of Feb 19, 2018 1:00pm EST, if `adjust` is
+     * called to adjust the value from an old time zone of "America/New_York"
+     * to "America/Chicago", the return value should be Feb 19, 2018 1:00pm CST
+     *
+     * @param value The given `Datetime` value
+     *
+     * @param newTimeZone
+     *
+     * @param oldTimeZone
+     *
+     * @return the same local time as previously observed in the old time zone,
+     *         but now adjusted to be accurately observed in the new time zone
+     */
+    public static Datetime adjust(
+            Datetime value, TimeZone newTimeZone, TimeZone oldTimeZone) {
+
+        // TODO
+        return value;
+    }
     
     public static Date getDate(DateTime value, String timeZoneSidKey) {
         return Date.valueOf(value.format('yyyy-MM-dd', timeZoneSidKey));
