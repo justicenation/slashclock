@@ -23,13 +23,13 @@ private class DatetimeUtilAdjustTest {
 
         Map<Datetime, Datetime> expectedMap = new Map<Datetime, Datetime> {
             Datetime.newInstanceGmt(2017, 3, 12, 7, 0, 0) =>
-                    Datetime.newInstanceGmt(2017, 3, 12, 6, 0, 0),
+                    Datetime.newInstanceGmt(2017, 3, 12, 8, 0, 0),
             Datetime.newInstanceGmt(2017, 7, 4, 16, 0, 0) =>
-                    Datetime.newInstanceGmt(2017, 7, 4, 15, 0, 0),
+                    Datetime.newInstanceGmt(2017, 7, 4, 17, 0, 0),
             Datetime.newInstanceGmt(2017, 11, 5, 6, 0, 0) =>
-                    Datetime.newInstanceGmt(2017, 11, 5, 5, 0, 0),
+                    Datetime.newInstanceGmt(2017, 11, 5, 7, 0, 0),
             Datetime.newInstanceGmt(2017, 12, 25, 17, 0, 0) =>
-                    Datetime.newInstanceGmt(2017, 12, 25, 16, 0, 0)
+                    Datetime.newInstanceGmt(2017, 12, 25, 18, 0, 0)
         };
 
         // When
@@ -40,7 +40,7 @@ private class DatetimeUtilAdjustTest {
         for (Datetime eachKey : expectedMap.keySet()) {
             actualMap.put(eachKey,
                     DatetimeUtil.adjust(
-                            eachKey, americaNewYork, americaChicago));
+                            eachKey, americaChicago, americaNewYork));
         }
 
         // Then
