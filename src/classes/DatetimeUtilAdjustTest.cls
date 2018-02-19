@@ -114,4 +114,55 @@ private class DatetimeUtilAdjustTest {
     private static String getDatetimeFormat() {
         return 'yyyy-MM-dd HH:mm:ss z';
     }
+
+    /**
+     * This test covers extraction of the date portion of `Datetime` values
+     * correctly localized for the "America/New_York" time zone
+     *
+     * - March 12, 2017 3:00am Eastern Daylight Time
+     * - July 4, 2017 12:00pm Eastern Daylight Time
+     * - Nov 5, 2017 1:00am Eastern Standard Time
+     * - Dec 25, 2017 12:00pm Eastern Standard Time
+     */
+    @isTest
+    public static void getDateInAmericaNewYork() {
+
+        // Given
+        TimeZone americaNewYork = TimeZone.getTimeZone('America/New_York');
+
+        Map<Datetime, Date> expectedMap = new Map<Datetime, Date> {
+            Datetime.newInstanceGmt(2017, 3, 12, 7, 0, 0) =>
+                    Date.newInstance(2017, 3, 12),
+            Datetime.newInstanceGmt(2017, 7, 4, 16, 0, 0) =>
+                    Date.newInstance(2017, 7, 4),
+            Datetime.newInstanceGmt(2017, 11, 5, 6, 0, 0) =>
+                    Date.newInstance(2017, 11, 5),
+            Datetime.newInstanceGmt(2017, 12, 25, 17, 0, 0) =>
+                    Date.newInstance(2017, 12, 25)
+        };
+
+        // When
+        Test.startTest();
+
+        Map<Datetime, Date> actualMap = new Map<Datetime, Date>();
+
+        for (Datetime eachKey : expectedMap.keySet()) {
+            actualMap.put(eachKey,
+                    DatetimeUtil.getDate(eachKey, americaNewYork.getID()));
+        }
+
+        // Then
+        Test.stopTest();
+
+        for (Datetime eachKey : expectedMap.keySet()) {
+            Date expectedValue = expectedMap.get(eachKey);
+            Date actualValue = actualMap.get(eachKey);
+
+            // Verify that the dates match
+            System.assertEquals(
+                    expectedValue,
+                    actualValue,
+                    'for key: ' + eachKey);
+        }
+    }
 }
