@@ -165,4 +165,55 @@ private class DatetimeUtilAdjustTest {
                     'for key: ' + eachKey);
         }
     }
+
+    /**
+     * This test covers extraction of the time portion of `Datetime` values
+     * correctly localized for the "America/New_York" time zone
+     *
+     * - March 12, 2017 3:00am Eastern Daylight Time
+     * - July 4, 2017 12:00pm Eastern Daylight Time
+     * - Nov 5, 2017 1:00am Eastern Standard Time
+     * - Dec 25, 2017 12:00pm Eastern Standard Time
+     */
+    @isTest
+    public static void getTimeInAmericaNewYork() {
+
+        // Given
+        TimeZone americaNewYork = TimeZone.getTimeZone('America/New_York');
+
+        Map<Datetime, Time> expectedMap = new Map<Datetime, Time> {
+            Datetime.newInstanceGmt(2017, 3, 12, 7, 0, 0) =>
+                    Time.newInstance(3, 0, 0, 0),
+            Datetime.newInstanceGmt(2017, 7, 4, 16, 0, 0) =>
+                    Time.newInstance(12, 0, 0, 0),
+            Datetime.newInstanceGmt(2017, 11, 5, 6, 0, 0) =>
+                    Time.newInstance(1, 0, 0, 0),
+            Datetime.newInstanceGmt(2017, 12, 25, 17, 0, 0) =>
+                    Time.newInstance(12, 0, 0, 0)
+        };
+
+        // When
+        Test.startTest();
+
+        Map<Datetime, Time> actualMap = new Map<Datetime, Time>();
+
+        for (Datetime eachKey : expectedMap.keySet()) {
+            actualMap.put(eachKey,
+                    DatetimeUtil.getTime(eachKey, americaNewYork.getID()));
+        }
+
+        // Then
+        Test.stopTest();
+
+        for (Datetime eachKey : expectedMap.keySet()) {
+            Time expectedValue = expectedMap.get(eachKey);
+            Time actualValue = actualMap.get(eachKey);
+
+            // Verify that the dates match
+            System.assertEquals(
+                    expectedValue,
+                    actualValue,
+                    'for key: ' + eachKey);
+        }
+    }
 }
