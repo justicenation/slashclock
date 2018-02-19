@@ -7,6 +7,7 @@
         <members>DatabaseUtil</members>
         <members>DateTimeUtil</members>
         <members>DateTimeUtilTest</members>
+        <members>DatetimeUtilAdjustTest</members>
         <members>HttpUtil</members>
         <members>PageService</members>
         <members>RelativeTestService</members>

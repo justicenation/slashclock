@@ -22,9 +22,11 @@ public with sharing class DateTimeUtil {
      */
     public static Datetime adjust(
             Datetime value, TimeZone newTimeZone, TimeZone oldTimeZone) {
+        
+        Date datePart = getDate(value, oldTimeZone.getID());
+        Time timePart = getTime(value, oldTimeZone.getID());
 
-        // TODO
-        return value;
+        return newDatetime(datePart, timePart, newTimeZone);
     }
     
     public static Date getDate(DateTime value, String timeZoneSidKey) {
