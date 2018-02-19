@@ -267,4 +267,52 @@ private class DatetimeUtilAdjustTest {
                     'for key: ' + eachKey);
         }
     }
+
+    /**
+     * This test covers conversion of the following `Datetime` value
+     * from "America/New_York" to "Asia/Taipei"
+     *
+     * - March 12, 2017 3:00am Eastern Daylight Time
+     */
+    @isTest
+    private static void adjust2017Mar120300FromAmericaNewYorkToAsiaTaipei() {
+
+        // Given
+        TimeZone americaNewYork = TimeZone.getTimeZone('America/New_York');
+        TimeZone asiaTaipei = TimeZone.getTimeZone('Asia/Taipei');
+
+        Datetime given = Datetime.newInstanceGmt(2017, 3, 12, 7, 0, 0);
+        Datetime expected = Datetime.newInstanceGmt(2017, 3, 11, 19, 0, 0);
+
+        Date givenDate = Date.newInstance(2017, 3, 12);
+
+        System.assertEquals(
+                givenDate,
+                DatetimeUtil.getDate(given, americaNewYork.getID()),
+                'date for: ' + given);
+
+        Time givenTime = Time.newInstance(3, 0, 0, 0);
+
+        System.assertEquals(
+                givenTime,
+                DatetimeUtil.getTime(given, americaNewYork.getID()),
+                'time for: ' + given);
+
+        System.assertEquals(
+                '2017-03-12 03:00:00 CST',
+                DatetimeUtil.newDatetime(
+                        givenDate, givenTime, asiaTaipei.getID()).format(
+                                getDatetimeFormat(), asiaTaipei.getID()),
+                'DatetimeUtil.newDatetime');
+
+        // When
+        Test.startTest();
+
+        Datetime actual = DatetimeUtil.adjust(given, asiaTaipei, americaNewYork);
+
+        // Then
+        Test.stopTest();
+
+        System.assertEquals(expected, actual, 'for given: ' + given);
+    }
 }
