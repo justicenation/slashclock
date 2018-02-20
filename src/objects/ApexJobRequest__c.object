@@ -93,7 +93,6 @@
         <inlineHelpText>Exception.getStackTraceString()</inlineHelpText>
         <label>Error Stack Trace</label>
         <length>32768</length>
-        <required>false</required>
         <trackTrending>false</trackTrending>
         <type>LongTextArea</type>
         <visibleLines>3</visibleLines>
