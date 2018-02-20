@@ -3,7 +3,7 @@
  * the job attempts to get the contact's current time zone and verify any
  * unverified time zones in time entries under the contact
  */
-global with sharing class TimeEntryVerifyTimeZoneJob {
+global with sharing class TimeEntryVerifyTimeZoneJob implements Requestable {
 
     private List<Id> contactIds;
 
@@ -22,6 +22,10 @@ global with sharing class TimeEntryVerifyTimeZoneJob {
             TimeEntryDataService.getInstance(
                     eachContact.Id).verifyTimeZone(timeZoneSidKey);
         }
+    }
+
+    global void execute(Database.BatchableContext context) {
+        this.execute();
     }
 
     global List<Contact> getContacts() {

@@ -2,6 +2,8 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>AbstractSmartMockSuite</members>
+        <members>ApexJobRequestProcessJob</members>
+        <members>ApexJobRequestProcessJobTest</members>
         <members>ClockResource</members>
         <members>ClockResourceTest</members>
         <members>DatabaseUtil</members>
@@ -11,6 +13,7 @@
         <members>HttpUtil</members>
         <members>PageService</members>
         <members>RelativeTestService</members>
+        <members>Requestable</members>
         <members>Slack</members>
         <members>SlackApi</members>
         <members>SlackApiService</members>
