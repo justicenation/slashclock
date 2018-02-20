@@ -76,6 +76,8 @@ public with sharing class SlackService {
      * for the user, the information in Salesforce should be updated
      * to match the user's Slack configuration.
      *
+     * @param userId The **Slack User ID**
+     *
      * @return the time zone SID key (e.g., "America/New_York")
      */
     public String getTimeZoneSidKey(String userId) {

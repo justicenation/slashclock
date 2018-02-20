@@ -65,6 +65,8 @@
         <members>TimeEntryDataService</members>
         <members>TimeEntryDataServiceTest</members>
         <members>TimeEntryUtil</members>
+        <members>TimeEntryVerifyTimeZoneJob</members>
+        <members>TimeEntryVerifyTimeZoneJobTest</members>
         <members>TimeTest</members>
         <members>TimeUtil</members>
         <members>TimeUtilTest</members>
