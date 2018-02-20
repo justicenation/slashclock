@@ -2,6 +2,36 @@
 private class ApexJobRequestProcessJobTest {
 
     @isTest
+    private static void processEmptyVerifyTimeZoneJob() {
+
+        // Given
+        ApexJobRequest__c givenRequest = new ApexJobRequest__c(
+                ApexClassName__c = TimeEntryVerifyTimeZoneJob.class.getName(),
+                Body__c = JSON.serialize(
+                        new TimeEntryVerifyTimeZoneJob(new List<Id>())));
+
+        insert givenRequest;
+
+        System.assertEquals(
+                'Submitted',
+                getApexJobRequest(givenRequest).Status__c,
+                Schema.SObjectType.ApexJobRequest__c.fields.Status__c.label);
+
+        // When
+        Test.startTest();
+
+        Database.executeBatch(new ApexJobRequestProcessJob());
+
+        // Then
+        Test.stopTest();
+
+        System.assertEquals(
+                'Success',
+                getApexJobRequest(givenRequest).Status__c,
+                Schema.SObjectType.ApexJobRequest__c.fields.Status__c.label);
+    }
+
+    @isTest
     private static void processInvalidJob() {
 
         // Given
