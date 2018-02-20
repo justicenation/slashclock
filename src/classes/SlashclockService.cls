@@ -105,29 +105,29 @@ public with sharing class SlashclockService {
         Slashclock.CommandResult result = new Slashclock.CommandResult();
 
         // Execute the command and catch any unexpected exceptions
-        //try {
+        try {
             Slashclock.Command command = SlashclockUtil.newCommand(inbound);
             result = command.execute();
-        //}
-        //catch(System.Exception caught) {
+        }
+        catch(System.Exception caught) {
 
-        //    // Log the command for further investigation
-        //    inbound.ErrorMessage__c = caught.getMessage();
-        //    inbound.ErrorStackTraceString__c = caught.getStackTraceString();
-        //    inbound.ErrorTypeName__c = caught.getTypeName();
+            // Log the command for further investigation
+            inbound.ErrorMessage__c = caught.getMessage();
+            inbound.ErrorStackTraceString__c = caught.getStackTraceString();
+            inbound.ErrorTypeName__c = caught.getTypeName();
 
-        //    insert inbound;
+            insert inbound;
 
-        //    // Set the result
-        //    result.setSuccess(false);
+            // Set the result
+            result.setSuccess(false);
 
-        //    SlashclockContentService content =
-        //            SlashclockContentService.getInstance();
+            SlashclockContentService content =
+                    SlashclockContentService.getInstance();
             
-        //    result.setMessage(content.getContent(
-        //            SlashclockContentName.UNKNOWN_ERROR,
-        //            new List<String> { SlackUtil.format(inbound) }));
-        //}
+            result.setMessage(content.getContent(
+                    SlashclockContentName.UNKNOWN_ERROR,
+                    new List<String> { SlackUtil.format(inbound) }));
+        }
 
         return result;
     }
