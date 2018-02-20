@@ -26,15 +26,6 @@ public with sharing class SlashclockService {
      */
     private String userId;
 
-    public SlashclockService(String userId, String teamId) {
-        this.userId = userId;
-        this.teamId = teamId;
-
-        // TODO: Make dynamic based on Slack user preference
-        this.timeZoneSidKey = 'America/New_York';
-        this.firstDayOfWeek = Weekday.MONDAY;
-    }
-
     public SlashclockService(Contact userContact) {
         this.userId = userContact.SlackUserId__c;
         this.teamId = userContact.SlackTeamId__c;
@@ -60,6 +51,7 @@ public with sharing class SlashclockService {
         // Construct the time entry
         TimeEntry__c entry = new TimeEntry__c(
                 StartTime__c = startTime,
+                StartTimeZoneSidKey__c = this.timeZoneSidKey,
                 SlackUserId__c = this.userId,
                 SlackTeamId__c = this.teamId);
 
@@ -257,18 +249,6 @@ public with sharing class SlashclockService {
         ];
     }
 
-    public static SlashclockService getInstance(SlashCommand__c command) {
-        return getInstance(command.SlackUserId__c, command.SlackTeamId__c);
-    }
-
-    public static SlashclockService getInstance(SlashclockService.Key serviceKey) {
-        return getInstance(serviceKey.userId, serviceKey.teamId);
-    }
-
-    public static SlashclockService getInstance(String userId, String teamId) {
-        return new SlashclockService(userId, teamId);
-    }
-
     public static SlashclockService getInstance(Contact userContact) {
         return new SlashclockService(userContact);
     }
@@ -334,15 +314,5 @@ public with sharing class SlashclockService {
 
         insert slice;
         return slice;
-    }
-
-    public class Key {
-        public String teamId { get; set; }
-        public String userId { get; set; }
-
-        public Key(String userId, String teamId) {
-            this.userId = userId;
-            this.teamId = teamId;
-        }
     }
 }

@@ -99,10 +99,6 @@ public with sharing class SlashclockUtil {
         return items;
     }
 
-    public static SlashclockService.Key newServiceKey(SlashCommand__c command) {
-        return new SlashclockService.Key(command.SlackUserId__c, command.SlackTeamId__c);
-    }
-
     public static List<TimeEntry__c> qualify(
             List<TimeEntry__c> entries, DateTime startTime, DateTime endTime) {
 
