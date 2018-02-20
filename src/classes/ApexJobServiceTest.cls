@@ -2,6 +2,45 @@
 private class ApexJobServiceTest {
 
     @isTest
+    private static void submitAndExecute() {
+
+        // Given
+        ApexJobService apexJob =
+                ApexJobService.getInstance(TimeEntryVerifyTimeZoneJob.class);
+
+        // When
+        Test.startTest();
+
+        Id jobId = apexJob.submitAndProcess(
+                new TimeEntryVerifyTimeZoneJob(new List<Id>()));
+
+        // Then
+        Test.stopTest();
+
+        System.assertNotEquals(null ,jobId, 'jobId');
+
+        List<AsyncApexJob> thenJobs = [
+            SELECT
+                Status,
+                Id
+            FROM AsyncApexJob
+            WHERE
+                ApexClassId IN (
+                    SELECT Id
+                    FROM ApexClass
+                    WHERE Name = :ApexJobRequestProcessJob.class.getName()
+                ) AND
+                JobType = 'BatchApex'
+            ORDER BY CreatedDate ASC
+        ];
+
+        System.assertEquals(
+                'Completed',
+                thenJobs[0].Status,
+                Schema.SObjectType.AsyncApexJob.fields.Status.label);
+    }
+
+    @isTest
     private static void submitTimeEntryVerifyTimeZoneJob() {
 
         // Given
