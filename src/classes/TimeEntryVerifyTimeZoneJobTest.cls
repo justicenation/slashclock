@@ -192,6 +192,7 @@ private class TimeEntryVerifyTimeZoneJobTest {
                 Schema.SObjectType.TimeEntry__c.fields.HasVerifiedEndTimeZone__c.label);
 
         // When
+        Test.setMock(HttpCalloutMock.class, new SlackApiServiceMockSuite());
         Test.startTest();
 
         new TimeEntryVerifyTimeZoneJob(new List<Id> { bugs.Id }).execute();

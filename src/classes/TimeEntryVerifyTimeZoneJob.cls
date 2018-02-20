@@ -29,6 +29,7 @@ global with sharing class TimeEntryVerifyTimeZoneJob {
             SELECT
                 SlackTeamId__c,
                 SlackUserId__c,
+                TimeZoneSidKey__c,
                 Id
             FROM Contact
             WHERE Id IN :this.contactIds
