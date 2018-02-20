@@ -1,5 +1,5 @@
 global class ApexJobRequestProcessJob
-        implements Database.Batchable<SObject> {
+        implements Database.Batchable<SObject>, Database.AllowsCallouts {
 
     global void execute(Database.BatchableContext context, List<SObject> records) {
         for (ApexJobRequest__c eachRequest : (List<ApexJobRequest__c>)records) {
