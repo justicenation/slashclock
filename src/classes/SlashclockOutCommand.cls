@@ -1,15 +1,11 @@
 public with sharing class SlashclockOutCommand implements Slashclock.Command {
 
     private DateTime endTime;
-    private String teamId;
-    private String timeZoneSidKey;
-    private String userId;
+    private Contact userContact;
 
     public SlashclockOutCommand() {
-        this.userId = null;
-        this.teamId = null;
-        this.timeZoneSidKey = null;
         this.endTime = DateTime.now();
+        this.userContact = null;
     }
 
     public Slashclock.CommandResult execute() {
@@ -17,11 +13,19 @@ public with sharing class SlashclockOutCommand implements Slashclock.Command {
         // Initialize the result
         Slashclock.CommandResult result = new Slashclock.CommandResult();
 
-        // Clock in via service
         try {
-            SlashclockService slashclock =
-                    SlashclockService.getInstance(this.userId, this.teamId);
-            slashclock.clockOut(this.endTime);
+            SlashclockService.getInstance(
+                    this.userContact).clockOut(this.endTime);
+
+            // Verify the time zone for this operation
+            TimeEntryVerifyTimeZoneJob job =
+                    new TimeEntryVerifyTimeZoneJob(
+                            new List<Id> { this.userContact.Id });
+
+            ApexJobService.getInstance().submitAndProcess(
+                    TimeEntryVerifyTimeZoneJob.class, job);
+
+            // Set the success message            
             result.setMessage(SlashclockService.CLOCKED_OUT_SUCCESS);
             result.setSuccess(true);
         }
@@ -43,21 +47,9 @@ public with sharing class SlashclockOutCommand implements Slashclock.Command {
 
     public Slashclock.Command load(SlashCommand__c command) {
 
-        // Remember the Slack User ID and Team ID,
-        // then locate the contact and the time zone
-        this.userId = command.SlackUserId__c;
-        this.teamId = command.SlackTeamId__c;
-        
-        SlackService slacker = SlackService.getInstance(this.teamId);
-        this.timeZoneSidKey = slacker.getTimeZoneSidKey(this.userId);
-
-        // Update the contact's time zone if it's determined to be
-        Contact userContact = slacker.findOrCreateContact(this.userId);
-
-        if (userContact.TimeZoneSidKey__c != this.timeZoneSidKey) {
-            userContact.TimeZoneSidKey__c = this.timeZoneSidKey;
-            DatabaseUtil.updateLater(userContact);
-        }
+        // Find the contact to get the time zone
+        SlackService slacker = SlackService.getInstance(command.SlackTeamId__c);
+        this.userContact = slacker.findOrCreateContact(command.SlackUserId__c);
 
         // Load the specific time if specified
         Matcher matcher = getPattern().matcher(command.Text__c);
@@ -71,9 +63,9 @@ public with sharing class SlashclockOutCommand implements Slashclock.Command {
             // Derive the correct end time
             this.endTime =
                     DateTimeUtil.newDateTime(
-                            DateTimeUtil.getDate(this.endTime, this.timeZoneSidKey).addDays(offset),
+                            DateTimeUtil.getDate(this.endTime, this.userContact.TimeZoneSidKey__c).addDays(offset),
                             TimeUtil.parseTime(matcher.group(3).trim()),
-                            TimeZone.getTimeZone(this.timeZoneSidKey));
+                            TimeZone.getTimeZone(this.userContact.TimeZoneSidKey__c));
         }
 
         // Return the fully loaded SlashClock command!

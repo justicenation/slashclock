@@ -1,5 +1,12 @@
 public with sharing class SlackService {
 
+    public static final String DEFAULT_TIME_ZONE_SID_KEY = 'America/New_York';
+
+    /**
+     * Cache of found or created contacts, keyed on the Slack User ID
+     */
+    private Map<String, Contact> contactMap;
+
     /**
      * Map of service instances by Slack Team ID
      */
@@ -9,6 +16,7 @@ public with sharing class SlackService {
     private String teamId;
 
     public SlackService(String teamId) {
+        this.contactMap = new Map<String, Contact>();
         this.teamId = teamId;
     }
 
@@ -24,8 +32,8 @@ public with sharing class SlackService {
     public Contact createContact(String userId) {
         Contact userContact = new Contact(
                 LastName = userId,
-                AccountId = findOrCreateAccount().Id,
-                TimeZoneSidKey__c = (String)Contact.TimeZoneSidKey__c.getDescribe().getDefaultValue(),
+                Account = this.findOrCreateAccount(),
+                TimeZoneSidKey__c = DEFAULT_TIME_ZONE_SID_KEY,
                 SlackUserId__c = userId);
 
         insert userContact;
@@ -36,7 +44,11 @@ public with sharing class SlackService {
 
         // Look for an existing account
         List<Account> teamAccounts = [
-            SELECT Id, Name, SlackAccessToken__c
+            SELECT
+                Name,
+                SlackAccessToken__c,
+                SlackTeamId__c,
+                Id
             FROM Account
             WHERE SlackTeamId__c = :this.teamId
         ];
@@ -44,21 +56,46 @@ public with sharing class SlackService {
         return teamAccounts.isEmpty() ? createAccount() : teamAccounts[0];
     }
 
+    /**
+     * @param userId The **Slack User ID**
+     *
+     * @return A Contact object including the parent Account object in the
+     *         `Contact.Account` field. This contact would be newly created
+     *         if one did not already exist at the time the method was called.
+     */
     public Contact findOrCreateContact(String userId) {
 
-        // Look for a existing contact
-        List<Contact> userContacts = [
-            SELECT
-                SlackTeamId__c,
-                SlackUserId__c,
-                TimeZoneSidKey__c,
-                Id
-            FROM Contact
-            WHERE AccountId = :findOrCreateAccount().Id
-                AND SlackUserId__c = :userId
-        ];
+        // Assume we'll get a hit in the cache
+        Contact userContact = this.contactMap.get(userId);
 
-        return userContacts.isEmpty() ? createContact(userId) : userContacts[0];
+        // If we didn't get a hit in the cache, query the system.
+        // for an existing contact.
+        if (userContact == null) {
+
+            List<Contact> userContacts = [
+                SELECT
+                    Account.Name,
+                    Account.SlackTeamId__c,
+                    Account.SlackAccessToken__c,
+                    AccountId,
+                    SlackTeamId__c,
+                    SlackUserId__c,
+                    TimeZoneSidKey__c,
+                    Id
+                FROM Contact
+                WHERE AccountId = :findOrCreateAccount().Id
+                    AND SlackUserId__c = :userId
+            ];
+
+            userContact = userContacts.isEmpty()
+                    ? createContact(userId)
+                    : userContacts[0];
+
+            // Cache the found or created contact
+            this.contactMap.put(userId, userContact);
+        }
+
+        return userContact;
     }
 
     public static SlackService getInstance(String teamId) {
@@ -75,6 +112,8 @@ public with sharing class SlackService {
      * If the time zone obtained from Slack is different than what's on file
      * for the user, the information in Salesforce should be updated
      * to match the user's Slack configuration.
+     *
+     * @param userId The **Slack User ID**
      *
      * @return the time zone SID key (e.g., "America/New_York")
      */

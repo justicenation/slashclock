@@ -15,30 +15,22 @@ public with sharing class SlashclockService {
     private Weekday firstDayOfWeek;
 
     /**
-     * Slack Team ID
+     * Cache of instances for fast retrieval, keyed on Contact ID
      */
-    private String teamId;
+    private static Map<Id, SlashclockService> instanceMap =
+            new Map<Id, SlashclockService>();
 
-    private String timeZoneSidKey;
+    private Account teamAccount;
     
-    /**
-     * Slack User ID
-     */
-    private String userId;
-
-    public SlashclockService(String userId, String teamId) {
-        this.userId = userId;
-        this.teamId = teamId;
-
-        // TODO: Make dynamic based on Slack user preference
-        this.timeZoneSidKey = 'America/New_York';
-        this.firstDayOfWeek = Weekday.MONDAY;
-    }
+    private Contact userContact;
 
     public SlashclockService(Contact userContact) {
-        this.userId = userContact.SlackUserId__c;
-        this.teamId = userContact.SlackTeamId__c;
-        this.timeZoneSidKey = userContact.TimeZoneSidKey__c;
+        this(userContact, userContact.Account);
+    }
+
+    public SlashclockService(Contact userContact, Account teamAccount) {
+        this.userContact = userContact;
+        this.teamAccount = teamAccount;
         
         // TODO: Make dynamic based on Slack user preference
         this.firstDayOfWeek = Weekday.MONDAY;
@@ -59,9 +51,11 @@ public with sharing class SlashclockService {
 
         // Construct the time entry
         TimeEntry__c entry = new TimeEntry__c(
+                Contact__c = this.userContact.Id,
                 StartTime__c = startTime,
-                SlackUserId__c = this.userId,
-                SlackTeamId__c = this.teamId);
+                StartTimeZoneSidKey__c = this.getTimeZoneSidKey(),
+                SlackUserId__c = this.userContact.SlackUserId__c,
+                SlackTeamId__c = this.teamAccount.SlackTeamId__c);
 
         // Insert and return the time entry
         insert entry;
@@ -87,6 +81,7 @@ public with sharing class SlashclockService {
         TimeEntry__c entry =
                 openTimeEntries.get(openTimeEntries.size() - 1);
         entry.EndTime__c = endTime;
+        entry.EndTimeZoneSidKey__c = this.userContact.TimeZoneSidKey__c;
 
         update entry;
         return entry;
@@ -187,7 +182,8 @@ public with sharing class SlashclockService {
     public String formatEntry(TimeEntry__c entry, Integer index) {
         
         // Always start with the standard entry details
-        String value = SlashclockUtil.formatEntry(entry, index, this.timeZoneSidKey);
+        String value = SlashclockUtil.formatEntry(
+                entry, index, this.getTimeZoneSidKey());
 
         // Add slice information if slices are present
         if (entry.TimeSlices__r.size() > 0) {
@@ -236,9 +232,9 @@ public with sharing class SlashclockService {
         return [
             SELECT Id, StartTime__c
             FROM TimeEntry__c
-            WHERE SlackUserId__c = :this.userId
-                AND SlackTeamId__c = :this.teamId
-                AND EndTime__c = NULL
+            WHERE
+                EndTime__c = NULL AND
+                Contact__c = :this.userContact.Id
         ];
     }
 
@@ -250,47 +246,41 @@ public with sharing class SlashclockService {
                 StartTime__c,
                 Id
             FROM TimeEntry__c
-            WHERE SlackUserId__c = :this.userId
-                AND SlackTeamId__c = :this.teamId
-                AND StartTime__c >= :startTime
+            WHERE
+                StartTime__c >= :startTime AND
+                Contact__c = :this.userContact.Id
             ORDER BY StartTime__c DESC
         ];
     }
 
-    public static SlashclockService getInstance(SlashCommand__c command) {
-        return getInstance(command.SlackUserId__c, command.SlackTeamId__c);
-    }
-
-    public static SlashclockService getInstance(SlashclockService.Key serviceKey) {
-        return getInstance(serviceKey.userId, serviceKey.teamId);
-    }
-
-    public static SlashclockService getInstance(String userId, String teamId) {
-        return new SlashclockService(userId, teamId);
-    }
-
     public static SlashclockService getInstance(Contact userContact) {
-        return new SlashclockService(userContact);
+
+        // Cache a new instance as needed
+        if (!instanceMap.containsKey(userContact.Id)) {
+            instanceMap.put(userContact.Id, new SlashclockService(userContact));
+        }
+
+        return instanceMap.get(userContact.Id);
     }
 
     public TimeEntry__c getLastTimeEntry() {
         return [
             SELECT Id
             FROM TimeEntry__c
-            WHERE SlackUserId__c = :this.userId
-                AND SlackTeamId__c = :this.teamId
+            WHERE
+                Contact__c = :this.userContact.Id
             ORDER BY StartTime__c DESC
             LIMIT 1
         ];
     }
 
     public String getTimeZoneSidKey() {
-        return this.timeZoneSidKey;
+        return this.userContact.TimeZoneSidKey__c;
     }
 
     public DateTime getStartOfWeek(DateTime value) {
         return DateTimeUtil.startOfWeek(
-                value, this.timeZoneSidKey, this.firstDayOfWeek);
+                value, this.getTimeZoneSidKey(), this.firstDayOfWeek);
     }
 
     public List<TimeEntry__c> getTimeEntries(DateTime startTime, DateTime endTime) {
@@ -298,10 +288,10 @@ public with sharing class SlashclockService {
             SELECT Id, StartTime__c, EndTime__c,
                 (SELECT Id, NumberOfMinutes__c, Tag__c FROM TimeSlices__r)
             FROM TimeEntry__c
-            WHERE SlackUserId__c = :this.userId
-                AND SlackTeamId__c = :this.teamId
-                AND StartTime__c < :endTime
-                AND (EndTime__c >= :startTime OR EndTime__c = NULL)
+            WHERE
+                StartTime__c < :endTime AND
+                (EndTime__c >= :startTime OR EndTime__c = NULL) AND
+                Contact__c = :this.userContact.Id
             ORDER BY StartTime__c ASC
         ];
     }
@@ -317,7 +307,7 @@ public with sharing class SlashclockService {
         // Go through every day for which we need to aggregate data
         for (SlashclockReportItem eachItem
                 : SlashclockUtil.newDailyReportItems(
-                        startOfWeek, endTime, this.timeZoneSidKey,
+                        startOfWeek, endTime, this.getTimeZoneSidKey(),
                         this.getTimeEntries(startOfWeek, endTime), 7)) {
             report.addItem(eachItem);
         }
@@ -334,15 +324,5 @@ public with sharing class SlashclockService {
 
         insert slice;
         return slice;
-    }
-
-    public class Key {
-        public String teamId { get; set; }
-        public String userId { get; set; }
-
-        public Key(String userId, String teamId) {
-            this.userId = userId;
-            this.teamId = teamId;
-        }
     }
 }

@@ -47,7 +47,7 @@
     <enableBulkApi>false</enableBulkApi>
     <enableChangeDataCapture>false</enableChangeDataCapture>
     <enableFeeds>false</enableFeeds>
-    <enableHistory>false</enableHistory>
+    <enableHistory>true</enableHistory>
     <enableReports>true</enableReports>
     <enableSearch>true</enableSearch>
     <enableSharing>false</enableSharing>
@@ -61,6 +61,7 @@
         <relationshipLabel>Time Entries</relationshipLabel>
         <relationshipName>TimeEntries</relationshipName>
         <required>false</required>
+        <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
@@ -72,6 +73,7 @@
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
+        <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
@@ -84,17 +86,56 @@
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
+        <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Number</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>EndTimeZoneSidKey__c</fullName>
+        <description>The time zone in which the End Time was entered</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The time zone in which the End Time was entered</inlineHelpText>
+        <label>End Time Zone</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetName>TimeZoneSidKey</valueSetName>
+        </valueSet>
     </fields>
     <fields>
         <fullName>EndTime__c</fullName>
         <externalId>false</externalId>
         <label>End Time</label>
         <required>false</required>
+        <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>HasVerifiedEndTimeZone__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Whether the End Time Zone has been verified with the source of truth for the user&apos;s time zone</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Whether the End Time Zone has been verified with the source of truth for the user&apos;s time zone</inlineHelpText>
+        <label>Verified End Time Zone</label>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>HasVerifiedStartTimeZone__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Whether the Start Time Zone has been verified with the source of truth for the user&apos;s time zone</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Whether the Start Time Zone has been verified with the source of truth for the user&apos;s time zone</inlineHelpText>
+        <label>Verified Start Time Zone</label>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>NumberOfSlicedMinutes__c</fullName>
@@ -103,6 +144,7 @@
         <summarizedField>TimeSlice__c.NumberOfMinutes__c</summarizedField>
         <summaryForeignKey>TimeSlice__c.TimeEntry__c</summaryForeignKey>
         <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Summary</type>
     </fields>
@@ -118,6 +160,7 @@
         </summaryFilterItems>
         <summaryForeignKey>TimeSlice__c.TimeEntry__c</summaryForeignKey>
         <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Summary</type>
     </fields>
@@ -127,6 +170,7 @@
         <label>Slack Team ID</label>
         <length>10</length>
         <required>true</required>
+        <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
@@ -137,9 +181,25 @@
         <label>Slack User ID</label>
         <length>10</length>
         <required>true</required>
+        <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>StartTimeZoneSidKey__c</fullName>
+        <description>The time zone in which the Start Time was entered</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The time zone in which the Start Time was entered</inlineHelpText>
+        <label>Start Time Zone</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetName>TimeZoneSidKey</valueSetName>
+        </valueSet>
     </fields>
     <fields>
         <fullName>StartTime__c</fullName>
@@ -147,6 +207,7 @@
         <externalId>false</externalId>
         <label>Start Time</label>
         <required>true</required>
+        <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>DateTime</type>
     </fields>
@@ -164,6 +225,7 @@
     <nameField>
         <displayFormat>TE-{0000000000}</displayFormat>
         <label>Time Entry Number</label>
+        <trackHistory>false</trackHistory>
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Time Entries</pluralLabel>

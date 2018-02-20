@@ -8,15 +8,12 @@ public with sharing class SlashclockStrikeCommand implements Slashclock.Command 
      */
     private Integer entryIndex;
 
-    private String teamId;
-    private String userId;
+    private Contact userContact;
 
     public SlashclockStrikeCommand() {
-        this.userId = null;
-        this.teamId = null;
-
         this.currentTime = DateTime.now();
         this.entryIndex = 1;  // by default strike the last time entry
+        this.userContact = null;
     }
 
     public Slashclock.CommandResult execute() {
@@ -27,7 +24,7 @@ public with sharing class SlashclockStrikeCommand implements Slashclock.Command 
         // Clock in via service
         try {
             SlashclockService slashclock =
-                    SlashclockService.getInstance(this.userId, this.teamId);
+                    SlashclockService.getInstance(this.userContact);
 
             TimeEntry__c struck = slashclock.getTimeEntriesSince(
                     this.currentTime.addDays(-1 * 7)).get(this.entryIndex - 1);
@@ -56,10 +53,9 @@ public with sharing class SlashclockStrikeCommand implements Slashclock.Command 
 
     public Slashclock.Command load(SlashCommand__c command) {
 
-        // Remember the Slack User ID and Team ID,
-        // then locate the contact and the time zone
-        this.userId = command.SlackUserId__c;
-        this.teamId = command.SlackTeamId__c;
+        // Find the contact for the Slack user
+        SlackService slacker = SlackService.getInstance(command.SlackTeamId__c);
+        this.userContact = slacker.findOrCreateContact(command.SlackUserId__c);
         
         // Store a matcher for the command
         Matcher matcher = getPattern().matcher(command.Text__c);

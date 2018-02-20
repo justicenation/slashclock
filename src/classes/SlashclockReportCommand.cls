@@ -2,14 +2,12 @@ public with sharing class SlashclockReportCommand implements Slashclock.Command 
 
     private DateTime endTime;
     private Boolean forLastWeek;
-    private String teamId;
-    private String userId;
+    private Contact userContact;
 
     public SlashclockReportCommand() {
-        this.userId = null;
-        this.teamId = null;
         this.endTime = DateTime.now();
         this.forLastWeek = false;
+        this.userContact = null;
     }
 
     public Slashclock.CommandResult execute() {
@@ -19,7 +17,7 @@ public with sharing class SlashclockReportCommand implements Slashclock.Command 
 
         // Get the service
         SlashclockService slashclock =
-                SlashclockService.getInstance(this.userId, this.teamId);
+                SlashclockService.getInstance(this.userContact);
 
         // Adjust for last week if needed
         if (this.forLastWeek) {
@@ -42,8 +40,10 @@ public with sharing class SlashclockReportCommand implements Slashclock.Command 
     }
 
     public Slashclock.Command load(SlashCommand__c command) {
-        this.userId = command.SlackUserId__c;
-        this.teamId = command.SlackTeamId__c;
+        
+        // Find the contact for the Slack user
+        SlackService slacker = SlackService.getInstance(command.SlackTeamId__c);
+        this.userContact = slacker.findOrCreateContact(command.SlackUserId__c);
 
         // Set the end time to the start of this week, so that the report
         // will contain all entries from the previous week.

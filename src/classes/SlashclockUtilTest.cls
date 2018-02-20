@@ -56,12 +56,19 @@ private class SlashclockUtilTest {
         String userId = 'em';
         String teamId = 'cee';
 
-        SlashclockService clock = SlashclockService.getInstance(userId, teamId);
-
         DateTime startTime = DateTime.newInstanceGmt(2017, 7, 3, 0, 0, 0);
         DateTime endTime = DateTime.newInstanceGmt(2017, 7, 10, 0, 0, 0);
 
-        List<TimeEntry__c> entries = clock.getTimeEntries(startTime, endTime);
+        List<TimeEntry__c> entries = [
+            SELECT Id, StartTime__c, EndTime__c,
+                (SELECT Id, NumberOfMinutes__c, Tag__c FROM TimeSlices__r)
+            FROM TimeEntry__c
+            WHERE SlackUserId__c = :userId
+                AND SlackTeamId__c = :teamId
+                AND StartTime__c < :endTime
+                AND (EndTime__c >= :startTime OR EndTime__c = NULL)
+            ORDER BY StartTime__c ASC
+        ];
 
         System.assertEquals(2, entries.size());
         

@@ -11,9 +11,6 @@ private class SlashclockUnknownCommandTest {
         String slackUserId = 'em';
         String slackTeamId = 'cee';
 
-        SlashclockService slashclock =
-                SlashclockService.getInstance(slackUserId, slackTeamId);
-
         SlashCommand__c slashCommand = new SlashCommand__c(
                 SlackUserId__c = slackUserId,
                 SlackTeamId__c = slackTeamId,
@@ -52,9 +49,6 @@ private class SlashclockUnknownCommandTest {
         String slackUserId = 'em';
         String slackTeamId = 'cee';
 
-        SlashclockService slashclock =
-                SlashclockService.getInstance(slackUserId, slackTeamId);
-
         SlashCommand__c slashCommand = new SlashCommand__c(
                 SlackUserId__c = slackUserId,
                 SlackTeamId__c = slackTeamId,
@@ -92,9 +86,6 @@ private class SlashclockUnknownCommandTest {
         // Given
         String slackUserId = 'em';
         String slackTeamId = 'cee';
-
-        SlashclockService slashclock =
-                SlashclockService.getInstance(slackUserId, slackTeamId);
 
         SlashCommand__c slashCommand = new SlashCommand__c(
                 SlackUserId__c = slackUserId,

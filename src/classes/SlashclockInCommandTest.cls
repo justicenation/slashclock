@@ -95,8 +95,12 @@ private class SlashclockInCommandTest {
         String slackUserId = 'em';
         String slackTeamId = 'cee';
 
+        // Find the contact for the Slack user
+        SlackService slacker = SlackService.getInstance(slackTeamId);
+        Contact userContact = slacker.findOrCreateContact(slackUserId);
+
         SlashclockService slashclock =
-                SlashclockService.getInstance(slackUserId, slackTeamId);
+                SlashclockService.getInstance(userContact);
 
         List<TimeEntry__c> openEntries = slashclock.getOpenTimeEntries();
 
@@ -127,7 +131,14 @@ private class SlashclockInCommandTest {
         Test.stopTest();
 
         TimeEntry__c openEntry = [
-            SELECT Id, StartTime__c
+            SELECT
+                EndTime__c,
+                EndTimeZoneSidKey__c,
+                HasVerifiedEndTimeZone__c,
+                HasVerifiedStartTimeZone__c,
+                StartTime__c,
+                StartTimeZoneSidKey__c,
+                Id
             FROM TimeEntry__c
             WHERE
                 SlackUserId__c = :slackUserId AND
@@ -137,6 +148,111 @@ private class SlashclockInCommandTest {
 
         System.assertEquals(clockInTime, openEntry.StartTime__c,
                 Schema.SObjectType.TimeEntry__c.fields.StartTime__c.label);
+
+        System.assertEquals('America/New_York', openEntry.StartTimeZoneSidKey__c,
+                Schema.SObjectType.TimeEntry__c.fields.StartTimeZoneSidKey__c.label);
+
+        System.assertEquals(false, openEntry.HasVerifiedStartTimeZone__c,
+                Schema.SObjectType.TimeEntry__c.fields.HasVerifiedStartTimeZone__c.label);
+
+        System.assertEquals(null, openEntry.EndTime__c,
+                Schema.SObjectType.TimeEntry__c.fields.EndTime__c.label);
+
+        System.assertEquals(null, openEntry.EndTimeZoneSidKey__c,
+                Schema.SObjectType.TimeEntry__c.fields.EndTimeZoneSidKey__c.label);
+
+        System.assertEquals(false, openEntry.HasVerifiedEndTimeZone__c,
+                Schema.SObjectType.TimeEntry__c.fields.HasVerifiedEndTimeZone__c.label);
+    }
+
+    /**
+     * This test validates the verification of time zones, based on whether
+     * an Apex Job Request record was created and also whether an
+     * `ApexJobRequestProcessJob` batch is executed.
+     */
+    @isTest
+    private static void clockInEightThirtyAmThenVerifyTimeZone() {
+        Test.setMock(HttpCalloutMock.class, new SlackApiServiceMockSuite());
+        
+        // Given
+        String slackUserId = 'em';
+        String slackTeamId = 'cee';
+
+        // Find the contact for the Slack user
+        SlackService slacker = SlackService.getInstance(slackTeamId);
+        Contact userContact = slacker.findOrCreateContact(slackUserId);
+
+        SlashclockService slashclock =
+                SlashclockService.getInstance(userContact);
+
+        Datetime clockInTime = DatetimeUtil.newDatetime(
+                Date.today(),
+                Time.newInstance(8, 30, 0, 0),
+                slashclock.getTimeZoneSidKey());
+
+        SlashCommand__c slashCommand = new SlashCommand__c(
+                SlackUserId__c = slackUserId,
+                SlackTeamId__c = slackTeamId,
+                Text__c = 'in 8:30am');
+
+        SlashclockInCommand command = new SlashclockInCommand();
+
+        // Make sure no `ApexJobRequestProcessJob` batches are
+        // already enqueued.
+        System.assertEquals(0, [
+            SELECT Id
+            FROM AsyncApexJob
+            WHERE
+                ApexClassId IN (
+                    SELECT Id
+                    FROM ApexClass
+                    WHERE Name = 'ApexJobRequestProcessJob'
+                )
+        ].size(), 'given count of ApexJobRequestProcessJob');
+
+        // When
+        Test.startTest();
+
+        command.load(slashCommand);
+        command.execute();
+
+        // Then
+        Test.stopTest();
+
+        // Make sure one Apex Job Request record was created
+        System.assertEquals(1, [
+            SELECT Id
+            FROM ApexJobRequest__c
+            WHERE ApexClassName__c = :TimeEntryVerifyTimeZoneJob.class.getName()
+        ].size(), 'then count of Apex Job Request');
+
+        // Make sure one `ApexJobRequestProcessJob` batch is
+        // executed and in the Apex job queue.
+        System.assertEquals(1, [
+            SELECT Id
+            FROM AsyncApexJob
+            WHERE
+                ApexClassId IN (
+                    SELECT Id
+                    FROM ApexClass
+                    WHERE Name = 'ApexJobRequestProcessJob'
+                ) AND
+                JobType = 'BatchApex'
+        ].size(), 'then count of BatchApex jobs');
+
+        // Make sure one `ApexJobRequestProcessJob` batch worker is
+        // executed and in the Apex job queue.
+        System.assertEquals(1, [
+            SELECT Id
+            FROM AsyncApexJob
+            WHERE
+                ApexClassId IN (
+                    SELECT Id
+                    FROM ApexClass
+                    WHERE Name = 'ApexJobRequestProcessJob'
+                ) AND
+                JobType = 'BatchApexWorker'
+        ].size(), 'then count of BatchApex jobs');
     }
 
     @isTest
@@ -147,8 +263,12 @@ private class SlashclockInCommandTest {
         String slackUserId = 'em';
         String slackTeamId = 'cee';
 
+        // Find the contact for the Slack user
+        SlackService slacker = SlackService.getInstance(slackTeamId);
+        Contact userContact = slacker.findOrCreateContact(slackUserId);
+
         SlashclockService slashclock =
-                SlashclockService.getInstance(slackUserId, slackTeamId);
+                SlashclockService.getInstance(userContact);
 
         List<TimeEntry__c> openEntries = slashclock.getOpenTimeEntries();
 
@@ -179,7 +299,10 @@ private class SlashclockInCommandTest {
         Test.stopTest();
 
         TimeEntry__c openEntry = [
-            SELECT Id, StartTime__c
+            SELECT
+                Contact__c,
+                StartTime__c,
+                Id
             FROM TimeEntry__c
             WHERE
                 SlackUserId__c = :slackUserId AND
@@ -189,6 +312,9 @@ private class SlashclockInCommandTest {
 
         System.assertEquals(clockInTime, openEntry.StartTime__c,
                 Schema.SObjectType.TimeEntry__c.fields.StartTime__c.label);
+
+        System.assertEquals(userContact.Id, openEntry.Contact__c,
+                Schema.SObjectType.TimeEntry__c.fields.Contact__c.label);
     }
 
     @testSetup
