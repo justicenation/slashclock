@@ -1,5 +1,7 @@
 public class ApexJobService {
 
+    private Id batchApexJobId;
+
     private static Map<Type, ApexJobService> instanceMap =
             new Map<Type, ApexJobService>();
 
@@ -7,6 +9,7 @@ public class ApexJobService {
 
     public ApexJobService(Type jobType) {
         this.jobType = jobType;
+        this.batchApexJobId = null;
     }
 
     public static ApexJobService getInstance(Type jobType) {
@@ -24,11 +27,27 @@ public class ApexJobService {
      * @return The ID of the new or already running batch job
      */
     public Id executeBatch() {
-        List<AsyncApexJob> pendingBatches = this.getPendingBatches();
 
-        return pendingBatches.isEmpty()
-                ? Database.executeBatch(new ApexJobRequestProcessJob(), 1)
-                : pendingBatches[0].Id;
+        // Populate the Batch Apex Job ID if there is no remembered
+        // Job ID in the current service instance
+        if (this.getBatchApexJobId() == null) {
+            List<AsyncApexJob> pendingBatches = this.getPendingBatches();
+
+            if (pendingBatches.isEmpty()) {
+                this.batchApexJobId =
+                        Database.executeBatch(
+                                new ApexJobRequestProcessJob(), 1);
+            }
+            else {
+                this.batchApexJobId = pendingBatches[0].Id;
+            }
+        }
+
+        return this.batchApexJobId;
+    }
+
+    public Id getBatchApexJobId() {
+        return this.batchApexJobId;
     }
 
     /**
@@ -46,7 +65,7 @@ public class ApexJobService {
                     FROM ApexClass
                     WHERE Name = :ApexJobRequestProcessJob.class.getName()
                 ) AND
-                JobType = 'BatchApex' AND
+                JobType IN ('BatchApex', 'BatchApexWorker') AND
                 Status NOT IN ('Aborted', 'Completed', 'Failed')
         ];
     }

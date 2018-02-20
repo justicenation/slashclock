@@ -2,6 +2,39 @@
 private class ApexJobServiceTest {
 
     @isTest
+    private static void submitAndExecuteTwice() {
+
+        // Given
+        ApexJobService apexJob =
+                ApexJobService.getInstance(TimeEntryVerifyTimeZoneJob.class);
+
+        // When
+        Test.startTest();
+
+        Id firstRequestId = apexJob.submitAndProcess(
+                new TimeEntryVerifyTimeZoneJob(new List<Id>()));
+
+        Id firstBatchApexJobId = apexJob.getBatchApexJobId();
+
+        System.assertNotEquals(null, firstBatchApexJobId,
+                '1st ' + Schema.SObjectType.AsyncApexJob.fields.Id.label);
+
+        Id secondRequestId = apexJob.submitAndProcess(
+                new TimeEntryVerifyTimeZoneJob(new List<Id>()));
+
+        Id secondBatchApexJobId = apexJob.getBatchApexJobId();
+
+        System.assertEquals(firstBatchApexJobId, secondBatchApexJobId,
+                '2nd ' + Schema.SObjectType.AsyncApexJob.fields.Id.label);
+
+        // Then
+        Test.stopTest();
+
+        System.assertNotEquals(firstRequestId ,secondRequestId,
+                Schema.SObjectType.ApexJobRequest__c.fields.Id.label);
+    }
+
+    @isTest
     private static void submitAndExecute() {
 
         // Given
@@ -11,13 +44,17 @@ private class ApexJobServiceTest {
         // When
         Test.startTest();
 
-        Id jobId = apexJob.submitAndProcess(
+        Id requestId = apexJob.submitAndProcess(
                 new TimeEntryVerifyTimeZoneJob(new List<Id>()));
+
+        System.assertNotEquals(null, apexJob.getBatchApexJobId(),
+                Schema.SObjectType.AsyncApexJob.fields.Id.label);
 
         // Then
         Test.stopTest();
 
-        System.assertNotEquals(null ,jobId, 'jobId');
+        System.assertNotEquals(null , requestId,
+                Schema.SObjectType.ApexJobRequest__c.fields.Id.label);
 
         List<AsyncApexJob> thenJobs = [
             SELECT
