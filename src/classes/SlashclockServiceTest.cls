@@ -27,10 +27,14 @@ private class SlashclockServiceTest {
         System.assertEquals(0, openEntries.size(),
                 'no existing time entries expected');
 
+        // Find the contact for the Slack user
+        SlackService slacker = SlackService.getInstance(teamId);
+        Contact userContact = slacker.findOrCreateContact(userId);
+
         // When
         Test.startTest();
 
-        SlashclockService.getInstance(userId, teamId).clockIn(commandTime);
+        SlashclockService.getInstance(userContact).clockIn(commandTime);
 
         // Then
         Test.stopTest();
@@ -74,13 +78,17 @@ private class SlashclockServiceTest {
         System.assertEquals(1, existingOpenEntries.size(),
                 'one existing time entry expected');
 
+        // Find the contact for the Slack user
+        SlackService slacker = SlackService.getInstance(teamId);
+        Contact userContact = slacker.findOrCreateContact(userId);
+
         // When
         Test.startTest();
 
         SlashclockException thrown = null;
 
         try {
-            SlashclockService.getInstance(userId, teamId).clockIn(startTime);
+            SlashclockService.getInstance(userContact).clockIn(startTime);
         }
         catch (SlashclockException caught) {
             thrown = caught;

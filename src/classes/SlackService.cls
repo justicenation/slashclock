@@ -24,7 +24,7 @@ public with sharing class SlackService {
     public Contact createContact(String userId) {
         Contact userContact = new Contact(
                 LastName = userId,
-                AccountId = findOrCreateAccount().Id,
+                Account = this.findOrCreateAccount(),
                 TimeZoneSidKey__c = (String)Contact.TimeZoneSidKey__c.getDescribe().getDefaultValue(),
                 SlackUserId__c = userId);
 
@@ -48,11 +48,22 @@ public with sharing class SlackService {
         return teamAccounts.isEmpty() ? createAccount() : teamAccounts[0];
     }
 
+    /**
+     * @param userId The **Slack User ID**
+     *
+     * @return A Contact object including the parent Account object in the
+     *         `Contact.Account` field. This contact would be newly created
+     *         if one did not already exist at the time the method was called.
+     */
     public Contact findOrCreateContact(String userId) {
 
         // Look for a existing contact
         List<Contact> userContacts = [
             SELECT
+                Account.Name,
+                Account.SlackTeamId__c,
+                Account.SlackAccessToken__c,
+                AccountId,
                 SlackTeamId__c,
                 SlackUserId__c,
                 TimeZoneSidKey__c,
