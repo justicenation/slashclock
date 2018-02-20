@@ -1,5 +1,7 @@
 public with sharing class SlackService {
 
+    public static final String DEFAULT_TIME_ZONE_SID_KEY = 'America/New_York';
+
     /**
      * Cache of found or created contacts, keyed on the Slack User ID
      */
@@ -31,7 +33,7 @@ public with sharing class SlackService {
         Contact userContact = new Contact(
                 LastName = userId,
                 Account = this.findOrCreateAccount(),
-                TimeZoneSidKey__c = (String)Contact.TimeZoneSidKey__c.getDescribe().getDefaultValue(),
+                TimeZoneSidKey__c = DEFAULT_TIME_ZONE_SID_KEY,
                 SlackUserId__c = userId);
 
         insert userContact;

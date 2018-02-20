@@ -131,7 +131,14 @@ private class SlashclockInCommandTest {
         Test.stopTest();
 
         TimeEntry__c openEntry = [
-            SELECT Id, StartTime__c
+            SELECT
+                EndTime__c,
+                EndTimeZoneSidKey__c,
+                HasVerifiedEndTimeZone__c,
+                HasVerifiedStartTimeZone__c,
+                StartTime__c,
+                StartTimeZoneSidKey__c,
+                Id
             FROM TimeEntry__c
             WHERE
                 SlackUserId__c = :slackUserId AND
@@ -141,6 +148,21 @@ private class SlashclockInCommandTest {
 
         System.assertEquals(clockInTime, openEntry.StartTime__c,
                 Schema.SObjectType.TimeEntry__c.fields.StartTime__c.label);
+
+        System.assertEquals('America/New_York', openEntry.StartTimeZoneSidKey__c,
+                Schema.SObjectType.TimeEntry__c.fields.StartTimeZoneSidKey__c.label);
+
+        System.assertEquals(false, openEntry.HasVerifiedStartTimeZone__c,
+                Schema.SObjectType.TimeEntry__c.fields.HasVerifiedStartTimeZone__c.label);
+
+        System.assertEquals(null, openEntry.EndTime__c,
+                Schema.SObjectType.TimeEntry__c.fields.EndTime__c.label);
+
+        System.assertEquals(null, openEntry.EndTimeZoneSidKey__c,
+                Schema.SObjectType.TimeEntry__c.fields.EndTimeZoneSidKey__c.label);
+
+        System.assertEquals(false, openEntry.HasVerifiedEndTimeZone__c,
+                Schema.SObjectType.TimeEntry__c.fields.HasVerifiedEndTimeZone__c.label);
     }
 
     /**
