@@ -30,18 +30,9 @@ public class ApexJobService {
 
         // Populate the Batch Apex Job ID if there is no remembered
         // Job ID in the current service instance
-        if (this.getBatchApexJobId() == null) {
-            List<AsyncApexJob> pendingBatches = this.getPendingBatches();
-
-            if (pendingBatches.isEmpty()) {
-                this.batchApexJobId =
-                        Database.executeBatch(
-                                new ApexJobRequestProcessJob(), 1);
-            }
-            else {
-                this.batchApexJobId = pendingBatches[0].Id;
-            }
-        }
+        this.batchApexJobId =
+                Database.executeBatch(
+                        new ApexJobRequestProcessJob(), 1);
 
         return this.batchApexJobId;
     }
@@ -84,7 +75,13 @@ public class ApexJobService {
 
     public Id submitAndProcess(Requestable job) {
         Id requestId = submit(job);
-        this.executeBatch();
+
+        // Execute a batch if no processing jobs are in flight
+        if (this.getBatchApexJobId() == null
+                && this.getPendingBatches().isEmpty()) {
+            this.executeBatch();
+        }
+
         return requestId;
     }
 }
