@@ -17,6 +17,7 @@ private class TimeEntryDataServiceTest {
 
         // Create contacts
         Contact bugs = new Contact(
+                AccountId = acme.Id,
                 FirstName = 'Bugs',
                 LastName = 'Bunny (TEST)',
                 SlackUserId__c = 'bugs',
