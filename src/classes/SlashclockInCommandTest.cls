@@ -95,8 +95,12 @@ private class SlashclockInCommandTest {
         String slackUserId = 'em';
         String slackTeamId = 'cee';
 
+        // Find the contact for the Slack user
+        SlackService slacker = SlackService.getInstance(slackTeamId);
+        Contact userContact = slacker.findOrCreateContact(slackUserId);
+
         SlashclockService slashclock =
-                SlashclockService.getInstance(slackUserId, slackTeamId);
+                SlashclockService.getInstance(userContact);
 
         List<TimeEntry__c> openEntries = slashclock.getOpenTimeEntries();
 
@@ -147,8 +151,12 @@ private class SlashclockInCommandTest {
         String slackUserId = 'em';
         String slackTeamId = 'cee';
 
+        // Find the contact for the Slack user
+        SlackService slacker = SlackService.getInstance(slackTeamId);
+        Contact userContact = slacker.findOrCreateContact(slackUserId);
+
         SlashclockService slashclock =
-                SlashclockService.getInstance(slackUserId, slackTeamId);
+                SlashclockService.getInstance(userContact);
 
         List<TimeEntry__c> openEntries = slashclock.getOpenTimeEntries();
 

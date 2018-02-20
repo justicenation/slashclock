@@ -1,6 +1,11 @@
 public with sharing class SlackService {
 
     /**
+     * Cache of found or created contacts, keyed on the Slack User ID
+     */
+    private Map<String, Contact> contactMap;
+
+    /**
      * Map of service instances by Slack Team ID
      */
     public static Map<String, SlackService> instanceMap =
@@ -9,6 +14,7 @@ public with sharing class SlackService {
     private String teamId;
 
     public SlackService(String teamId) {
+        this.contactMap = new Map<String, Contact>();
         this.teamId = teamId;
     }
 
@@ -57,23 +63,37 @@ public with sharing class SlackService {
      */
     public Contact findOrCreateContact(String userId) {
 
-        // Look for a existing contact
-        List<Contact> userContacts = [
-            SELECT
-                Account.Name,
-                Account.SlackTeamId__c,
-                Account.SlackAccessToken__c,
-                AccountId,
-                SlackTeamId__c,
-                SlackUserId__c,
-                TimeZoneSidKey__c,
-                Id
-            FROM Contact
-            WHERE AccountId = :findOrCreateAccount().Id
-                AND SlackUserId__c = :userId
-        ];
+        // Assume we'll get a hit in the cache
+        Contact userContact = this.contactMap.get(userId);
 
-        return userContacts.isEmpty() ? createContact(userId) : userContacts[0];
+        // If we didn't get a hit in the cache, query the system.
+        // for an existing contact.
+        if (userContact == null) {
+
+            List<Contact> userContacts = [
+                SELECT
+                    Account.Name,
+                    Account.SlackTeamId__c,
+                    Account.SlackAccessToken__c,
+                    AccountId,
+                    SlackTeamId__c,
+                    SlackUserId__c,
+                    TimeZoneSidKey__c,
+                    Id
+                FROM Contact
+                WHERE AccountId = :findOrCreateAccount().Id
+                    AND SlackUserId__c = :userId
+            ];
+
+            userContact = userContacts.isEmpty()
+                    ? createContact(userId)
+                    : userContacts[0];
+
+            // Cache the found or created contact
+            this.contactMap.put(userId, userContact);
+        }
+
+        return userContact;
     }
 
     public static SlackService getInstance(String teamId) {

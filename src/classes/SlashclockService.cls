@@ -15,6 +15,12 @@ public with sharing class SlashclockService {
     private Weekday firstDayOfWeek;
 
     /**
+     * Cache of instances for fast retrieval, keyed on Contact ID
+     */
+    private static Map<Id, SlashclockService> instanceMap =
+            new Map<Id, SlashclockService>();
+
+    /**
      * Slack Team ID
      */
     private String teamId;
@@ -254,7 +260,13 @@ public with sharing class SlashclockService {
     }
 
     public static SlashclockService getInstance(Contact userContact) {
-        return new SlashclockService(userContact);
+
+        // Cache a new instance as needed
+        if (!instanceMap.containsKey(userContact.Id)) {
+            instanceMap.put(userContact.Id, new SlashclockService(userContact));
+        }
+
+        return instanceMap.get(userContact.Id);
     }
 
     public TimeEntry__c getLastTimeEntry() {
