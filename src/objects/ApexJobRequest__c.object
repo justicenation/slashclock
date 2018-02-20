@@ -113,6 +113,11 @@
     <label>Apex Job Request</label>
     <listViews>
         <fullName>All</fullName>
+        <columns>CREATED_DATE</columns>
+        <columns>ApexClassName__c</columns>
+        <columns>Status__c</columns>
+        <columns>ErrorMessage__c</columns>
+        <columns>NAME</columns>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>
@@ -122,7 +127,16 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Apex Job Requests</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>CREATED_DATE</customTabListAdditionalFields>
+        <customTabListAdditionalFields>ApexClassName__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Status__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>ErrorMessage__c</customTabListAdditionalFields>
+        <searchResultsAdditionalFields>CREATED_DATE</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>ApexClassName__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Status__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>ErrorMessage__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>
