@@ -4,6 +4,8 @@
         <members>AbstractSmartMockSuite</members>
         <members>ApexJobRequestProcessJob</members>
         <members>ApexJobRequestProcessJobTest</members>
+        <members>ApexJobService</members>
+        <members>ApexJobServiceTest</members>
         <members>ClockResource</members>
         <members>ClockResourceTest</members>
         <members>DatabaseUtil</members>
@@ -92,6 +94,7 @@
     </types>
     <types>
         <members>Account</members>
+        <members>ApexJobRequest__c</members>
         <members>Connection__c</members>
         <members>Contact</members>
         <members>SlashCommand__c</members>
@@ -99,6 +102,7 @@
         <name>CustomObject</name>
     </types>
     <types>
+        <members>ApexJobRequest__c</members>
         <members>SlashCommand__c</members>
         <members>TimeEntry__c</members>
         <name>CustomTab</name>
@@ -120,6 +124,7 @@
         <name>GlobalValueSet</name>
     </types>
     <types>
+        <members>ApexJobRequest__c-Apex Job Request Layout</members>
         <members>SlashCommand__c-Slash Command Layout</members>
         <name>Layout</name>
     </types>
