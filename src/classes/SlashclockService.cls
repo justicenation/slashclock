@@ -27,8 +27,12 @@ public with sharing class SlashclockService {
     private String userId;
 
     public SlashclockService(Contact userContact) {
+        this(userContact, userContact.Account);
+    }
+
+    public SlashclockService(Contact userContact, Account teamAccount) {
         this.userId = userContact.SlackUserId__c;
-        this.teamId = userContact.SlackTeamId__c;
+        this.teamId = teamAccount.SlackTeamId__c;
         this.timeZoneSidKey = userContact.TimeZoneSidKey__c;
         
         // TODO: Make dynamic based on Slack user preference

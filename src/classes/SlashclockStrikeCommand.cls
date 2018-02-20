@@ -56,6 +56,7 @@ public with sharing class SlashclockStrikeCommand implements Slashclock.Command 
         // Find the contact for the Slack user
         SlackService slacker = SlackService.getInstance(command.SlackTeamId__c);
         this.userContact = slacker.findOrCreateContact(command.SlackUserId__c);
+        this.userContact.Account = slacker.findOrCreateAccount();
         
         // Store a matcher for the command
         Matcher matcher = getPattern().matcher(command.Text__c);

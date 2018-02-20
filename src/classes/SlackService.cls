@@ -36,7 +36,11 @@ public with sharing class SlackService {
 
         // Look for an existing account
         List<Account> teamAccounts = [
-            SELECT Id, Name, SlackAccessToken__c
+            SELECT
+                Name,
+                SlackAccessToken__c,
+                SlackTeamId__c,
+                Id
             FROM Account
             WHERE SlackTeamId__c = :this.teamId
         ];
