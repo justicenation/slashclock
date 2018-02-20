@@ -13,11 +13,21 @@ public with sharing class SlashclockInCommand implements Slashclock.Command {
         // Initialize the result
         Slashclock.CommandResult result = new Slashclock.CommandResult();
 
-        // Clock in via service
-        try {
-            SlashclockService slashclock =
-                    SlashclockService.getInstance(this.userContact);
-            slashclock.clockIn(this.startTime);
+        try {       
+
+            // Clock in
+            SlashclockService.getInstance(
+                    this.userContact).clockIn(this.startTime);
+
+            // Verify the time zone for this operation
+            TimeEntryVerifyTimeZoneJob job =
+                    new TimeEntryVerifyTimeZoneJob(
+                            new List<Id> { this.userContact.Id });
+
+            ApexJobService.getInstance().submitAndProcess(
+                    TimeEntryVerifyTimeZoneJob.class, job);
+
+            // Set the success message
             result.setMessage(SlashclockService.CLOCKED_IN_SUCCESS);
             result.setSuccess(true);
         }
