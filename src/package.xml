@@ -125,6 +125,7 @@
     </types>
     <types>
         <members>ApexJobRequest__c-Apex Job Request Layout</members>
+        <members>Contact-Contact Layout</members>
         <members>SlashCommand__c-Slash Command Layout</members>
         <name>Layout</name>
     </types>
