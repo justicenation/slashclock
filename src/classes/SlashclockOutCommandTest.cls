@@ -69,6 +69,96 @@ private class SlashclockOutCommandTest {
                 Schema.SObjectType.TimeEntry__c.fields.EndTime__c.label);
     }
 
+    /**
+     * This test validates the verification of time zones, based on whether
+     * an Apex Job Request record was created and also whether an
+     * `ApexJobRequestProcessJob` batch is executed.
+     */
+    @isTest
+    private static void clockOutFiveThirtyPmThenVerifyTimeZone() {
+        Test.setMock(HttpCalloutMock.class, new SlackApiServiceMockSuite());
+        
+        // Given
+        String slackUserId = 'kick';
+        String slackTeamId = 'board';
+
+        // Find the contact for the Slack user
+        SlackService slacker = SlackService.getInstance(slackTeamId);
+        Contact userContact = slacker.findOrCreateContact(slackUserId);
+
+        SlashclockService slashclock =
+                SlashclockService.getInstance(userContact);
+
+        Datetime clockOutTime = DatetimeUtil.newDatetime(
+                Date.today(),
+                Time.newInstance(17, 30, 0, 0),
+                slashclock.getTimeZoneSidKey());
+
+        SlashCommand__c slashCommand = new SlashCommand__c(
+                SlackUserId__c = slackUserId,
+                SlackTeamId__c = slackTeamId,
+                Text__c = 'out 5:30pm');
+
+        SlashclockOutCommand command = new SlashclockOutCommand();
+
+        // Make sure no `ApexJobRequestProcessJob` batches are
+        // already enqueued.
+        System.assertEquals(0, [
+            SELECT Id
+            FROM AsyncApexJob
+            WHERE
+                ApexClassId IN (
+                    SELECT Id
+                    FROM ApexClass
+                    WHERE Name = 'ApexJobRequestProcessJob'
+                )
+        ].size(), 'given count of ApexJobRequestProcessJob');
+
+        // When
+        Test.startTest();
+
+        command.load(slashCommand);
+        command.execute();
+
+        // Then
+        Test.stopTest();
+
+        // Make sure one Apex Job Request record was created
+        System.assertEquals(1, [
+            SELECT Id
+            FROM ApexJobRequest__c
+            WHERE ApexClassName__c = :TimeEntryVerifyTimeZoneJob.class.getName()
+        ].size(), 'then count of Apex Job Request');
+
+        // Make sure one `ApexJobRequestProcessJob` batch is
+        // executed and in the Apex job queue.
+        System.assertEquals(1, [
+            SELECT Id
+            FROM AsyncApexJob
+            WHERE
+                ApexClassId IN (
+                    SELECT Id
+                    FROM ApexClass
+                    WHERE Name = 'ApexJobRequestProcessJob'
+                ) AND
+                JobType = 'BatchApex'
+        ].size(), 'then count of BatchApex jobs');
+
+        // Make sure one `ApexJobRequestProcessJob` batch worker is
+        // executed and in the Apex job queue.
+        System.assertEquals(1, [
+            SELECT Id
+            FROM AsyncApexJob
+            WHERE
+                ApexClassId IN (
+                    SELECT Id
+                    FROM ApexClass
+                    WHERE Name = 'ApexJobRequestProcessJob'
+                ) AND
+                JobType = 'BatchApexWorker'
+        ].size(), 'then count of BatchApex jobs');
+    }
+
     @isTest
     private static void clockOutYesterdayFiveThirtyPm() {
         Test.setMock(HttpCalloutMock.class, new SlackApiServiceMockSuite());
