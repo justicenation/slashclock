@@ -97,7 +97,7 @@
     </customValue>
     <customValue>
         <fullName>America/New_York</fullName>
-        <default>true</default>
+        <default>false</default>
         <label>America/New_York</label>
     </customValue>
     <customValue>

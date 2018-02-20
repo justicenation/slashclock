@@ -83,10 +83,8 @@ public class RelativeTestService {
         // Create time entries
         TimeEntry__c kickboard2DaysAgo = new TimeEntry__c(
                 Contact__c = kick.Id,
-                EndTime__c = null,
-                EndTimeZoneSidKey__c = null,
                 StartTime__c = twoDaysAgo,
-                StartTimeZoneSidKey__c = 'America/New_York',
+                StartTimeZoneSidKey__c = this.timeZoneSidKey,
                 SlackUserId__c = 'kick',
                 SlackTeamId__c = 'board');
 
