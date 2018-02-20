@@ -2,35 +2,29 @@
 private class ApexJobServiceTest {
 
     @isTest
-    private static void submitAndExecuteTwice() {
+    private static void isExecuteBatchReady() {
 
         // Given
         ApexJobService apexJob =
-                ApexJobService.getInstance(TimeEntryVerifyTimeZoneJob.class);
+                ApexJobService.getInstance();
+
+        System.assertEquals(true, apexJob.isExecuteBatchReady(),
+                'ApexJobService is ready to execute batch');
 
         // When
         Test.startTest();
 
-        Id firstRequestId = apexJob.submitAndProcess(
+        Id requestId = apexJob.submitAndProcess(
+                TimeEntryVerifyTimeZoneJob.class,
                 new TimeEntryVerifyTimeZoneJob(new List<Id>()));
 
-        Id firstBatchApexJobId = apexJob.getBatchApexJobId();
-
-        System.assertNotEquals(null, firstBatchApexJobId,
-                '1st ' + Schema.SObjectType.AsyncApexJob.fields.Id.label);
-
-        Id secondRequestId = apexJob.submitAndProcess(
-                new TimeEntryVerifyTimeZoneJob(new List<Id>()));
-
-        Id secondBatchApexJobId = apexJob.getBatchApexJobId();
-
-        System.assertEquals(firstBatchApexJobId, secondBatchApexJobId,
-                '2nd ' + Schema.SObjectType.AsyncApexJob.fields.Id.label);
+        System.assertEquals(false, apexJob.isExecuteBatchReady(),
+                'ApexJobService should no longer be ready to execute batch');
 
         // Then
         Test.stopTest();
 
-        System.assertNotEquals(firstRequestId ,secondRequestId,
+        System.assertNotEquals(null , requestId,
                 Schema.SObjectType.ApexJobRequest__c.fields.Id.label);
     }
 
@@ -39,16 +33,14 @@ private class ApexJobServiceTest {
 
         // Given
         ApexJobService apexJob =
-                ApexJobService.getInstance(TimeEntryVerifyTimeZoneJob.class);
+                ApexJobService.getInstance();
 
         // When
         Test.startTest();
 
         Id requestId = apexJob.submitAndProcess(
+                TimeEntryVerifyTimeZoneJob.class,
                 new TimeEntryVerifyTimeZoneJob(new List<Id>()));
-
-        System.assertNotEquals(null, apexJob.getBatchApexJobId(),
-                Schema.SObjectType.AsyncApexJob.fields.Id.label);
 
         // Then
         Test.stopTest();
@@ -87,8 +79,8 @@ private class ApexJobServiceTest {
         // When
         Test.startTest();
 
-        Id requestId = ApexJobService.getInstance(
-                TimeEntryVerifyTimeZoneJob.class).submit(job);
+        Id requestId = ApexJobService.getInstance().submit(
+                TimeEntryVerifyTimeZoneJob.class, job);
 
         // Then
         Test.stopTest();

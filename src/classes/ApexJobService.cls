@@ -2,22 +2,14 @@ public class ApexJobService {
 
     private Id batchApexJobId;
 
-    private static Map<Type, ApexJobService> instanceMap =
-            new Map<Type, ApexJobService>();
+    private static ApexJobService instance = new ApexJobService();
 
-    private Type jobType;
-
-    public ApexJobService(Type jobType) {
-        this.jobType = jobType;
+    public ApexJobService() {
         this.batchApexJobId = null;
     }
 
-    public static ApexJobService getInstance(Type jobType) {
-        if (!instanceMap.containsKey(jobType)) {
-            instanceMap.put(jobType, new ApexJobService(jobType));
-        }
-
-        return instanceMap.get(jobType);
+    public static ApexJobService getInstance() {
+        return instance;
     }
 
     /**
@@ -61,11 +53,16 @@ public class ApexJobService {
         ];
     }
 
-    public Id submit(Requestable job) {
+    public Boolean isExecuteBatchReady() {
+        return this.getBatchApexJobId() == null
+                && this.getPendingBatches().isEmpty();
+    }
+
+    public Id submit(Type jobClass, Requestable job) {
 
         // Construct the job request
         ApexJobRequest__c request = new ApexJobRequest__c(
-                ApexClassName__c = this.jobType.getName(),
+                ApexClassName__c = jobClass.getName(),
                 Body__c = JSON.serialize(job));
 
         // Create the request and return the ID
@@ -73,12 +70,11 @@ public class ApexJobService {
         return request.Id;
     }
 
-    public Id submitAndProcess(Requestable job) {
-        Id requestId = submit(job);
+    public Id submitAndProcess(Type jobClass, Requestable job) {
+        Id requestId = this.submit(jobClass, job);
 
         // Execute a batch if no processing jobs are in flight
-        if (this.getBatchApexJobId() == null
-                && this.getPendingBatches().isEmpty()) {
+        if (this.isExecuteBatchReady()) {
             this.executeBatch();
         }
 
