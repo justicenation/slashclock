@@ -73,20 +73,34 @@ public with sharing class TestService {
                 LastName = this.annotate('Flip'),
                 SlackUserId__c = 'flip');
 
+        Contact em = new Contact(
+                AccountId = cee.Id,
+                FirstName = 'Em',
+                LastName = 'Inem (TEST)',
+                SlackUserId__c = 'em');
+
+        insert new List<Contact> {
+            flip,
+            em
+        };
+
         // Create time entries
         TimeEntry__c emcee20170704 = new TimeEntry__c(
+                Contact__c = em.Id,
                 StartTime__c = DateTime.newInstanceGmt(2017, 7, 4, 8, 0, 0),
                 EndTime__c = DateTime.newInstanceGmt(2017, 7, 4, 17, 0, 0),
                 SlackUserId__c = 'em',
                 SlackTeamId__c = 'cee');
         
         TimeEntry__c emcee20170705 = new TimeEntry__c(
+                Contact__c = em.Id,
                 StartTime__c = DateTime.newInstanceGmt(2017, 7, 5, 8, 0, 0),
                 EndTime__c = DateTime.newInstanceGmt(2017, 7, 5, 17, 30, 0),
                 SlackUserId__c = 'em',
                 SlackTeamId__c = 'cee');
 
         TimeEntry__c flipboard30mAgo = new TimeEntry__c(
+                Contact__c = flip.Id,
                 StartTime__c = DateTime.now().addMinutes(-30),
                 SlackUserId__c = 'flip',
                 SlackTeamId__c = 'board');

@@ -80,22 +80,26 @@ public class RelativeTestService {
 
         // Create time entries
         TimeEntry__c kickboard2DaysAgo = new TimeEntry__c(
+                Contact__c = kick.Id,
                 StartTime__c = twoDaysAgo,
                 SlackUserId__c = 'kick',
                 SlackTeamId__c = 'board');
 
         TimeEntry__c flipboard30mAgo = new TimeEntry__c(
+                Contact__c = flip.Id,
                 StartTime__c = thirtyMinutesAgo,
                 SlackUserId__c = 'flip',
                 SlackTeamId__c = 'board');
 
         TimeEntry__c skateboardYesterdayNineFifteen = new TimeEntry__c(
+                Contact__c = skate.Id,
                 StartTime__c = yesterdayNineFifteen,
                 EndTime__c = yesterdayNineFifteen.addMinutes(30),
                 SlackUserId__c = 'skate',
                 SlackTeamId__c = 'board');
 
         TimeEntry__c skateboardYesterdayTenFifteen = new TimeEntry__c(
+                Contact__c = skate.Id,
                 StartTime__c = yesterdayTenFifteen,
                 EndTime__c = yesterdayTenFifteen.addHours(7).addMinutes(30),
                 SlackUserId__c = 'skate',
