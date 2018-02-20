@@ -6,7 +6,12 @@ global class ClockResource {
 
         // Process the request
         SlashCommand__c slash = SlashCommandUtil.parse(RestContext.request);
-        SlashclockService slashclock = SlashclockService.getInstance(slash);
+
+        // Find the contact for the Slack user
+        SlackService slacker = SlackService.getInstance(slash.SlackTeamId__c);
+        Contact userContact = slacker.findOrCreateContact(slash.SlackUserId__c);
+
+        SlashclockService slashclock = SlashclockService.getInstance(userContact);
         Slashclock.CommandResult result = slashclock.execute(slash);
 
         // Return the response
