@@ -43,7 +43,13 @@ private class SlashclockLosAngelesTest {
         Slashclock.CommandResult result = null;
 
         System.runAs(apiGuestUser) {
-            result = SlashclockService.getInstance(inbound).execute(inbound);
+            
+            // Find the contact for the Slack user
+            SlackService slacker = SlackService.getInstance(inbound.SlackTeamId__c);
+            Contact userContact = slacker.findOrCreateContact(inbound.SlackUserId__c);
+            SlashclockService slashclock = SlashclockService.getInstance(userContact);
+
+            result = slashclock.execute(inbound);
         }
 
         // Then
