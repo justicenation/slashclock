@@ -21,7 +21,7 @@ private class TimeEntryVerifyTimeZoneJobTest {
                 FirstName = 'Bugs',
                 LastName = 'Bunny (TEST)',
                 SlackUserId__c = 'bugs',
-                TimeZoneSidKey__c = 'America/New_York');
+                TimeZoneSidKey__c = 'America/Los_Angeles');
 
         List<Contact> contacts = new List<Contact>();
         contacts.add(bugs);
@@ -92,6 +92,9 @@ private class TimeEntryVerifyTimeZoneJobTest {
 
         // Given
         Contact bugs = thisTest.getContact('Bunny (TEST)');
+
+        System.assertEquals('America/Los_Angeles', bugs.TimeZoneSidKey__c,
+                Schema.SObjectType.Contact.fields.TimeZoneSidKey__c.label);
 
         List<TimeEntry__c> givenEntries = getTimeEntries(bugs);
 
@@ -199,6 +202,11 @@ private class TimeEntryVerifyTimeZoneJobTest {
 
         // Then
         Test.stopTest();
+
+        bugs = thisTest.getContact('Bunny (TEST)');
+
+        System.assertEquals('America/New_York', bugs.TimeZoneSidKey__c,
+                Schema.SObjectType.Contact.fields.TimeZoneSidKey__c.label);
 
         List<TimeEntry__c> thenEntries = getTimeEntries(bugs);
 
