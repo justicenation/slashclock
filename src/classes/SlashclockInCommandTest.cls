@@ -187,7 +187,10 @@ private class SlashclockInCommandTest {
         Test.stopTest();
 
         TimeEntry__c openEntry = [
-            SELECT Id, StartTime__c
+            SELECT
+                Contact__c,
+                StartTime__c,
+                Id
             FROM TimeEntry__c
             WHERE
                 SlackUserId__c = :slackUserId AND
@@ -197,6 +200,9 @@ private class SlashclockInCommandTest {
 
         System.assertEquals(clockInTime, openEntry.StartTime__c,
                 Schema.SObjectType.TimeEntry__c.fields.StartTime__c.label);
+
+        System.assertEquals(userContact.Id, openEntry.Contact__c,
+                Schema.SObjectType.TimeEntry__c.fields.Contact__c.label);
     }
 
     @testSetup
