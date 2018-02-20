@@ -214,8 +214,23 @@ private class SlashclockInCommandTest {
                     SELECT Id
                     FROM ApexClass
                     WHERE Name = 'ApexJobRequestProcessJob'
-                )
-        ].size(), 'then count of ApexJobRequestProcessJob');
+                ) AND
+                JobType = 'BatchApex'
+        ].size(), 'then count of BatchApex jobs');
+
+        // Make sure one `ApexJobRequestProcessJob` batch worker is
+        // executed and in the Apex job queue.
+        System.assertEquals(1, [
+            SELECT Id
+            FROM AsyncApexJob
+            WHERE
+                ApexClassId IN (
+                    SELECT Id
+                    FROM ApexClass
+                    WHERE Name = 'ApexJobRequestProcessJob'
+                ) AND
+                JobType = 'BatchApexWorker'
+        ].size(), 'then count of BatchApex jobs');
     }
 
     @isTest
