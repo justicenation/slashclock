@@ -57,13 +57,15 @@ public class RelativeTestService {
                 AccountId = board.Id,
                 FirstName = 'Baxter',
                 LastName = 'Flip (TEST)',
-                SlackUserId__c = 'flip');
+                SlackUserId__c = 'flip',
+                TimeZoneSidKey__c = this.timeZoneSidKey);
 
         Contact kick = new Contact(
                 AccountId = board.Id,
                 FirstName = 'Dynamo',
                 LastName = 'Kick (TEST)',
-                SlackuserId__c = 'kick');
+                SlackuserId__c = 'kick',
+                TimeZoneSidKey__c = this.timeZoneSidKey);
 
         Contact skate = new Contact(
                 AccountId = board.Id,
@@ -81,7 +83,10 @@ public class RelativeTestService {
         // Create time entries
         TimeEntry__c kickboard2DaysAgo = new TimeEntry__c(
                 Contact__c = kick.Id,
+                EndTime__c = null,
+                EndTimeZoneSidKey__c = null,
                 StartTime__c = twoDaysAgo,
+                StartTimeZoneSidKey__c = 'America/New_York',
                 SlackUserId__c = 'kick',
                 SlackTeamId__c = 'board');
 

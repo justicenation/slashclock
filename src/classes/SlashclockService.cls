@@ -81,6 +81,7 @@ public with sharing class SlashclockService {
         TimeEntry__c entry =
                 openTimeEntries.get(openTimeEntries.size() - 1);
         entry.EndTime__c = endTime;
+        entry.EndTimeZoneSidKey__c = this.userContact.TimeZoneSidKey__c;
 
         update entry;
         return entry;

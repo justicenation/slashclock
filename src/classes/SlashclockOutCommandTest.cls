@@ -4,7 +4,7 @@ private class SlashclockOutCommandTest {
     @testSetup
     private static void setup() {
         DateTime setupTime = DateTime.now();
-        TimeZone setupTimeZone = UserInfo.getTimeZone();
+        TimeZone setupTimeZone = TimeZone.getTimeZone('America/New_York');
 
         RelativeTestService relativeTest =
                 RelativeTestService.getInstance(
@@ -21,24 +21,37 @@ private class SlashclockOutCommandTest {
         String slackUserId = 'kick';
         String slackTeamId = 'board';
 
-        // Find the contact for the Slack user
-        SlackService slacker = SlackService.getInstance(slackTeamId);
-        Contact userContact = slacker.findOrCreateContact(slackUserId);
-
-        SlashclockService slashclock =
-                SlashclockService.getInstance(userContact);
-
-        List<TimeEntry__c> openEntries = slashclock.getOpenTimeEntries();
+        List<TimeEntry__c> openEntries = [
+            SELECT
+                EndTime__c,
+                EndTimeZoneSidKey__c,
+                StartTime__c,
+                Id
+            FROM TimeEntry__c
+            WHERE
+                EndTime__c = NULL AND
+                Contact__r.SlackUserId__c = :slackUserId
+        ];
 
         System.assertEquals(1, openEntries.size(), 'openEntries.size()');
 
         Datetime clockOutTime = DatetimeUtil.newDatetime(
                 Date.today(),
                 Time.newInstance(17, 30, 0, 0),
-                slashclock.getTimeZoneSidKey());
+                'America/New_York');
 
         System.assert(openEntries[0].StartTime__c < clockOutTime,
                 'clockOutTime must be later than open entry Start Time');
+
+        System.assertEquals(
+                null,
+                openEntries[0].EndTime__c,
+                Schema.SObjectType.TimeEntry__c.fields.EndTime__c.label);
+
+        System.assertEquals(
+                null,
+                openEntries[0].EndTimeZoneSidKey__c,
+                Schema.SObjectType.TimeEntry__c.fields.EndTimeZoneSidKey__c.label);
 
         SlashCommand__c slashCommand = new SlashCommand__c(
                 SlackUserId__c = slackUserId,
@@ -60,13 +73,22 @@ private class SlashclockOutCommandTest {
         Test.stopTest();
 
         TimeEntry__c closedEntry = [
-            SELECT Id, EndTime__c
+            SELECT
+                EndTime__c,
+                EndTimeZoneSidKey__c,
+                HasVerifiedEndTimeZone__c,
+                Id
             FROM TimeEntry__c
             WHERe Id = :openEntries[0].Id
         ];
 
         System.assertEquals(clockOutTime, closedEntry.EndTime__c,
                 Schema.SObjectType.TimeEntry__c.fields.EndTime__c.label);
+
+        System.assertEquals(
+                'America/New_York',
+                closedEntry.EndTimeZoneSidKey__c,
+                Schema.SObjectType.TimeEntry__c.fields.EndTimeZoneSidKey__c.label);
     }
 
     /**
