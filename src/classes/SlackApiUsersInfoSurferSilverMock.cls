@@ -21,6 +21,13 @@ public class SlackApiUsersInfoSurferSilverMock implements SmartHttpCalloutMock {
     }
 
     public HttpResponse respond(HttpRequest req) {
-        return null;
+
+        // Initialize the response
+        HttpResponse res = new HttpResponse();
+
+        res.setBody(SmartMockService.getInstance(
+                SlackApiUsersInfoSurferSilverMock.class).getResponseBody());
+
+        return res;
     }
 }

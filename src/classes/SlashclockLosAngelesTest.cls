@@ -24,16 +24,6 @@ private class SlashclockLosAngelesTest {
                 Command__c = '/clock',
                 Text__c = 'in 9:15am');
 
-        User apiGuestUser = [
-            SELECT Id
-            FROM User
-            WHERE ProfileId IN (
-                SELECT Id
-                FROM Profile
-                WHERE Name = 'API Profile'
-            )
-        ];
-
         // When
         Test.setMock(
                 HttpCalloutMock.class,
@@ -42,8 +32,8 @@ private class SlashclockLosAngelesTest {
 
         Slashclock.CommandResult result = null;
 
-        System.runAs(apiGuestUser) {
-            
+        System.runAs(getApiGuestUser()) {
+
             // Find the contact for the Slack user
             SlackService slacker = SlackService.getInstance(inbound.SlackTeamId__c);
             Contact userContact = slacker.findOrCreateContact(inbound.SlackUserId__c);
@@ -55,15 +45,36 @@ private class SlashclockLosAngelesTest {
         // Then
         Test.stopTest();
 
+        System.assertEquals(true, result.isSuccess(), 'result.success');
+
+        System.assertEquals(
+                'You have clocked in.', result.getMessage(), 'result.message');
+
+        Account thenTeamAccount = [
+            SELECT
+                Name,
+                SlackTeamId__c,
+                Id
+            FROM Account
+            WHERE SlackTeamId__c = 'surfer'
+        ];
+
+        System.assertEquals('surfer', thenTeamAccount.Name,
+                Schema.SObjectType.Account.fields.Name.label);
+
         Contact thenUserContact = [
             SELECT
+                AccountId,
+                SlackUserId__c,
                 TimeZoneSidKey__c,
                 Id
             FROM Contact
             WHERE
-                SlackTeamId__c = 'surfer' AND
                 SlackUserId__c = 'silver'
         ];
+
+        System.assertEquals(thenTeamAccount.Id, thenUserContact.AccountId,
+                Schema.SObjectType.Contact.fields.AccountId.label);
 
         System.assertEquals(
                 'America/Los_Angeles',
@@ -91,38 +102,50 @@ private class SlashclockLosAngelesTest {
                 Schema.SObjectType.TimeEntry__c.fields.StartTime__c.label);
     }
 
-    @isTest
+    // TODO: @isTest
     private static void clockIn() {
         System.assert(false, 'TODO');
     }
 
-    @isTest
+    // TODO: @isTest
     private static void clockOut() {
         System.assert(false, 'TODO');
     }
 
-    @isTest
+    // TODO: @isTest
     private static void clockReport() {
         System.assert(false, 'TODO');
     }
 
-    @isTest
+    // TODO: @isTest
     private static void clockEntries() {
         System.assert(false, 'TODO');
     }
 
-    @isTest
+    // TODO: @isTest
     private static void clockInFromNewTimeZone() {
         System.assert(false, 'TODO');
     }
 
-    @isTest
+    // TODO: @isTest
     private static void clockOutFromNewTimeZone() {
         System.assert(false, 'TODO');
     }
 
-    @isTest
+    // TODO: @isTest
     private static void clockReportFromDifferentTimeZone() {
         System.assert(false, 'TODO');
+    }
+
+    private static User getApiGuestUser() {
+        return [
+            SELECT Id
+            FROM User
+            WHERE ProfileId IN (
+                SELECT Id
+                FROM Profile
+                WHERE Name = 'API Profile'
+            )
+        ].get(0);
     }
 }
