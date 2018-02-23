@@ -455,9 +455,92 @@ private class SlashclockLosAngelesTest {
                 'second line of response message');
     }
 
-    // TODO: @isTest
+    /**
+     * Given a user who started in the "America/New_York" time zone,
+     * clock in when the user goes to the "America/Los_Angeles" time zone.
+     * The time entry created should be resolved to be
+     * in the "America/Los_Angeles" time zone.
+     */
+    @isTest
     private static void clockInFromNewTimeZone() {
-        System.assert(false, 'TODO');
+        
+        // Given
+        Datetime refDatetime = Datetime.now();
+
+        Date refDate = DatetimeUtil.getDate(refDatetime, 'America/Los_Angeles');
+
+        Account teamAccount = new Account(
+                Name = 'Surfer, Inc. (TEST)',
+                SlackTeamId__c = 'surfer');
+
+        insert teamAccount;
+
+        Contact userContact = new Contact(
+                AccountId = teamAccount.Id,
+                FirstName = 'Silver',
+                LastName = 'Surfer (TEST)',
+                TimeZoneSidKey__c = 'America/New_York',
+                SlackUserId__c = 'silver');
+
+        insert userContact;
+
+        SlashCommand__c inbound = new SlashCommand__c(
+                SlackUserId__c = 'silver',
+                SlackTeamId__c = 'surfer',
+                Command__c = '/clock',
+                Text__c = 'in 9:15am');
+
+        // When
+        Test.setMock(
+                HttpCalloutMock.class,
+                new SlashclockLosAngelesMockSuite());
+        Test.startTest();
+
+        Slashclock.CommandResult result = null;
+
+        System.runAs(getApiGuestUser()) {
+
+            // Find the contact for the Slack user
+            SlackService slacker = SlackService.getInstance(inbound.SlackTeamId__c);
+            SlashclockService slashclock = SlashclockService.getInstance(
+                    slacker.findOrCreateContact(inbound.SlackUserId__c));
+
+            result = slashclock.execute(inbound);
+        }
+
+        // Then
+        Test.stopTest();
+
+        System.assertEquals(true, result.isSuccess(), 'result.success');
+
+        System.assertEquals(
+                'You have clocked in.', result.getMessage(), 'result.message');
+
+        Datetime expectedStartTime =
+                DatetimeUtil.newDatetime(
+                        refDate, Time.newInstance(9, 15, 0, 0),
+                        'America/Los_Angeles');
+
+        List<TimeEntry__c> thenEntries = [
+            SELECT
+                StartTime__c,
+                StartTimeZoneSidkey__c,
+                Id
+            FROM TimeEntry__c
+            WHERE Contact__c = :userContact.Id
+        ];
+
+        System.assertEquals(1, thenEntries.size(), 'thenEntries.size()');
+
+        System.assertEquals(
+                expectedStartTime,
+                thenEntries[0].StartTime__c,
+                Schema.SObjectType.TimeEntry__c.fields.StartTime__c.label);
+
+        System.assertEquals(
+                'America/Los_Angeles',
+                thenEntries[0].StartTimeZoneSidkey__c,
+                Schema.SObjectType.TimeEntry__c.fields.StartTimeZoneSidkey__c.label);
     }
 
     // TODO: @isTest
