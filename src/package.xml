@@ -138,6 +138,7 @@
         <members>SlackApiUsersInfoAcmeBunnyMock</members>
         <members>SlackApiUsersInfoBarFooMock</members>
         <members>SlackApiUsersInfoBoardFlipMock</members>
+        <members>SlackApiUsersInfoSurferSilverMock</members>
         <name>StaticResource</name>
     </types>
     <version>40.0</version>
