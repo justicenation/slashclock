@@ -11,8 +11,7 @@ public virtual class SmartHttpCalloutMockSuite implements SmartHttpCalloutMock {
     }
 
     public virtual List<Type> getMockTypes() {
-        System.assert(false, 'override expected');
-        return null;
+        return new List<Type>();
     }
 
     public Boolean handles(HttpRequest req) {

@@ -66,6 +66,7 @@
         <members>SlashclockUtilTest</members>
         <members>SmartHttpCalloutMock</members>
         <members>SmartHttpCalloutMockSuite</members>
+        <members>SmartHttpCalloutMockSuiteTest</members>
         <members>SmartMock</members>
         <members>SmartMockService</members>
         <members>TestService</members>
