@@ -30,13 +30,23 @@ public with sharing class SlackService {
     }
 
     public Contact createContact(String userId) {
+        
+        // Find or create the team account
+        Account teamAccount = this.findOrCreateAccount();
+
+        // Create the user contact
         Contact userContact = new Contact(
                 LastName = userId,
-                Account = this.findOrCreateAccount(),
+                AccountId = teamAccount.Id,
                 TimeZoneSidKey__c = DEFAULT_TIME_ZONE_SID_KEY,
                 SlackUserId__c = userId);
 
         insert userContact;
+
+        // Set the reference object for convenient reference
+        userContact.Account = teamAccount;
+
+        // Return the user contact
         return userContact;
     }
 
