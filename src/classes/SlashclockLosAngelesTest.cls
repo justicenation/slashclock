@@ -637,11 +637,6 @@ private class SlashclockLosAngelesTest {
                 Schema.SObjectType.TimeEntry__c.fields.EndTimeZoneSidkey__c.label);
     }
 
-    // TODO: @isTest
-    private static void clockReportFromDifferentTimeZone() {
-        System.assert(false, 'TODO');
-    }
-
     private static User getApiGuestUser() {
         return [
             SELECT Id
