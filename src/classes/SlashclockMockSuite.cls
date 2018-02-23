@@ -1,3 +1,4 @@
+@isTest
 public class SlashclockMockSuite extends AbstractSmartMockSuite {
     public override List<SmartMock> getMocks() {
         return new List<SmartMock> {
