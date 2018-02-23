@@ -366,9 +366,93 @@ private class SlashclockLosAngelesTest {
                 'second line of response message');
     }
 
-    // TODO: @isTest
+    @isTest
     private static void clockEntries() {
-        System.assert(false, 'TODO');
+        
+        // Given
+        Datetime refDatetime = Datetime.now();
+
+        Date refDate = DatetimeUtil.getDate(refDatetime, 'America/Los_Angeles');
+
+        Date refWeekStart = DatetimeUtil.startOfWeek(refDate, Weekday.MONDAY);
+
+        Account teamAccount = new Account(
+                Name = 'Surfer, Inc. (TEST)',
+                SlackTeamId__c = 'surfer');
+
+        insert teamAccount;
+
+        Contact userContact = new Contact(
+                AccountId = teamAccount.Id,
+                FirstName = 'Silver',
+                LastName = 'Surfer (TEST)',
+                TimeZoneSidKey__c = 'America/Los_Angeles',
+                SlackUserId__c = 'silver');
+
+        insert userContact;
+
+        Datetime startTime =
+                DatetimeUtil.newDatetime(
+                        refWeekStart, Time.newInstance(9, 0, 0, 0),
+                        'America/Los_Angeles');
+
+        Datetime endTime =
+                DatetimeUtil.newDatetime(
+                        refWeekStart, Time.newInstance(17, 0, 0, 0),
+                        'America/Los_Angeles');
+
+        TimeEntry__c closedTimeEntry = new TimeEntry__c(
+                Contact__c = userContact.Id,
+                EndTime__c = endTime,
+                EndTimeZoneSidkey__c = 'America/Los_Angeles',
+                HasVerifiedEndTimeZone__c = true,
+                HasVerifiedStartTimeZone__c = true,
+                SlackTeamId__c = teamAccount.SlackTeamId__c,
+                SlackUserId__c = userContact.SlackUserId__c,
+                StartTime__c = startTime,
+                StartTimeZoneSidkey__c = 'America/Los_Angeles');
+
+        insert closedTimeEntry;
+
+        SlashCommand__c inbound = new SlashCommand__c(
+                SlackUserId__c = 'silver',
+                SlackTeamId__c = 'surfer',
+                Command__c = '/clock',
+                Text__c = 'entries');
+
+        // When
+        Test.setMock(
+                HttpCalloutMock.class,
+                new SlashclockLosAngelesMockSuite());
+        Test.startTest();
+
+        Slashclock.CommandResult result = null;
+
+        System.runAs(getApiGuestUser()) {
+
+            // Find the contact for the Slack user
+            SlackService slacker = SlackService.getInstance(inbound.SlackTeamId__c);
+            SlashclockService slashclock = SlashclockService.getInstance(
+                    slacker.findOrCreateContact(inbound.SlackUserId__c));
+
+            result = slashclock.execute(inbound);
+        }
+
+        // Then
+        Test.stopTest();
+
+        System.assertEquals(true, result.isSuccess(), 'result.success');
+
+        List<String> messageParts = result.getMessage().split('\n');
+
+        System.assertEquals(
+                'Here\'s what you\'ve clocked over the last seven days.', messageParts[0],
+                'first line of response message');
+
+        System.assertEquals(
+                '1. Mon ' + startTime.format('M/d', 'America/Los_Angeles') + ' 9:00am - 5:00pm',
+                messageParts[1],
+                'second line of response message');
     }
 
     // TODO: @isTest
