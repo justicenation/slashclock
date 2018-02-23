@@ -1,3 +1,4 @@
+@isTest
 public with sharing class SlackApiUsersInfoBarFooMock implements SmartMock {
     public Boolean handles(HttpRequest req) {
         
