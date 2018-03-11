@@ -30,6 +30,7 @@
         <members>SlashCommandUtil</members>
         <members>Slashclock</members>
         <members>SlashclockCallbackController</members>
+        <members>SlashclockCallbackControllerTest</members>
         <members>SlashclockContentName</members>
         <members>SlashclockContentService</members>
         <members>SlashclockContentUtil</members>

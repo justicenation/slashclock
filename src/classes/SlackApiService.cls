@@ -56,6 +56,10 @@ public with sharing class SlackApiService {
     }
 
     public SlackApi.TeamInfoResponse teamInfo() {
+        return this.teamInfo(this.accessToken);
+    }
+
+    public SlackApi.TeamInfoResponse teamInfo(String accessToken) {
 
         // Initialize the request
         HttpRequest req = new HttpRequest();
@@ -66,7 +70,7 @@ public with sharing class SlackApiService {
 
         // Construct the request body
         Map<String, String> parameterMap = new Map<String, String> {
-            'token' => this.accessToken
+            'token' => accessToken
         };
 
         req.setBody(HttpUtil.serializeQuery(parameterMap));

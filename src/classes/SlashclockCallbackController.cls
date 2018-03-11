@@ -6,6 +6,16 @@ public with sharing class SlashclockCallbackController {
 
     public String message { get; set; }
 
+    private SlackService slack;
+
+    public SlashclockCallbackController() {
+        this(SlackService.getInstance());
+    }
+
+    public SlashclockCallbackController(SlackService slack) {
+        this.slack = slack;
+    }
+
     public PageReference load() {
 
         // Visualforce it up!
@@ -21,26 +31,20 @@ public with sharing class SlashclockCallbackController {
 
         try {
 
-            // Get the access token
-            SlackApiService slack = SlackApiService.getInstance();
-            SlackApi.OauthAccessResponse oauthAccess =
-                    slack.oauthAccess(Connection__c.getInstance('Slack'), code);
-            String accessToken = oauthAccess.access_token;
-
-            // Determine the appropriate next page for the team
-            SlackApiService teamSlack = SlackApiService.getInstance(accessToken);
-            SlackApi.TeamInfoResponse teamInfo = teamSlack.teamInfo();
-
-            // Store the access token
-            SlackService slacker = SlackService.getInstance(oauthAccess.team_id);
-            slacker.storeAccessToken(accessToken);
+            // Activate the team based on the given code
+            SlackApi.TeamInfoResponse teamInfo = slack.activateTeam(code);
 
             // Prepare to redirect the user back to the Slack workspace
             nextPage = new PageReference(
                     SlackUtil.getWorkspaceUrl(teamInfo.team.domain));
         }
         catch (System.Exception caught) {
-            this.message = JSON.serialize(caught);
+            List<String> messageParts = new List<String> {
+                caught.getMessage(),
+                caught.getStackTraceString()
+            };
+
+            this.message = String.join(messageParts, '\n');
         }
 
         // Use Slack to get the 

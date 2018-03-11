@@ -7,6 +7,9 @@ public with sharing class SlackService {
      */
     private Map<String, Contact> contactMap;
 
+    @testVisible
+    private static SlackService instance = new SlackService();
+
     /**
      * Map of service instances by Slack Team ID
      */
@@ -15,9 +18,45 @@ public with sharing class SlackService {
 
     private String teamId;
 
+    private SlackApiService slackApi;
+
+    public SlackService() {
+        this(null);
+    }
+
     public SlackService(String teamId) {
         this.contactMap = new Map<String, Contact>();
         this.teamId = teamId;
+        this.slackApi = SlackApiService.getInstance();
+    }
+
+    /**
+     * Given an OAuth 2.0 authorization code, call the Slack API to get
+     * an access token and create or update the account in Salesforce
+     * for the team.
+     *
+     * @param code The OAuth2.0 authorization code
+     *
+     * @return The `SlackApi.TeamInfoResponse` object that would be obtained
+     *         upon successful exchange fo the authorization code
+     *         and subsequent call to get details on the team
+     */ 
+    public SlackApi.TeamInfoResponse activateTeam(String code) {
+
+        // Get the access token
+        SlackApi.OauthAccessResponse oauthAccess =
+                this.slackApi.oauthAccess(
+                        Connection__c.getInstance('Slack'), code);
+
+        // Determine the appropriate next page for the team
+        SlackApi.TeamInfoResponse teamInfo =
+                this.slackApi.teamInfo(oauthAccess.access_token);
+
+        // Store the access token
+        this.storeAccessToken(oauthAccess.access_token, oauthAccess.team_id);
+
+        // Return the team information
+        return teamInfo;
     }
 
     public Account createAccount() {
@@ -51,6 +90,10 @@ public with sharing class SlackService {
     }
 
     public Account findOrCreateAccount() {
+        return this.findOrCreateAccount(teamId);
+    }
+
+    public Account findOrCreateAccount(String teamId) {
 
         // Look for an existing account
         List<Account> teamAccounts = [
@@ -60,7 +103,7 @@ public with sharing class SlackService {
                 SlackTeamId__c,
                 Id
             FROM Account
-            WHERE SlackTeamId__c = :this.teamId
+            WHERE SlackTeamId__c = :teamId
         ];
 
         return teamAccounts.isEmpty() ? createAccount() : teamAccounts[0];
@@ -106,6 +149,10 @@ public with sharing class SlackService {
         }
 
         return userContact;
+    }
+
+    public static SlackService getInstance() {
+        return instance;
     }
 
     public static SlackService getInstance(String teamId) {
@@ -169,8 +216,11 @@ public with sharing class SlackService {
     }
 
     public Account storeAccessToken(String accessToken) {
+        return this.storeAccessToken(accessToken, this.teamId);
+    }
 
-        Account teamAccount = this.findOrCreateAccount();
+    public Account storeAccessToken(String accessToken, String teamId) {
+        Account teamAccount = this.findOrCreateAccount(teamId);
         teamAccount.SlackAccessToken__c = accessToken;
         update teamAccount;
         return teamAccount;
