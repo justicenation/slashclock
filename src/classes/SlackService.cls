@@ -53,7 +53,7 @@ public with sharing class SlackService {
                 this.slackApi.teamInfo(oauthAccess.access_token);
 
         // Store the access token
-        this.storeAccessToken(oauthAccess.access_token, oauthAccess.team_id);
+        this.storeAccessToken(oauthAccess.access_token, teamInfo.team.id);
 
         // Return the team information
         return teamInfo;

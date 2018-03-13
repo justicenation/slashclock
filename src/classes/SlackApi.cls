@@ -2,9 +2,6 @@ public class SlackApi {
     public class OauthAccessResponse extends Response {
         public String access_token { get; set; }
         public String scope { get; set; }
-        public String team_id { get; set; }
-        public String team_name { get; set; }
-        public String user_id { get; set; }
     }
 
     public class Icon {

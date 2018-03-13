@@ -19,6 +19,7 @@
         <members>SlackApi</members>
         <members>SlackApiService</members>
         <members>SlackApiServiceMockSuite</members>
+        <members>SlackApiServiceTest</members>
         <members>SlackApiUsersInfoAcmeBunnyMock</members>
         <members>SlackApiUsersInfoBarFooMock</members>
         <members>SlackApiUsersInfoBoardFlipMock</members>
@@ -136,6 +137,7 @@
         <name>Layout</name>
     </types>
     <types>
+        <members>SlackApiServiceOauthAccessMock</members>
         <members>SlackApiUsersInfoAcmeBunnyMock</members>
         <members>SlackApiUsersInfoBarFooMock</members>
         <members>SlackApiUsersInfoBoardFlipMock</members>
