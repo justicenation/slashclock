@@ -138,6 +138,7 @@
     </types>
     <types>
         <members>SlackApiServiceOauthAccessMock</members>
+        <members>SlackApiServiceTeamInfoMock</members>
         <members>SlackApiUsersInfoAcmeBunnyMock</members>
         <members>SlackApiUsersInfoBarFooMock</members>
         <members>SlackApiUsersInfoBoardFlipMock</members>

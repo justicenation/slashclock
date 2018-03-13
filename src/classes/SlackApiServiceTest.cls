@@ -32,6 +32,93 @@ private class SlackApiServiceTest {
                 'OauthAccessResponse.scope');
     }
 
+    @isTest
+    private static void teamInfo() {
+
+        // Given
+        String accessToken = 'xoxp-23984754863-2348975623103';
+
+        // When
+        Test.setMock(HttpCalloutMock.class, new TeamInfoMock());
+        Test.startTest();
+
+        SlackApi.TeamInfoResponse teamInfo =
+                new SlackApiService(accessToken).teamInfo();
+
+        // Then
+        Test.stopTest();
+
+        System.assertEquals(
+                true,
+                teamInfo.ok,
+                'TeamInfoResponse.ok');
+
+        System.assertEquals(
+                'T12345',
+                teamInfo.team.id,
+                'TeamInfoResponse.team.id');
+
+        System.assertEquals(
+                'My Team',
+                teamInfo.team.name,
+                'TeamInfoResponse.team.name');
+
+        System.assertEquals(
+                'example',
+                teamInfo.team.domain,
+                'TeamInfoResponse.team.domain');
+
+        System.assertEquals(
+                'example.com',
+                teamInfo.team.email_domain,
+                'TeamInfoResponse.team.email_domain');
+
+        System.assertEquals(
+                'https://...',
+                teamInfo.team.icon.image_34,
+                'TeamInfoResponse.team.icon.image_34');
+
+        System.assertEquals(
+                'https://...',
+                teamInfo.team.icon.image_44,
+                'TeamInfoResponse.team.icon.image_44');
+
+        System.assertEquals(
+                'https://...',
+                teamInfo.team.icon.image_68,
+                'TeamInfoResponse.team.icon.image_68');
+
+        System.assertEquals(
+                'https://...',
+                teamInfo.team.icon.image_88,
+                'TeamInfoResponse.team.icon.image_88');
+
+        System.assertEquals(
+                'https://...',
+                teamInfo.team.icon.image_102,
+                'TeamInfoResponse.team.icon.image_102');
+
+        System.assertEquals(
+                'https://...',
+                teamInfo.team.icon.image_132,
+                'TeamInfoResponse.team.icon.image_132');
+
+        System.assertEquals(
+                true,
+                teamInfo.team.icon.image_default,
+                'TeamInfoResponse.team.icon.image_default');
+
+        System.assertEquals(
+                'E1234A12AB',
+                teamInfo.team.enterprise_id,
+                'TeamInfoResponse.team.enterprise_id');
+
+        System.assertEquals(
+                'Umbrella Corporation',
+                teamInfo.team.enterprise_name,
+                'TeamInfoResponse.team.enterprise_name');
+    }
+
     private class OauthAccessMock implements HttpCalloutMock {
         public HttpResponse respond(HttpRequest req) {
 
@@ -42,6 +129,23 @@ private class SlackApiServiceTest {
                 SELECT Body
                 FROM StaticResource
                 WHERE Name = 'SlackApiOauthAccessMock'
+            ].Body.toString());
+
+            // Return the response
+            return res;
+        }
+    }
+
+    private class TeamInfoMock implements HttpCalloutMock {
+        public HttpResponse respond(HttpRequest req) {
+
+            // Construct the response
+            HttpResponse res = new HttpResponse();
+
+            res.setBody([
+                SELECT Body
+                FROM StaticResource
+                WHERE Name = 'SlackApiTeamInfoMock'
             ].Body.toString());
 
             // Return the response
