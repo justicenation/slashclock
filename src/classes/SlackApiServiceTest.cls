@@ -119,6 +119,38 @@ private class SlackApiServiceTest {
                 'TeamInfoResponse.team.enterprise_name');
     }
 
+    @isTest
+    private static void usersInfo() {
+
+        // Given
+        String accessToken = 'xoxp-23984754863-2348975623103';
+
+        // When
+        Test.setMock(HttpCalloutMock.class, new UsersInfoAcmeBunnyMock());
+        Test.startTest();
+
+        SlackApi.UsersInfoResponse usersInfo =
+                new SlackApiService(accessToken).usersInfo('bunny');
+
+        // Then
+        Test.stopTest();
+
+        System.assertEquals(
+                'bunny',
+                usersInfo.user.id,
+                'UsersInfo.user.id');
+
+        System.assertEquals(
+                'acme',
+                usersInfo.user.team_id,
+                'UsersInfo.user.team_id');
+
+        System.assertEquals(
+                'America/New_York',
+                usersInfo.user.tz,
+                'UsersInfo.user.tz');
+    }
+
     private class OauthAccessMock implements HttpCalloutMock {
         public HttpResponse respond(HttpRequest req) {
 
@@ -146,6 +178,23 @@ private class SlackApiServiceTest {
                 SELECT Body
                 FROM StaticResource
                 WHERE Name = 'SlackApiTeamInfoMock'
+            ].Body.toString());
+
+            // Return the response
+            return res;
+        }
+    }
+
+    public class UsersInfoAcmeBunnyMock implements HttpCalloutMock {
+        public HttpResponse respond(HttpRequest req) {
+
+            // Construct the response
+            HttpResponse res = new HttpResponse();
+
+            res.setBody([
+                SELECT Body
+                FROM StaticResource
+                WHERE Name = 'SlackApiUsersInfoAcmeBunnyMock'
             ].Body.toString());
 
             // Return the response
