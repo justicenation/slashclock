@@ -2,6 +2,28 @@
 private class SmartHttpCalloutMockSuiteTest {
 
     @isTest
+    private static void respond() {
+
+        // Given
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint('https://test.salesforce.com');
+
+        // When
+        Test.startTest();
+
+        SampleCalloutMockSuite mockSuite = new SampleCalloutMockSuite();
+        Boolean handles = mockSuite.handles(req);
+        HttpResponse res = mockSuite.respond(req);
+
+        // Then
+        Test.stopTest();
+
+        System.assertEquals(true, handles);
+
+        System.assertNotEquals(null, res);
+    }
+
+    @isTest
     private static void throwUnknownRequestException() {
 
         // Given
@@ -23,5 +45,23 @@ private class SmartHttpCalloutMockSuiteTest {
         Test.stopTest();
 
         System.assertNotEquals(null, error);
+    }
+
+    private class SampleCalloutMock implements SmartHttpCalloutMock {
+        public Boolean handles(HttpRequest req) {
+            return true;
+        }
+
+        public HttpResponse respond(HttpRequest req) {
+            return new HttpResponse();
+        }
+    }
+
+    private class SampleCalloutMockSuite extends SmartHttpCalloutMockSuite {
+        public override List<Type> getMockTypes() {
+            return new List<Type> {
+                SampleCalloutMock.class
+            };
+        }
     }
 }
