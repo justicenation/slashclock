@@ -2,6 +2,21 @@
 private class SlashclockCallbackControllerTest {
 
     @isTest
+    private static void newInstance() {
+
+        // When
+        Test.startTest();
+
+        SlashclockCallbackController controller =
+                new SlashclockCallbackController();
+
+        // Then
+        Test.stopTest();
+
+        System.assertNotEquals(null, controller.slack);
+    }
+
+    @isTest
     private static void loadSuccess() {
 
         // Given

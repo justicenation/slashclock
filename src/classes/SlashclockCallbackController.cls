@@ -6,7 +6,8 @@ public with sharing class SlashclockCallbackController {
 
     public String message { get; set; }
 
-    private SlackService slack;
+    @testVisible
+    private transient SlackService slack;
 
     public SlashclockCallbackController() {
         this(SlackService.getInstance());
