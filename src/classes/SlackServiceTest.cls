@@ -49,6 +49,20 @@ private class SlackServiceTest {
                 Schema.SObjectType.Contact.fields.AccountId.label);
     }
 
+    @isTest
+    private static void getInstance() {
+
+        // When
+        Test.startTest();
+
+        SlackService slack = SlackService.getInstance();
+
+        // Then
+        Test.stopTest();
+
+        System.assertNotEquals(null, slack);
+    }
+
     private static List<Account> getAccounts(String slackTeamId) {
         return [
             SELECT
