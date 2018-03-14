@@ -2,6 +2,63 @@
 private class SlackServiceTest {
 
     /**
+     * - Given no existing accounts in Salesforce;
+     * - When `activateTeam` is called with a valid, new authorization code;
+     * - Then an account should be created for the team holding an access token
+     */
+    @isTest
+    private static void activateTeam() {
+
+        // Given
+        List<Account> givenAccounts = [
+            SELECT Id
+            FROM Account
+        ];
+
+        System.assertEquals(0, givenAccounts.size(),
+                'no existing accounts expected');
+
+        // Stub the SlackApiService instance
+        SlackApiServiceStubProvier slackApiStubProvider =
+                new SlackApiServiceStubProvier();
+
+        SlackApiService slackApi =
+                (SlackApiService)Test.createStub(
+                        SlackApiService.class, slackApiStubProvider);
+
+        // When
+        Test.startTest();
+
+        SlackService slack = new SlackService(null, slackApi);
+
+        SlackApi.TeamInfoResponse teamInfo = slack.activateTeam('test');
+
+        // then
+        Test.stopTest();
+
+        List<Account> thenAccounts = [
+            SELECT
+                SlackAccessToken__c,
+                SlackTeamId__c,
+                Id
+            FROM Account
+        ];
+
+        System.assertEquals(1, thenAccounts.size(),
+                'one account should have been created');
+
+        System.assertEquals(
+                'test-access-token',
+                thenAccounts[0].SlackAccessToken__c,
+                Schema.SObjectType.Account.fields.SlackAccessToken__c.label);
+
+        System.assertEquals(
+                'test-team-id',
+                thenAccounts[0].SlackTeamId__c,
+                Schema.SObjectType.Account.fields.SlackTeamId__c.label);
+    }
+
+    /**
      * Given the Slack User ID and Slack Team ID for a user and team
      * not already in the system, `SlackService.findOrCreateContact` should
      * return the Contact ID for a contact having `Contact.AccountId`
@@ -84,5 +141,57 @@ private class SlackServiceTest {
             FROM Contact
             WHERE SlackUserId__c = :slackUserId
         ];
+    }
+
+    private class SlackApiServiceStubProvier implements StubProvider {
+
+        public Object handleMethodCall(
+                Object stubbedObject,
+                String stubbedMethodName,
+                Type returnType,
+                List<Type> listOfParamTypes,
+                List<String> listOfParamNames,
+                List<Object> listOfArgs) {
+            
+            // Initialize the return value
+            Object returnValue = null;
+
+            if ('oauthAccess'.equals(stubbedMethodName)) {
+                returnValue = this.oauthAccess(
+                        (Connection__c)listOfArgs[0], (String)listOfArgs[1]);
+            }
+            else if ('teamInfo'.equals(stubbedMethodName)) {
+                returnValue = this.teamInfo((String)listOfArgs[0]);
+            }
+
+            // Return a value
+            return returnValue;            
+        }
+
+        public SlackApi.OauthAccessResponse oauthAccess(
+                Connection__c conn, String authCode) {
+
+            // Construct the reponse
+            SlackApi.OauthAccessResponse res =
+                    new SlackApi.OauthAccessResponse();
+
+            res.access_token = 'test-access-token';
+
+            // Return the response
+            return res;
+        }
+
+        public SlackApi.TeamInfoResponse teamInfo(String accessToken) {
+
+            // Construct the response
+            SlackApi.TeamInfoResponse res =
+                    new SlackApi.TeamInfoResponse();
+
+            res.team = new SlackApi.Team();
+            res.team.id = 'test-team-id';
+
+            // Return the response
+            return res;
+        }
     }
 }

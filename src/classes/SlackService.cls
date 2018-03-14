@@ -25,9 +25,13 @@ public with sharing class SlackService {
     }
 
     public SlackService(String teamId) {
+        this(teamId, SlackApiService.getInstance());
+    }
+
+    public SlackService(String teamId, SlackApiService slackApi) {
         this.contactMap = new Map<String, Contact>();
         this.teamId = teamId;
-        this.slackApi = SlackApiService.getInstance();
+        this.slackApi = slackApi;
     }
 
     /**
@@ -59,10 +63,10 @@ public with sharing class SlackService {
         return teamInfo;
     }
 
-    public Account createAccount() {
+    public Account createAccount(String teamId) {
         Account teamAccount = new Account(
-                Name = this.teamId,
-                SlackTeamId__c = this.teamId);
+                Name = teamId,
+                SlackTeamId__c = teamId);
 
         insert teamAccount;
         return teamAccount;
@@ -106,7 +110,7 @@ public with sharing class SlackService {
             WHERE SlackTeamId__c = :teamId
         ];
 
-        return teamAccounts.isEmpty() ? createAccount() : teamAccounts[0];
+        return teamAccounts.isEmpty() ? createAccount(teamId) : teamAccounts[0];
     }
 
     /**
@@ -213,10 +217,6 @@ public with sharing class SlackService {
 
         // Return the user's time zone
         return userContact.TimeZoneSidKey__c;
-    }
-
-    public Account storeAccessToken(String accessToken) {
-        return this.storeAccessToken(accessToken, this.teamId);
     }
 
     public Account storeAccessToken(String accessToken, String teamId) {
