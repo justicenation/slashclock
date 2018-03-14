@@ -106,6 +106,45 @@ private class SlackServiceTest {
                 Schema.SObjectType.Contact.fields.AccountId.label);
     }
 
+    /**
+     * - Given a user contact with Time Zone "America/New_York";
+     * - When `SlackService.getTimeZoneSidKey` is called with the contact,
+     *   and the response from the Slack API is expected to indicate the
+     *   contact's current time zone is actually "America/Los_Angeles";
+     * - Then "America/Los_Angeles" should be returned by the method
+     */
+    @isTest
+    private static void getTimeZoneSidKey() {
+
+        // Given
+        Contact userContact = new Contact(
+                FirstName = 'Bugs',
+                LastName = 'Bunny (TEST)',
+                TimeZoneSidKey__c = 'America/New_York');
+
+        insert userContact;
+
+        // Stub SlackApiService
+        SlackApiServiceStubProvier slackApiStubProvider =
+                new SlackApiServiceStubProvier();
+
+        SlackApiService slackApiStub =
+                (SlackApiService)Test.createStub(
+                        SlackApiService.class, slackApiStubProvider);
+
+        // When
+        Test.startTest();
+
+        SlackService slack = new SlackService(null, slackApiStub);
+
+        String tz = slack.getTimeZoneSidKey(userContact);
+
+        // Then
+        Test.stopTest();
+
+        System.assertEquals('America/Los_Angeles', tz);
+    }
+
     @isTest
     private static void getInstance() {
 
@@ -163,9 +202,28 @@ private class SlackServiceTest {
             else if ('teamInfo'.equals(stubbedMethodName)) {
                 returnValue = this.teamInfo((String)listOfArgs[0]);
             }
+            else if ('usersInfo'.equals(stubbedMethodName)) {
+                returnValue = this.usersInfo((String)listOfArgs[0]);
+            }
 
             // Return a value
             return returnValue;            
+        }
+
+        /**
+         * @see `getTimeZoneSidKey` test
+         */
+        public SlackApi.UsersInfoResponse usersInfo(String userId) {
+
+            // Construct the response
+            SlackApi.UsersInfoResponse res =
+                    new SlackApi.UsersInfoResponse();
+
+            res.user = new SlackApi.User();
+            res.user.tz = 'America/Los_Angeles';
+
+            // Return the response
+            return res;
         }
 
         public SlackApi.OauthAccessResponse oauthAccess(
