@@ -35,9 +35,38 @@ private class SlashclockCallbackControllerTest {
         System.assertNotEquals(null, nextPage);
     }
 
-    // TODO: @isTest
+    @isTest
     private static void loadError() {
 
+        // Given
+        PageReference testPage = Page.SlashclockCallback;
+
+        testPage.getParameters().put(
+                SlashclockCallbackController.CODE_PARAMETER, 'acme');
+
+        testPage.getParameters().put(
+                SlashclockCallbackController.STATE_PARAMETER, 'sad-state');
+
+        // Stub the `SlackService` instance
+        SlackService slackStub =
+                (SlackService)Test.createStub(
+                        SlackService.class, new SlackServiceEvilStubProvider());
+
+        // When
+        Test.setCurrentPage(testPage);
+        Test.startTest();
+
+        SlashclockCallbackController controller =
+                new SlashclockCallbackController(slackStub);
+        
+        PageReference nextPage = controller.load();
+
+        // Then
+        Test.stopTest();
+        
+        System.assertNotEquals(null, controller.message);
+
+        System.assertEquals(null, nextPage);
     }
 
     private class SlackServiceStubProvider implements System.StubProvider {
@@ -73,5 +102,31 @@ private class SlashclockCallbackControllerTest {
             // Return a value
             return returnValue;            
         }
+    }
+
+    private class SlackServiceEvilStubProvider implements StubProvider {
+
+        public Object handleMethodCall(
+                Object stubbedObject,
+                String stubbedMethodName,
+                Type returnType,
+                List<Type> listOfParamTypes,
+                List<String> listOfParamNames,
+                List<Object> listOfArgs) {
+            
+            // Initialize the return value
+            Object returnValue = null;
+
+            if ('activateTeam'.equals(stubbedMethodName)) {
+                throw new TestException('ho ho ho');
+            }
+
+            // Return a value
+            return returnValue;            
+        }
+    }
+
+    private class TestException extends Exception {
+        /* nothing special */
     }
 }
