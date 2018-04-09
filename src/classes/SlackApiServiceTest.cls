@@ -12,7 +12,7 @@ private class SlackApiServiceTest {
         String code = 'test-code';
 
         // When
-        Test.setMock(HttpCalloutMock.class, new OauthAccessMock());
+        Test.setMock(HttpCalloutMock.class, new TestService.OauthAccessMock());
         Test.startTest();
 
         SlackApi.OauthAccessResponse oauthAccess =
@@ -39,7 +39,7 @@ private class SlackApiServiceTest {
         String accessToken = 'xoxp-23984754863-2348975623103';
 
         // When
-        Test.setMock(HttpCalloutMock.class, new TeamInfoMock());
+        Test.setMock(HttpCalloutMock.class, new TestService.TeamInfoMock());
         Test.startTest();
 
         SlackApi.TeamInfoResponse teamInfo =
@@ -126,7 +126,7 @@ private class SlackApiServiceTest {
         String accessToken = 'xoxp-23984754863-2348975623103';
 
         // When
-        Test.setMock(HttpCalloutMock.class, new UsersInfoAcmeBunnyMock());
+        Test.setMock(HttpCalloutMock.class, new TestService.UsersInfoAcmeBunnyMock());
         Test.startTest();
 
         SlackApi.UsersInfoResponse usersInfo =
@@ -149,56 +149,5 @@ private class SlackApiServiceTest {
                 'America/New_York',
                 usersInfo.user.tz,
                 'UsersInfo.user.tz');
-    }
-
-    private class OauthAccessMock implements HttpCalloutMock {
-        public HttpResponse respond(HttpRequest req) {
-
-            // Construct the response
-            HttpResponse res = new HttpResponse();
-
-            res.setBody([
-                SELECT Body
-                FROM StaticResource
-                WHERE Name = 'SlackApiOauthAccessMock'
-            ].Body.toString());
-
-            // Return the response
-            return res;
-        }
-    }
-
-    private class TeamInfoMock implements HttpCalloutMock {
-        public HttpResponse respond(HttpRequest req) {
-
-            // Construct the response
-            HttpResponse res = new HttpResponse();
-
-            res.setBody([
-                SELECT Body
-                FROM StaticResource
-                WHERE Name = 'SlackApiTeamInfoMock'
-            ].Body.toString());
-
-            // Return the response
-            return res;
-        }
-    }
-
-    public class UsersInfoAcmeBunnyMock implements HttpCalloutMock {
-        public HttpResponse respond(HttpRequest req) {
-
-            // Construct the response
-            HttpResponse res = new HttpResponse();
-
-            res.setBody([
-                SELECT Body
-                FROM StaticResource
-                WHERE Name = 'SlackApiUsersInfoAcmeBunnyMock'
-            ].Body.toString());
-
-            // Return the response
-            return res;
-        }
     }
 }

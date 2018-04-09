@@ -178,4 +178,55 @@ public with sharing class TestService {
                     Body = Blob.valueOf('Bad command: {0}'))
         };
     }
+
+    public class OauthAccessMock implements HttpCalloutMock {
+        public HttpResponse respond(HttpRequest req) {
+
+            // Construct the response
+            HttpResponse res = new HttpResponse();
+
+            res.setBody([
+                SELECT Body
+                FROM StaticResource
+                WHERE Name = 'SlackApiOauthAccessMock'
+            ].Body.toString());
+
+            // Return the response
+            return res;
+        }
+    }
+
+    public class TeamInfoMock implements HttpCalloutMock {
+        public HttpResponse respond(HttpRequest req) {
+
+            // Construct the response
+            HttpResponse res = new HttpResponse();
+
+            res.setBody([
+                SELECT Body
+                FROM StaticResource
+                WHERE Name = 'SlackApiTeamInfoMock'
+            ].Body.toString());
+
+            // Return the response
+            return res;
+        }
+    }
+
+    public class UsersInfoAcmeBunnyMock implements HttpCalloutMock {
+        public HttpResponse respond(HttpRequest req) {
+
+            // Construct the response
+            HttpResponse res = new HttpResponse();
+
+            res.setBody([
+                SELECT Body
+                FROM StaticResource
+                WHERE Name = 'SlackApiUsersInfoAcmeBunnyMock'
+            ].Body.toString());
+
+            // Return the response
+            return res;
+        }
+    }
 }
