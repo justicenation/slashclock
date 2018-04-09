@@ -52,8 +52,8 @@ private class DatetimeUtilAdjustTest {
 
             // Verify that the dates match
             System.assertEquals(
-                    expectedValue.format(getDatetimeFormat(), americaChicago.getID()),
-                    actualValue.format(getDatetimeFormat(), americaChicago.getID()),
+                    expectedValue.format(TestService.getDatetimeFormat(), americaChicago.getID()),
+                    actualValue.format(TestService.getDatetimeFormat(), americaChicago.getID()),
                     'for key: ' + eachKey);
         }
     }
@@ -105,14 +105,10 @@ private class DatetimeUtilAdjustTest {
 
             // Verify that the dates match
             System.assertEquals(
-                    expectedValue.format(getDatetimeFormat(), asiaTaipei.getID()),
-                    actualValue.format(getDatetimeFormat(), asiaTaipei.getID()),
+                    expectedValue.format(TestService.getDatetimeFormat(), asiaTaipei.getID()),
+                    actualValue.format(TestService.getDatetimeFormat(), asiaTaipei.getID()),
                     'for key: ' + eachKey);
         }
-    }
-
-    private static String getDatetimeFormat() {
-        return 'yyyy-MM-dd HH:mm:ss z';
     }
 
     /**
@@ -302,7 +298,7 @@ private class DatetimeUtilAdjustTest {
                 '2017-03-12 03:00:00 CST',
                 DatetimeUtil.newDatetime(
                         givenDate, givenTime, asiaTaipei.getID()).format(
-                                getDatetimeFormat(), asiaTaipei.getID()),
+                                TestService.getDatetimeFormat(), asiaTaipei.getID()),
                 'DatetimeUtil.newDatetime');
 
         // When

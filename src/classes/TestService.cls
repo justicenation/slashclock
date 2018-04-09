@@ -51,6 +51,10 @@ public with sharing class TestService {
         ];
     }
 
+    public static String getDatetimeFormat() {
+        return 'yyyy-MM-dd HH:mm:ss z';
+    }
+
     public static TestService getInstance() {
         return new TestService(Test.isRunningTest());
     }
