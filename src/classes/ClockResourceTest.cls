@@ -11,6 +11,9 @@ private class ClockResourceTest {
     private static void clockInSuccess() {
 
         // Given
+        TestService thisTest = TestService.getInstance();
+        thisTest.setup();
+        
         String userId = 'foo';
         String teamId = 'bar';
 
@@ -68,6 +71,9 @@ private class ClockResourceTest {
     private static void clockInError() {
 
         // Given
+        TestService thisTest = TestService.getInstance();
+        thisTest.setup();
+        
         DateTime startTime = DateTime.now();
         String userId = 'flip';
         String teamId = 'board';
@@ -128,6 +134,9 @@ private class ClockResourceTest {
     private static void clockOutSuccess() {
 
         // Given
+        TestService thisTest = TestService.getInstance();
+        thisTest.setup();
+        
         String userId = 'flip';
         String teamId = 'board';
 
@@ -172,68 +181,6 @@ private class ClockResourceTest {
         System.assertEquals(SlashclockService.CLOCKED_OUT_SUCCESS, commandRes.text,
                 'SlashCommandResponse.text');
     }
-    
-    /**
-     * - Given a Slack user who is clocked in;
-     * - When the Slack user types "/clock out" twice;
-     * - Then the open Time Entry record should be closed for the user,
-     *   but the second message sent to user should say,
-     *   "You must first clock in!"
-     */
-    // TODO: Fix error causing test failure
-    //       System.CalloutException: You have uncommitted work pending.
-    //       Please commit or rollback before calling out
-    // @isTest
-    private static void clockOutTwiceError() {
-
-        // Given
-        String userId = 'flip';
-        String teamId = 'board';
-
-        List<TimeEntry__c> openEntries = [
-            SELECT Id, StartTime__c
-            FROM TimeEntry__c
-            WHERE SlackUserId__c = :userId
-                AND SlackTeamId__c = :teamId
-                AND EndTime__c = NULL
-        ];
-
-        System.assertEquals(1, openEntries.size(),
-                'existing time entry expected');
-
-        // When
-        Test.setMock(HttpCalloutMock.class, new SlashclockMockSuite());
-        Test.startTest();
-
-        RestRequest restReq = new RestRequest();
-        restReq.params.put(SlashCommandUtil.USER_ID_PARAM, userId);
-        restReq.params.put(SlashCommandUtil.TEAM_ID_PARAM, teamId);
-        restReq.params.put(SlashCommandUtil.COMMAND_PARAM, '/clock');
-        restReq.params.put(SlashCommandUtil.TEXT_PARAM, 'out');
-
-        RestContext.request = restReq;
-        RestContext.response = new RestResponse();
-
-        Slack.SlashCommandResponse firstCommandRes = ClockResource.post();
-        Slack.SlashCommandResponse secondCommandRes = ClockResource.post();
-
-        // Then
-        Test.stopTest();
-
-        TimeEntry__c closedEntry = [
-            SELECT Id, StartTime__c, EndTime__c
-            FROM TimeEntry__c
-            WHERE Id = :openEntries[0].Id
-        ];
-
-        System.assert(closedEntry.EndTime__c >= closedEntry.StartTime__c,
-                'entry end time should be after start time');
-
-        System.assertEquals(SlashclockService.CLOCKED_OUT_SUCCESS, firstCommandRes.text,
-                'SlashCommandResponse.text');
-        System.assertEquals(SlashclockService.NOT_CLOCKED_IN_ERROR, secondCommandRes.text,
-                'SlashCommandResponse.text');
-    }
 
     /**
      * - Given a Slack user who is not clocked in;
@@ -245,6 +192,9 @@ private class ClockResourceTest {
     private static void clockOutError() {
 
         // Given
+        TestService thisTest = TestService.getInstance();
+        thisTest.setup();
+        
         DateTime startTime = DateTime.now();
         String userId = 'foo';
         String teamId = 'bar';
@@ -291,10 +241,5 @@ private class ClockResourceTest {
 
         System.assertEquals(SlashclockService.NOT_CLOCKED_IN_ERROR, commandRes.text,
                 'SlashCommandResponse.text');
-    }
-
-    @testSetup
-    private static void setup() {
-        TestService.getInstance().setup();
     }
 }
