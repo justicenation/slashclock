@@ -22,6 +22,18 @@ public with sharing class TestService {
         return this.annotation;
     }
 
+    public ApexJobRequest__c getApexJobRequest(ApexJobRequest__c record) {
+        return [
+            SELECT
+                ErrorMessage__c,
+                ErrorStackTrace__c,
+                Status__c,
+                Id
+            FROM ApexJobRequest__c
+            WHERE Id = :record.Id
+        ];
+    }
+
     public Contact getContact(String lastName) {
         return [
             SELECT

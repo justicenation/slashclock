@@ -5,6 +5,8 @@ private class ApexJobRequestProcessJobTest {
     private static void processEmptyVerifyTimeZoneJob() {
 
         // Given
+        TestService thisTest = TestService.getInstance();
+
         ApexJobRequest__c givenRequest = new ApexJobRequest__c(
                 ApexClassName__c = TimeEntryVerifyTimeZoneJob.class.getName(),
                 Body__c = JSON.serialize(
@@ -14,7 +16,7 @@ private class ApexJobRequestProcessJobTest {
 
         System.assertEquals(
                 'Submitted',
-                getApexJobRequest(givenRequest).Status__c,
+                thisTest.getApexJobRequest(givenRequest).Status__c,
                 Schema.SObjectType.ApexJobRequest__c.fields.Status__c.label);
 
         // When
@@ -27,7 +29,7 @@ private class ApexJobRequestProcessJobTest {
 
         System.assertEquals(
                 'Success',
-                getApexJobRequest(givenRequest).Status__c,
+                thisTest.getApexJobRequest(givenRequest).Status__c,
                 Schema.SObjectType.ApexJobRequest__c.fields.Status__c.label);
     }
 
@@ -35,6 +37,8 @@ private class ApexJobRequestProcessJobTest {
     private static void processInvalidJob() {
 
         // Given
+        TestService thisTest = TestService.getInstance();
+        
         ApexJobRequest__c givenRequest = new ApexJobRequest__c(
                 ApexClassName__c = 'DoesNotExistJob',
                 Body__c = 'foobar');
@@ -43,7 +47,7 @@ private class ApexJobRequestProcessJobTest {
 
         System.assertEquals(
                 'Submitted',
-                getApexJobRequest(givenRequest).Status__c,
+                thisTest.getApexJobRequest(givenRequest).Status__c,
                 Schema.SObjectType.ApexJobRequest__c.fields.Status__c.label);
 
         // When
@@ -56,24 +60,12 @@ private class ApexJobRequestProcessJobTest {
 
         System.assertEquals(
                 'Error',
-                getApexJobRequest(givenRequest).Status__c,
+                thisTest.getApexJobRequest(givenRequest).Status__c,
                 Schema.SObjectType.ApexJobRequest__c.fields.Status__c.label);
 
         System.assertEquals(
                 'Attempt to de-reference a null object',
-                getApexJobRequest(givenRequest).ErrorMessage__c,
+                thisTest.getApexJobRequest(givenRequest).ErrorMessage__c,
                 Schema.SObjectType.ApexJobRequest__c.fields.ErrorMessage__c.label);
-    }
-
-    private static ApexJobRequest__c getApexJobRequest(ApexJobRequest__c record) {
-        return [
-            SELECT
-                ErrorMessage__c,
-                ErrorStackTrace__c,
-                Status__c,
-                Id
-            FROM ApexJobRequest__c
-            WHERE Id = :record.Id
-        ];
     }
 }
