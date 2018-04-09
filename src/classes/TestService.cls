@@ -22,15 +22,17 @@ public with sharing class TestService {
         return this.annotation;
     }
 
-    public ApexJobRequest__c getApexJobRequest(ApexJobRequest__c record) {
+    public ApexJobRequest__c getApexJobRequest(Id recordId) {
         return [
             SELECT
+                ApexClassName__c,
+                Body__c,
                 ErrorMessage__c,
                 ErrorStackTrace__c,
                 Status__c,
                 Id
             FROM ApexJobRequest__c
-            WHERE Id = :record.Id
+            WHERE Id = :recordId
         ];
     }
 

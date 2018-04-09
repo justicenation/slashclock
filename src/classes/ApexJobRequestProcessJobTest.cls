@@ -16,7 +16,7 @@ private class ApexJobRequestProcessJobTest {
 
         System.assertEquals(
                 'Submitted',
-                thisTest.getApexJobRequest(givenRequest).Status__c,
+                thisTest.getApexJobRequest(givenRequest.Id).Status__c,
                 Schema.SObjectType.ApexJobRequest__c.fields.Status__c.label);
 
         // When
@@ -29,7 +29,7 @@ private class ApexJobRequestProcessJobTest {
 
         System.assertEquals(
                 'Success',
-                thisTest.getApexJobRequest(givenRequest).Status__c,
+                thisTest.getApexJobRequest(givenRequest.Id).Status__c,
                 Schema.SObjectType.ApexJobRequest__c.fields.Status__c.label);
     }
 
@@ -38,7 +38,7 @@ private class ApexJobRequestProcessJobTest {
 
         // Given
         TestService thisTest = TestService.getInstance();
-        
+
         ApexJobRequest__c givenRequest = new ApexJobRequest__c(
                 ApexClassName__c = 'DoesNotExistJob',
                 Body__c = 'foobar');
@@ -47,7 +47,7 @@ private class ApexJobRequestProcessJobTest {
 
         System.assertEquals(
                 'Submitted',
-                thisTest.getApexJobRequest(givenRequest).Status__c,
+                thisTest.getApexJobRequest(givenRequest.Id).Status__c,
                 Schema.SObjectType.ApexJobRequest__c.fields.Status__c.label);
 
         // When
@@ -60,12 +60,12 @@ private class ApexJobRequestProcessJobTest {
 
         System.assertEquals(
                 'Error',
-                thisTest.getApexJobRequest(givenRequest).Status__c,
+                thisTest.getApexJobRequest(givenRequest.Id).Status__c,
                 Schema.SObjectType.ApexJobRequest__c.fields.Status__c.label);
 
         System.assertEquals(
                 'Attempt to de-reference a null object',
-                thisTest.getApexJobRequest(givenRequest).ErrorMessage__c,
+                thisTest.getApexJobRequest(givenRequest.Id).ErrorMessage__c,
                 Schema.SObjectType.ApexJobRequest__c.fields.ErrorMessage__c.label);
     }
 }

@@ -5,6 +5,8 @@ private class ApexJobServiceTest {
     private static void isExecuteBatchReady() {
 
         // Given
+        TestService thisTest = TestService.getInstance();
+
         ApexJobService apexJob =
                 ApexJobService.getInstance();
 
@@ -32,6 +34,8 @@ private class ApexJobServiceTest {
     private static void submitAndExecute() {
 
         // Given
+        TestService thisTest = TestService.getInstance();
+        
         ApexJobService apexJob =
                 ApexJobService.getInstance();
 
@@ -73,6 +77,8 @@ private class ApexJobServiceTest {
     private static void submitTimeEntryVerifyTimeZoneJob() {
 
         // Given
+        TestService thisTest = TestService.getInstance();
+        
         TimeEntryVerifyTimeZoneJob job =
                 new TimeEntryVerifyTimeZoneJob(new List<Id>());
 
@@ -85,7 +91,7 @@ private class ApexJobServiceTest {
         // Then
         Test.stopTest();
 
-        ApexJobRequest__c thenRequest = getApexJobRequest(requestId);
+        ApexJobRequest__c thenRequest = thisTest.getApexJobRequest(requestId);
 
         System.assertEquals(
                 TimeEntryVerifyTimeZoneJob.class.getName(),
@@ -96,19 +102,5 @@ private class ApexJobServiceTest {
                 '{"contactIds":[]}',
                 thenRequest.Body__c,
                 Schema.SObjectType.ApexJobRequest__c.fields.Body__c.label);
-    }
-
-    private static ApexJobRequest__c getApexJobRequest(Id recordId) {
-        return [
-            SELECT
-                ApexClassName__c,
-                Body__c,
-                ErrorMessage__c,
-                ErrorStackTrace__c,
-                Status__c,
-                Id
-            FROM ApexJobRequest__c
-            WHERE Id = :recordId
-        ];
     }
 }
