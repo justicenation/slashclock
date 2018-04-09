@@ -137,8 +137,8 @@
         <name>Layout</name>
     </types>
     <types>
-        <members>SlackApiServiceOauthAccessMock</members>
-        <members>SlackApiServiceTeamInfoMock</members>
+        <members>SlackApiOauthAccessMock</members>
+        <members>SlackApiTeamInfoMock</members>
         <members>SlackApiUsersInfoAcmeBunnyMock</members>
         <members>SlackApiUsersInfoBarFooMock</members>
         <members>SlackApiUsersInfoBoardFlipMock</members>
