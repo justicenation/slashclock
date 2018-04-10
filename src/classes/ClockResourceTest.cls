@@ -29,7 +29,6 @@ private class ClockResourceTest {
                 'no existing time entries expected');
 
         // When
-        Test.setMock(HttpCalloutMock.class, new SlashclockMockSuite());
         Test.startTest();
 
         RestRequest restReq = new RestRequest();
@@ -90,7 +89,6 @@ private class ClockResourceTest {
                 'one existing time entry expected');
 
         // When
-        Test.setMock(HttpCalloutMock.class, new SlashclockMockSuite());
         Test.startTest();
 
         RestRequest restReq = new RestRequest();
@@ -152,7 +150,6 @@ private class ClockResourceTest {
                 'existing time entry expected');
 
         // When
-        Test.setMock(HttpCalloutMock.class, new SlashclockMockSuite());
         Test.startTest();
 
         RestRequest restReq = new RestRequest();
@@ -211,7 +208,6 @@ private class ClockResourceTest {
                 'no existing time entries expected');
 
         // When
-        Test.setMock(HttpCalloutMock.class, new SlashclockMockSuite());
         Test.startTest();
 
         RestRequest restReq = new RestRequest();
