@@ -202,6 +202,75 @@ public with sharing class TestService {
         };
     }
 
+    public void setupSlashclockSliceCommandTest() {
+
+        // Create accounts
+        Account acme = new Account(
+                Name = 'Acme Corporation (TEST)',
+                SlackTeamId__c = 'acme');
+
+        insert new List<Account> {
+            acme
+        };
+
+        // Create contacts
+        Contact bugs = new Contact(
+                AccountId = acme.Id,
+                FirstName = 'Bugs',
+                LastName = 'Bunny (TEST)',
+                Email = 'bugs@acme.com.test',
+                SlackUserId__c = 'bugs');
+
+        Contact daffy = new Contact(
+                AccountId = acme.Id,
+                FirstName = 'Daffy',
+                LastName = 'Duck (TEST)',
+                Email = 'daffy@acme.com.test',
+                SlackUserId__c = 'daffy');
+
+        insert new List<Contact> {
+            bugs,
+            daffy
+        };
+
+        // Create time entries
+        TimeEntry__c bugs20171106930 = new TimeEntry__c(
+                SlackUserId__c = 'bugs',
+                SlackTeamId__c = 'acme',
+                Contact__c = bugs.Id,
+                StartTime__c = DateTime.newInstanceGmt(2017, 11, 6, 9, 30, 0),
+                EndTime__c = DateTime.newInstanceGmt(2017, 11, 6, 10, 30, 0));
+
+        TimeEntry__c bugs20171107930 = new TimeEntry__c(
+                SlackUserId__c = 'bugs',
+                SlackTeamId__c = 'acme',
+                Contact__c = bugs.Id,
+                StartTime__c = DateTime.newInstanceGmt(2017, 11, 7, 9, 30, 0));
+
+        TimeEntry__c daffy20171106930 = new TimeEntry__c(
+                SlackUserId__c = 'daffy',
+                SlackTeamId__c = 'acme',
+                Contact__c = daffy.Id,
+                StartTime__c = DateTime.newInstanceGmt(2017, 11, 6, 9, 30, 0),
+                EndTime__c = DateTime.newInstanceGmt(2017, 11, 6, 10, 30, 0));
+
+        insert new List<TimeEntry__c> {
+            bugs20171106930,
+            bugs20171107930,
+            daffy20171106930
+        };
+
+        // Create time slices
+        TimeSlice__c daffy20171106930alpha30 = new TimeSlice__c(
+                TimeEntry__c = daffy20171106930.Id,
+                NumberOfMinutes__c = 30,
+                Tag__c = 'alpha');
+
+        insert new List<TimeSlice__c> {
+            daffy20171106930alpha30
+        };
+    }
+
     public class OauthAccessMock implements HttpCalloutMock {
         public HttpResponse respond(HttpRequest req) {
 
