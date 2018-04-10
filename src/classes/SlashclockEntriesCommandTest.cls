@@ -1,16 +1,13 @@
 @isTest
 private class SlashclockEntriesCommandTest {
 
-    @testSetup
-    private static void setup() {
-        RelativeTestService.getInstance(
-                Datetime.now(), 'Europe/London').setup();
-    }
-
     @isTest
     private static void clockEntriesAfterSlice30Minutes() {
 
         // Given
+        RelativeTestService.getInstance(
+                Datetime.now(), 'Europe/London').setup();
+        
         Contact skate = [
             SELECT
                 Account.SlackTeamId__c,
