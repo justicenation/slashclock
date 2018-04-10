@@ -1,4 +1,3 @@
-@isTest
 public class SlackApiUsersInfoSurferSilverMock implements SmartHttpCalloutMock {
 
     public Boolean handles(HttpRequest req) {
