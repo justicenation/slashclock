@@ -11,7 +11,7 @@ private class SmartHttpCalloutMockSuiteTest {
         // When
         Test.startTest();
 
-        SampleCalloutMockSuite mockSuite = new SampleCalloutMockSuite();
+        SmartHttpCalloutMockSuite.SampleCalloutMockSuite mockSuite = new SmartHttpCalloutMockSuite.SampleCalloutMockSuite();
         Boolean handles = mockSuite.handles(req);
         HttpResponse res = mockSuite.respond(req);
 
@@ -45,23 +45,5 @@ private class SmartHttpCalloutMockSuiteTest {
         Test.stopTest();
 
         System.assertNotEquals(null, error);
-    }
-
-    private class SampleCalloutMock implements SmartHttpCalloutMock {
-        public Boolean handles(HttpRequest req) {
-            return true;
-        }
-
-        public HttpResponse respond(HttpRequest req) {
-            return new HttpResponse();
-        }
-    }
-
-    private class SampleCalloutMockSuite extends SmartHttpCalloutMockSuite {
-        public override List<Type> getMockTypes() {
-            return new List<Type> {
-                SampleCalloutMock.class
-            };
-        }
     }
 }

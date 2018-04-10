@@ -48,6 +48,24 @@ public virtual class SmartHttpCalloutMockSuite implements SmartHttpCalloutMock {
         return res;
     }
 
+    public class SampleCalloutMock implements SmartHttpCalloutMock {
+        public Boolean handles(HttpRequest req) {
+            return true;
+        }
+
+        public HttpResponse respond(HttpRequest req) {
+            return new HttpResponse();
+        }
+    }
+
+    public class SampleCalloutMockSuite extends SmartHttpCalloutMockSuite {
+        public override List<Type> getMockTypes() {
+            return new List<Type> {
+                SampleCalloutMock.class
+            };
+        }
+    }
+
     public class UnknownRequestException extends System.Exception {
         public UnknownRequestException(HttpRequest req) {
             this(String.join(new List<String> {
