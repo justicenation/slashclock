@@ -31,7 +31,7 @@ private class SlashclockCallbackControllerTest {
         // Stub the `SlackService` instance
         SlackService slackStub =
                 (SlackService)Test.createStub(
-                        SlackService.class, new SlackServiceStubProvider());
+                        SlackService.class, new TestService.SlackServiceStubProvider());
 
         // When
         Test.setCurrentPage(testPage);
@@ -65,7 +65,7 @@ private class SlashclockCallbackControllerTest {
         // Stub the `SlackService` instance
         SlackService slackStub =
                 (SlackService)Test.createStub(
-                        SlackService.class, new SlackServiceEvilStubProvider());
+                        SlackService.class, new TestService.SlackServiceEvilStubProvider());
 
         // When
         Test.setCurrentPage(testPage);
@@ -82,66 +82,5 @@ private class SlashclockCallbackControllerTest {
         System.assertNotEquals(null, controller.message);
 
         System.assertEquals(null, nextPage);
-    }
-
-    private class SlackServiceStubProvider implements System.StubProvider {
-
-        private SlackApi.TeamInfoResponse activateTeam(String code) {
-
-            // Initialize the response
-            SlackApi.TeamInfoResponse teamInfo =
-                    new SlackApi.TeamInfoResponse();
-
-            teamInfo.team = new SlackApi.Team();
-            teamInfo.team.domain = code;
-
-            // Return the response
-            return teamInfo;
-        }
-
-        public Object handleMethodCall(
-                Object stubbedObject,
-                String stubbedMethodName,
-                Type returnType,
-                List<Type> listOfParamTypes,
-                List<String> listOfParamNames,
-                List<Object> listOfArgs) {
-            
-            // Initialize the return value
-            Object returnValue = null;
-
-            if ('activateTeam'.equals(stubbedMethodName)) {
-                returnValue = this.activateTeam((String)listOfArgs[0]);
-            }
-
-            // Return a value
-            return returnValue;            
-        }
-    }
-
-    private class SlackServiceEvilStubProvider implements StubProvider {
-
-        public Object handleMethodCall(
-                Object stubbedObject,
-                String stubbedMethodName,
-                Type returnType,
-                List<Type> listOfParamTypes,
-                List<String> listOfParamNames,
-                List<Object> listOfArgs) {
-            
-            // Initialize the return value
-            Object returnValue = null;
-
-            if ('activateTeam'.equals(stubbedMethodName)) {
-                throw new TestException('ho ho ho');
-            }
-
-            // Return a value
-            return returnValue;            
-        }
-    }
-
-    private class TestException extends Exception {
-        /* nothing special */
     }
 }
