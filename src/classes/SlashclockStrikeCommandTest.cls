@@ -1,16 +1,14 @@
 @isTest
 private class SlashclockStrikeCommandTest {
 
-    @testSetup
-    private static void setup() {
-        TestService.getInstance().setup();
-    }
-
     /**
      * Delete the most recent time entry
      */
     @isTest
     private static void strikeFirstEntry() {
+
+        // Test setup
+        TestService.getInstance().setup();
 
         // Given
         SlashCommand__c command = new SlashCommand__c(
