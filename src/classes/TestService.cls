@@ -18,6 +18,10 @@ public with sharing class TestService {
         return value + ' (' + this.getAnnotation() + ')';
     }
 
+    public static String format(Datetime value, String timeZoneSidKey) {
+        return value.format('yyyy-MM-dd HH:mm:ss z', timeZoneSidKey);
+    }
+
     public List<Account> getAccountsBySlackTeamId(String slackTeamId) {
         return [
             SELECT
@@ -80,6 +84,25 @@ public with sharing class TestService {
 
     public static TestService getInstance() {
         return new TestService(Test.isRunningTest());
+    }
+
+    public List<TimeEntry__c> getTimeEntries(Contact contact) {
+        return [
+            SELECT
+                Contact__c,
+                EndTime__c,
+                EndTimeZoneSidKey__c,
+                HasVerifiedEndTimeZone__c,
+                HasVerifiedStartTimeZone__c,
+                SlackUserId__c,
+                SlackTeamId__c,
+                StartTime__c,
+                StartTimeZoneSidKey__c,
+                Id
+            FROM TimeEntry__c
+            WHERE Contact__c = :contact.Id
+            ORDER BY StartTime__c
+        ];
     }
 
     /**
@@ -269,6 +292,70 @@ public with sharing class TestService {
         insert new List<TimeSlice__c> {
             daffy20171106930alpha30
         };
+    }
+
+    public void setupTimeEntryDataServiceTest() {
+
+        // Create accounts
+        Account acme = new Account(
+                Name = 'Acme Corporation (TEST)',
+                SlackTeamId__c = 'acme');
+
+        List<Account> accounts = new List<Account>();
+        accounts.add(acme);
+        insert accounts;
+
+        // Create contacts
+        Contact bugs = new Contact(
+                AccountId = acme.Id,
+                FirstName = 'Bugs',
+                LastName = 'Bunny (TEST)',
+                SlackUserId__c = 'bugs',
+                TimeZoneSidKey__c = 'America/New_York');
+
+        List<Contact> contacts = new List<Contact>();
+        contacts.add(bugs);
+        insert contacts;
+
+        // Create time entries
+        TimeEntry__c bugs2018Feb12NineFifteenAmLosAngeles = new TimeEntry__c(
+                Contact__c = bugs.Id,
+                EndTime__c = Datetime.newInstanceGmt(2018, 2, 12, 22, 0, 0),
+                EndTimeZoneSidKey__c = 'America/New_York',
+                HasVerifiedEndTimeZone__c = false,
+                HasVerifiedStartTimeZone__c = true,
+                SlackUserId__c = 'bugs',
+                SlackTeamId__c = 'acme',
+                StartTime__c = Datetime.newInstanceGmt(2018, 2, 12, 17, 15, 0),
+                StartTimeZoneSidKey__c = 'America/Los_Angeles');
+
+        TimeEntry__c bugs2018Feb13NineFifteenAmLondon = new TimeEntry__c(
+                Contact__c = bugs.Id,
+                EndTime__c = Datetime.newInstanceGmt(2018, 2, 13, 15, 0, 0),
+                EndTimeZoneSidKey__c = 'Asia/Jerusalem',
+                HasVerifiedEndTimeZone__c = false,
+                HasVerifiedStartTimeZone__c = false,
+                SlackUserId__c = 'bugs',
+                SlackTeamId__c = 'acme',
+                StartTime__c = Datetime.newInstanceGmt(2018, 2, 13, 9, 15, 0),
+                StartTimeZoneSidKey__c = 'Europe/London');
+
+        TimeEntry__c bugs2018Feb14NineFifteenAmTaipei = new TimeEntry__c(
+                Contact__c = bugs.Id,
+                EndTime__c = null,
+                EndTimeZoneSidKey__c = null,
+                HasVerifiedEndTimeZone__c = false,
+                HasVerifiedStartTimeZone__c = false,
+                SlackUserId__c = 'bugs',
+                SlackTeamId__c = 'acme',
+                StartTime__c = Datetime.newInstanceGmt(2018, 2, 14, 1, 15, 0),
+                StartTimeZoneSidKey__c = 'Asia/Taipei');
+
+        List<TimeEntry__c> timeEntries = new List<TimeEntry__c>();
+        timeEntries.add(bugs2018Feb12NineFifteenAmLosAngeles);
+        timeEntries.add(bugs2018Feb13NineFifteenAmLondon);
+        timeEntries.add(bugs2018Feb14NineFifteenAmTaipei);
+        insert timeEntries;
     }
 
     public class OauthAccessMock implements HttpCalloutMock {
