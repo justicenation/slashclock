@@ -1,8 +1,11 @@
 @isTest
 private class SlashclockOutCommandTest {
 
-    @testSetup
-    private static void setup() {
+    @isTest
+    private static void clockOutFiveThirtyPm() {
+        Test.setMock(HttpCalloutMock.class, new SlackApiServiceMockSuite());
+        
+        // Test setup
         DateTime setupTime = DateTime.now();
         TimeZone setupTimeZone = TimeZone.getTimeZone('America/New_York');
 
@@ -11,12 +14,7 @@ private class SlashclockOutCommandTest {
                         setupTime, setupTimeZone.getID());
 
         relativeTest.setup();
-    }
 
-    @isTest
-    private static void clockOutFiveThirtyPm() {
-        Test.setMock(HttpCalloutMock.class, new SlackApiServiceMockSuite());
-        
         // Given
         String slackUserId = 'kick';
         String slackTeamId = 'board';
@@ -99,6 +97,16 @@ private class SlashclockOutCommandTest {
     @isTest
     private static void clockOutFiveThirtyPmThenVerifyTimeZone() {
         Test.setMock(HttpCalloutMock.class, new SlackApiServiceMockSuite());
+        
+        // Test setup
+        DateTime setupTime = DateTime.now();
+        TimeZone setupTimeZone = TimeZone.getTimeZone('America/New_York');
+
+        RelativeTestService relativeTest =
+                RelativeTestService.getInstance(
+                        setupTime, setupTimeZone.getID());
+
+        relativeTest.setup();
         
         // Given
         String slackUserId = 'kick';
@@ -184,6 +192,16 @@ private class SlashclockOutCommandTest {
     @isTest
     private static void clockOutYesterdayFiveThirtyPm() {
         Test.setMock(HttpCalloutMock.class, new SlackApiServiceMockSuite());
+        
+        // Test setup
+        DateTime setupTime = DateTime.now();
+        TimeZone setupTimeZone = TimeZone.getTimeZone('America/New_York');
+
+        RelativeTestService relativeTest =
+                RelativeTestService.getInstance(
+                        setupTime, setupTimeZone.getID());
+
+        relativeTest.setup();
         
         // Given
         String slackUserId = 'kick';
