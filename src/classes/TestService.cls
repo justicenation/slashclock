@@ -18,6 +18,17 @@ public with sharing class TestService {
         return value + ' (' + this.getAnnotation() + ')';
     }
 
+    public List<Account> getAccountsBySlackTeamId(String slackTeamId) {
+        return [
+            SELECT
+                Name,
+                SlackTeamId__c,
+                Id
+            FROM Account
+            WHERE SlackTeamId__c = :slackTeamId
+        ];
+    }
+
     public String getAnnotation() {
         return this.annotation;
     }
@@ -48,6 +59,18 @@ public with sharing class TestService {
                 Id
             FROM Contact
             WHERE LastName = :lastName
+        ];
+    }
+
+    public List<Contact> getContactsBySlackUserId(String slackUserId) {
+        return [
+            SELECT
+                AccountId,
+                Name,
+                SlackUserId__c,
+                Id
+            FROM Contact
+            WHERE SlackUserId__c = :slackUserId
         ];
     }
 
@@ -190,6 +213,77 @@ public with sharing class TestService {
                 FROM StaticResource
                 WHERE Name = 'SlackApiOauthAccessMock'
             ].Body.toString());
+
+            // Return the response
+            return res;
+        }
+    }
+
+    public class SlackApiServiceStubProvier implements StubProvider {
+
+        public Object handleMethodCall(
+                Object stubbedObject,
+                String stubbedMethodName,
+                Type returnType,
+                List<Type> listOfParamTypes,
+                List<String> listOfParamNames,
+                List<Object> listOfArgs) {
+            
+            // Initialize the return value
+            Object returnValue = null;
+
+            if ('oauthAccess'.equals(stubbedMethodName)) {
+                returnValue = this.oauthAccess(
+                        (Connection__c)listOfArgs[0], (String)listOfArgs[1]);
+            }
+            else if ('teamInfo'.equals(stubbedMethodName)) {
+                returnValue = this.teamInfo((String)listOfArgs[0]);
+            }
+            else if ('usersInfo'.equals(stubbedMethodName)) {
+                returnValue = this.usersInfo((String)listOfArgs[0]);
+            }
+
+            // Return a value
+            return returnValue;            
+        }
+
+        /**
+         * @see `getTimeZoneSidKey` test
+         */
+        public SlackApi.UsersInfoResponse usersInfo(String userId) {
+
+            // Construct the response
+            SlackApi.UsersInfoResponse res =
+                    new SlackApi.UsersInfoResponse();
+
+            res.user = new SlackApi.User();
+            res.user.tz = 'America/Los_Angeles';
+
+            // Return the response
+            return res;
+        }
+
+        public SlackApi.OauthAccessResponse oauthAccess(
+                Connection__c conn, String authCode) {
+
+            // Construct the reponse
+            SlackApi.OauthAccessResponse res =
+                    new SlackApi.OauthAccessResponse();
+
+            res.access_token = 'test-access-token';
+
+            // Return the response
+            return res;
+        }
+
+        public SlackApi.TeamInfoResponse teamInfo(String accessToken) {
+
+            // Construct the response
+            SlackApi.TeamInfoResponse res =
+                    new SlackApi.TeamInfoResponse();
+
+            res.team = new SlackApi.Team();
+            res.team.id = 'test-team-id';
 
             // Return the response
             return res;
