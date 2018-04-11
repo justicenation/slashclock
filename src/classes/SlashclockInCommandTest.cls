@@ -10,6 +10,8 @@ private class SlashclockInCommandTest {
     private static void matchesIn() {
 
         // Given
+        TestService.getInstance().setup();
+        
         SlashCommand__c userCommand = new SlashCommand__c(
                 SlackTeamId__c = 'acme',
                 SlackUserId__c = 'bunny',
@@ -24,7 +26,6 @@ private class SlashclockInCommandTest {
         Long defaultStartTime = command.getStartTime().getTime();
 
         // When
-        Test.setMock(HttpCalloutMock.class, new SlashclockMockSuite());
         Test.startTest();
 
         command.load(userCommand);
@@ -50,6 +51,8 @@ private class SlashclockInCommandTest {
     private static void matchesInNineThirtyAm() {
 
         // Given
+        TestService.getInstance().setup();
+
         SlashCommand__c userCommand = new SlashCommand__c(
                 SlackTeamId__c = 'acme',
                 SlackUserId__c = 'bunny',
@@ -71,7 +74,6 @@ private class SlashclockInCommandTest {
                 americaNewYork).getTime();
 
         // When
-        Test.setMock(HttpCalloutMock.class, new SlashclockMockSuite());
         Test.startTest();
 
         command.load(userCommand);
@@ -92,6 +94,8 @@ private class SlashclockInCommandTest {
         Test.setMock(HttpCalloutMock.class, new SlackApiServiceMockSuite());
         
         // Given
+        TestService.getInstance().setup();
+
         String slackUserId = 'em';
         String slackTeamId = 'cee';
 
@@ -175,6 +179,8 @@ private class SlashclockInCommandTest {
         Test.setMock(HttpCalloutMock.class, new SlackApiServiceMockSuite());
         
         // Given
+        TestService.getInstance().setup();
+
         String slackUserId = 'em';
         String slackTeamId = 'cee';
 
@@ -260,6 +266,8 @@ private class SlashclockInCommandTest {
         Test.setMock(HttpCalloutMock.class, new SlackApiServiceMockSuite());
         
         // Given
+        TestService.getInstance().setup();
+
         String slackUserId = 'em';
         String slackTeamId = 'cee';
 
@@ -315,10 +323,5 @@ private class SlashclockInCommandTest {
 
         System.assertEquals(userContact.Id, openEntry.Contact__c,
                 Schema.SObjectType.TimeEntry__c.fields.Contact__c.label);
-    }
-
-    @testSetup
-    private static void setup() {
-        TestService.getInstance().setup();
     }
 }

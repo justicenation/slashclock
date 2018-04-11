@@ -6,6 +6,9 @@ private class SlashclockUnknownCommandTest {
      */
     @isTest
     private static void clock() {
+
+        // Test setup
+        TestService.getInstance().setup();
         
         // Given
         String slackUserId = 'em';
@@ -44,6 +47,9 @@ private class SlashclockUnknownCommandTest {
      */
     @isTest
     private static void clockFoo() {
+
+        // Test setup
+        TestService.getInstance().setup();
         
         // Given
         String slackUserId = 'em';
@@ -82,6 +88,9 @@ private class SlashclockUnknownCommandTest {
      */
     @isTest
     private static void clockHack1337style() {
+
+        // Test setup
+        TestService.getInstance().setup();
         
         // Given
         String slackUserId = 'em';
@@ -113,10 +122,5 @@ private class SlashclockUnknownCommandTest {
                 'Unknown command, /clock hack!',
                 result.getMessage(),
                 'result.getMessage()');
-    }
-
-    @testSetup
-    private static void setup() {
-        TestService.getInstance().setup();
     }
 }

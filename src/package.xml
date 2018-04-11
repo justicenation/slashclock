@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>AbstractSmartMockSuite</members>
         <members>ApexJobRequestProcessJob</members>
         <members>ApexJobRequestProcessJobTest</members>
         <members>ApexJobService</members>
@@ -20,9 +19,7 @@
         <members>SlackApi</members>
         <members>SlackApiService</members>
         <members>SlackApiServiceMockSuite</members>
-        <members>SlackApiUsersInfoAcmeBunnyMock</members>
-        <members>SlackApiUsersInfoBarFooMock</members>
-        <members>SlackApiUsersInfoBoardFlipMock</members>
+        <members>SlackApiServiceTest</members>
         <members>SlackApiUsersInfoSurferSilverMock</members>
         <members>SlackService</members>
         <members>SlackServiceTest</members>
@@ -30,6 +27,7 @@
         <members>SlashCommandUtil</members>
         <members>Slashclock</members>
         <members>SlashclockCallbackController</members>
+        <members>SlashclockCallbackControllerTest</members>
         <members>SlashclockContentName</members>
         <members>SlashclockContentService</members>
         <members>SlashclockContentUtil</members>
@@ -43,7 +41,6 @@
         <members>SlashclockInCommandTest</members>
         <members>SlashclockLosAngelesMockSuite</members>
         <members>SlashclockLosAngelesTest</members>
-        <members>SlashclockMockSuite</members>
         <members>SlashclockOutCommand</members>
         <members>SlashclockOutCommandTest</members>
         <members>SlashclockReport</members>
@@ -66,6 +63,7 @@
         <members>SlashclockUtilTest</members>
         <members>SmartHttpCalloutMock</members>
         <members>SmartHttpCalloutMockSuite</members>
+        <members>SmartHttpCalloutMockSuiteTest</members>
         <members>SmartMock</members>
         <members>SmartMockService</members>
         <members>TestService</members>
@@ -135,6 +133,8 @@
         <name>Layout</name>
     </types>
     <types>
+        <members>SlackApiOauthAccessMock</members>
+        <members>SlackApiTeamInfoMock</members>
         <members>SlackApiUsersInfoAcmeBunnyMock</members>
         <members>SlackApiUsersInfoBarFooMock</members>
         <members>SlackApiUsersInfoBoardFlipMock</members>

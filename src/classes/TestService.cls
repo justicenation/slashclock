@@ -18,8 +18,37 @@ public with sharing class TestService {
         return value + ' (' + this.getAnnotation() + ')';
     }
 
+    public static String format(Datetime value, String timeZoneSidKey) {
+        return value.format('yyyy-MM-dd HH:mm:ss z', timeZoneSidKey);
+    }
+
+    public List<Account> getAccountsBySlackTeamId(String slackTeamId) {
+        return [
+            SELECT
+                Name,
+                SlackTeamId__c,
+                Id
+            FROM Account
+            WHERE SlackTeamId__c = :slackTeamId
+        ];
+    }
+
     public String getAnnotation() {
         return this.annotation;
+    }
+
+    public ApexJobRequest__c getApexJobRequest(Id recordId) {
+        return [
+            SELECT
+                ApexClassName__c,
+                Body__c,
+                ErrorMessage__c,
+                ErrorStackTrace__c,
+                Status__c,
+                Id
+            FROM ApexJobRequest__c
+            WHERE Id = :recordId
+        ];
     }
 
     public Contact getContact(String lastName) {
@@ -37,8 +66,43 @@ public with sharing class TestService {
         ];
     }
 
+    public List<Contact> getContactsBySlackUserId(String slackUserId) {
+        return [
+            SELECT
+                AccountId,
+                Name,
+                SlackUserId__c,
+                Id
+            FROM Contact
+            WHERE SlackUserId__c = :slackUserId
+        ];
+    }
+
+    public static String getDatetimeFormat() {
+        return 'yyyy-MM-dd HH:mm:ss z';
+    }
+
     public static TestService getInstance() {
         return new TestService(Test.isRunningTest());
+    }
+
+    public List<TimeEntry__c> getTimeEntries(Contact contact) {
+        return [
+            SELECT
+                Contact__c,
+                EndTime__c,
+                EndTimeZoneSidKey__c,
+                HasVerifiedEndTimeZone__c,
+                HasVerifiedStartTimeZone__c,
+                SlackUserId__c,
+                SlackTeamId__c,
+                StartTime__c,
+                StartTimeZoneSidKey__c,
+                Id
+            FROM TimeEntry__c
+            WHERE Contact__c = :contact.Id
+            ORDER BY StartTime__c
+        ];
     }
 
     /**
@@ -159,5 +223,385 @@ public with sharing class TestService {
                     Name = SlashclockContentName.UNKNOWN_ERROR.name(),
                     Body = Blob.valueOf('Bad command: {0}'))
         };
+    }
+
+    public void setupSlashclockSliceCommandTest() {
+
+        // Create accounts
+        Account acme = new Account(
+                Name = 'Acme Corporation (TEST)',
+                SlackTeamId__c = 'acme');
+
+        insert new List<Account> {
+            acme
+        };
+
+        // Create contacts
+        Contact bugs = new Contact(
+                AccountId = acme.Id,
+                FirstName = 'Bugs',
+                LastName = 'Bunny (TEST)',
+                Email = 'bugs@acme.com.test',
+                SlackUserId__c = 'bugs');
+
+        Contact daffy = new Contact(
+                AccountId = acme.Id,
+                FirstName = 'Daffy',
+                LastName = 'Duck (TEST)',
+                Email = 'daffy@acme.com.test',
+                SlackUserId__c = 'daffy');
+
+        insert new List<Contact> {
+            bugs,
+            daffy
+        };
+
+        // Create time entries
+        TimeEntry__c bugs20171106930 = new TimeEntry__c(
+                SlackUserId__c = 'bugs',
+                SlackTeamId__c = 'acme',
+                Contact__c = bugs.Id,
+                StartTime__c = DateTime.newInstanceGmt(2017, 11, 6, 9, 30, 0),
+                EndTime__c = DateTime.newInstanceGmt(2017, 11, 6, 10, 30, 0));
+
+        TimeEntry__c bugs20171107930 = new TimeEntry__c(
+                SlackUserId__c = 'bugs',
+                SlackTeamId__c = 'acme',
+                Contact__c = bugs.Id,
+                StartTime__c = DateTime.newInstanceGmt(2017, 11, 7, 9, 30, 0));
+
+        TimeEntry__c daffy20171106930 = new TimeEntry__c(
+                SlackUserId__c = 'daffy',
+                SlackTeamId__c = 'acme',
+                Contact__c = daffy.Id,
+                StartTime__c = DateTime.newInstanceGmt(2017, 11, 6, 9, 30, 0),
+                EndTime__c = DateTime.newInstanceGmt(2017, 11, 6, 10, 30, 0));
+
+        insert new List<TimeEntry__c> {
+            bugs20171106930,
+            bugs20171107930,
+            daffy20171106930
+        };
+
+        // Create time slices
+        TimeSlice__c daffy20171106930alpha30 = new TimeSlice__c(
+                TimeEntry__c = daffy20171106930.Id,
+                NumberOfMinutes__c = 30,
+                Tag__c = 'alpha');
+
+        insert new List<TimeSlice__c> {
+            daffy20171106930alpha30
+        };
+    }
+
+    public void setupTimeEntryDataServiceTest() {
+
+        // Create accounts
+        Account acme = new Account(
+                Name = 'Acme Corporation (TEST)',
+                SlackTeamId__c = 'acme');
+
+        List<Account> accounts = new List<Account>();
+        accounts.add(acme);
+        insert accounts;
+
+        // Create contacts
+        Contact bugs = new Contact(
+                AccountId = acme.Id,
+                FirstName = 'Bugs',
+                LastName = 'Bunny (TEST)',
+                SlackUserId__c = 'bugs',
+                TimeZoneSidKey__c = 'America/New_York');
+
+        List<Contact> contacts = new List<Contact>();
+        contacts.add(bugs);
+        insert contacts;
+
+        // Create time entries
+        TimeEntry__c bugs2018Feb12NineFifteenAmLosAngeles = new TimeEntry__c(
+                Contact__c = bugs.Id,
+                EndTime__c = Datetime.newInstanceGmt(2018, 2, 12, 22, 0, 0),
+                EndTimeZoneSidKey__c = 'America/New_York',
+                HasVerifiedEndTimeZone__c = false,
+                HasVerifiedStartTimeZone__c = true,
+                SlackUserId__c = 'bugs',
+                SlackTeamId__c = 'acme',
+                StartTime__c = Datetime.newInstanceGmt(2018, 2, 12, 17, 15, 0),
+                StartTimeZoneSidKey__c = 'America/Los_Angeles');
+
+        TimeEntry__c bugs2018Feb13NineFifteenAmLondon = new TimeEntry__c(
+                Contact__c = bugs.Id,
+                EndTime__c = Datetime.newInstanceGmt(2018, 2, 13, 15, 0, 0),
+                EndTimeZoneSidKey__c = 'Asia/Jerusalem',
+                HasVerifiedEndTimeZone__c = false,
+                HasVerifiedStartTimeZone__c = false,
+                SlackUserId__c = 'bugs',
+                SlackTeamId__c = 'acme',
+                StartTime__c = Datetime.newInstanceGmt(2018, 2, 13, 9, 15, 0),
+                StartTimeZoneSidKey__c = 'Europe/London');
+
+        TimeEntry__c bugs2018Feb14NineFifteenAmTaipei = new TimeEntry__c(
+                Contact__c = bugs.Id,
+                EndTime__c = null,
+                EndTimeZoneSidKey__c = null,
+                HasVerifiedEndTimeZone__c = false,
+                HasVerifiedStartTimeZone__c = false,
+                SlackUserId__c = 'bugs',
+                SlackTeamId__c = 'acme',
+                StartTime__c = Datetime.newInstanceGmt(2018, 2, 14, 1, 15, 0),
+                StartTimeZoneSidKey__c = 'Asia/Taipei');
+
+        List<TimeEntry__c> timeEntries = new List<TimeEntry__c>();
+        timeEntries.add(bugs2018Feb12NineFifteenAmLosAngeles);
+        timeEntries.add(bugs2018Feb13NineFifteenAmLondon);
+        timeEntries.add(bugs2018Feb14NineFifteenAmTaipei);
+        insert timeEntries;
+    }
+
+    public void setupTimeEntryVerifyTimeZoneJobTest() {
+
+        // Create accounts
+        Account acme = new Account(
+                Name = 'Acme Corporation (TEST)',
+                SlackTeamId__c = 'acme');
+
+        List<Account> accounts = new List<Account>();
+        accounts.add(acme);
+        insert accounts;
+
+        // Create contacts
+        Contact bugs = new Contact(
+                AccountId = acme.Id,
+                FirstName = 'Bugs',
+                LastName = 'Bunny (TEST)',
+                SlackUserId__c = 'bugs',
+                TimeZoneSidKey__c = 'America/Los_Angeles');
+
+        List<Contact> contacts = new List<Contact>();
+        contacts.add(bugs);
+        insert contacts;
+
+        // Create time entries
+        TimeEntry__c bugs2018Feb12NineFifteenAmLosAngeles = new TimeEntry__c(
+                Contact__c = bugs.Id,
+                EndTime__c = Datetime.newInstanceGmt(2018, 2, 12, 22, 0, 0),
+                EndTimeZoneSidKey__c = 'America/New_York',
+                HasVerifiedEndTimeZone__c = false,
+                HasVerifiedStartTimeZone__c = true,
+                SlackUserId__c = 'bugs',
+                SlackTeamId__c = 'acme',
+                StartTime__c = Datetime.newInstanceGmt(2018, 2, 12, 17, 15, 0),
+                StartTimeZoneSidKey__c = 'America/Los_Angeles');
+
+        TimeEntry__c bugs2018Feb13NineFifteenAmLondon = new TimeEntry__c(
+                Contact__c = bugs.Id,
+                EndTime__c = Datetime.newInstanceGmt(2018, 2, 13, 15, 0, 0),
+                EndTimeZoneSidKey__c = 'Asia/Jerusalem',
+                HasVerifiedEndTimeZone__c = false,
+                HasVerifiedStartTimeZone__c = false,
+                SlackUserId__c = 'bugs',
+                SlackTeamId__c = 'acme',
+                StartTime__c = Datetime.newInstanceGmt(2018, 2, 13, 9, 15, 0),
+                StartTimeZoneSidKey__c = 'Europe/London');
+
+        TimeEntry__c bugs2018Feb14NineFifteenAmTaipei = new TimeEntry__c(
+                Contact__c = bugs.Id,
+                EndTime__c = null,
+                EndTimeZoneSidKey__c = null,
+                HasVerifiedEndTimeZone__c = false,
+                HasVerifiedStartTimeZone__c = false,
+                SlackUserId__c = 'bugs',
+                SlackTeamId__c = 'acme',
+                StartTime__c = Datetime.newInstanceGmt(2018, 2, 14, 1, 15, 0),
+                StartTimeZoneSidKey__c = 'Asia/Taipei');
+
+        List<TimeEntry__c> timeEntries = new List<TimeEntry__c>();
+        timeEntries.add(bugs2018Feb12NineFifteenAmLosAngeles);
+        timeEntries.add(bugs2018Feb13NineFifteenAmLondon);
+        timeEntries.add(bugs2018Feb14NineFifteenAmTaipei);
+        insert timeEntries;
+    }
+
+    public class OauthAccessMock implements HttpCalloutMock {
+        public HttpResponse respond(HttpRequest req) {
+
+            // Construct the response
+            HttpResponse res = new HttpResponse();
+
+            res.setBody([
+                SELECT Body
+                FROM StaticResource
+                WHERE Name = 'SlackApiOauthAccessMock'
+            ].Body.toString());
+
+            // Return the response
+            return res;
+        }
+    }
+
+    public class SlackApiServiceStubProvier implements StubProvider {
+
+        public Object handleMethodCall(
+                Object stubbedObject,
+                String stubbedMethodName,
+                Type returnType,
+                List<Type> listOfParamTypes,
+                List<String> listOfParamNames,
+                List<Object> listOfArgs) {
+            
+            // Initialize the return value
+            Object returnValue = null;
+
+            if ('oauthAccess'.equals(stubbedMethodName)) {
+                returnValue = this.oauthAccess(
+                        (Connection__c)listOfArgs[0], (String)listOfArgs[1]);
+            }
+            else if ('teamInfo'.equals(stubbedMethodName)) {
+                returnValue = this.teamInfo((String)listOfArgs[0]);
+            }
+            else if ('usersInfo'.equals(stubbedMethodName)) {
+                returnValue = this.usersInfo((String)listOfArgs[0]);
+            }
+
+            // Return a value
+            return returnValue;            
+        }
+
+        /**
+         * @see `getTimeZoneSidKey` test
+         */
+        public SlackApi.UsersInfoResponse usersInfo(String userId) {
+
+            // Construct the response
+            SlackApi.UsersInfoResponse res =
+                    new SlackApi.UsersInfoResponse();
+
+            res.user = new SlackApi.User();
+            res.user.tz = 'America/Los_Angeles';
+
+            // Return the response
+            return res;
+        }
+
+        public SlackApi.OauthAccessResponse oauthAccess(
+                Connection__c conn, String authCode) {
+
+            // Construct the reponse
+            SlackApi.OauthAccessResponse res =
+                    new SlackApi.OauthAccessResponse();
+
+            res.access_token = 'test-access-token';
+
+            // Return the response
+            return res;
+        }
+
+        public SlackApi.TeamInfoResponse teamInfo(String accessToken) {
+
+            // Construct the response
+            SlackApi.TeamInfoResponse res =
+                    new SlackApi.TeamInfoResponse();
+
+            res.team = new SlackApi.Team();
+            res.team.id = 'test-team-id';
+
+            // Return the response
+            return res;
+        }
+    }
+
+    public class SlackServiceEvilStubProvider implements StubProvider {
+
+        public Object handleMethodCall(
+                Object stubbedObject,
+                String stubbedMethodName,
+                Type returnType,
+                List<Type> listOfParamTypes,
+                List<String> listOfParamNames,
+                List<Object> listOfArgs) {
+            
+            // Initialize the return value
+            Object returnValue = null;
+
+            if ('activateTeam'.equals(stubbedMethodName)) {
+                throw new TestException('ho ho ho');
+            }
+
+            // Return a value
+            return returnValue;            
+        }
+    }
+
+    public class SlackServiceStubProvider implements System.StubProvider {
+
+        private SlackApi.TeamInfoResponse activateTeam(String code) {
+
+            // Initialize the response
+            SlackApi.TeamInfoResponse teamInfo =
+                    new SlackApi.TeamInfoResponse();
+
+            teamInfo.team = new SlackApi.Team();
+            teamInfo.team.domain = code;
+
+            // Return the response
+            return teamInfo;
+        }
+
+        public Object handleMethodCall(
+                Object stubbedObject,
+                String stubbedMethodName,
+                Type returnType,
+                List<Type> listOfParamTypes,
+                List<String> listOfParamNames,
+                List<Object> listOfArgs) {
+            
+            // Initialize the return value
+            Object returnValue = null;
+
+            if ('activateTeam'.equals(stubbedMethodName)) {
+                returnValue = this.activateTeam((String)listOfArgs[0]);
+            }
+
+            // Return a value
+            return returnValue;            
+        }
+    }
+
+    public class TeamInfoMock implements HttpCalloutMock {
+        public HttpResponse respond(HttpRequest req) {
+
+            // Construct the response
+            HttpResponse res = new HttpResponse();
+
+            res.setBody([
+                SELECT Body
+                FROM StaticResource
+                WHERE Name = 'SlackApiTeamInfoMock'
+            ].Body.toString());
+
+            // Return the response
+            return res;
+        }
+    }
+
+    public class TestException extends Exception {
+        /* nothing special */
+    }
+
+    public class UsersInfoAcmeBunnyMock implements HttpCalloutMock {
+        public HttpResponse respond(HttpRequest req) {
+
+            // Construct the response
+            HttpResponse res = new HttpResponse();
+
+            res.setBody([
+                SELECT Body
+                FROM StaticResource
+                WHERE Name = 'SlackApiUsersInfoAcmeBunnyMock'
+            ].Body.toString());
+
+            // Return the response
+            return res;
+        }
     }
 }

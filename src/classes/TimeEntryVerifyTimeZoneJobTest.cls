@@ -1,73 +1,6 @@
 @isTest
 private class TimeEntryVerifyTimeZoneJobTest {
 
-    private static TestService thisTest = TestService.getInstance();
-
-    @testSetup
-    private static void setup() {
-
-        // Create accounts
-        Account acme = new Account(
-                Name = 'Acme Corporation (TEST)',
-                SlackTeamId__c = 'acme');
-
-        List<Account> accounts = new List<Account>();
-        accounts.add(acme);
-        insert accounts;
-
-        // Create contacts
-        Contact bugs = new Contact(
-                AccountId = acme.Id,
-                FirstName = 'Bugs',
-                LastName = 'Bunny (TEST)',
-                SlackUserId__c = 'bugs',
-                TimeZoneSidKey__c = 'America/Los_Angeles');
-
-        List<Contact> contacts = new List<Contact>();
-        contacts.add(bugs);
-        insert contacts;
-
-        // Create time entries
-        TimeEntry__c bugs2018Feb12NineFifteenAmLosAngeles = new TimeEntry__c(
-                Contact__c = bugs.Id,
-                EndTime__c = Datetime.newInstanceGmt(2018, 2, 12, 22, 0, 0),
-                EndTimeZoneSidKey__c = 'America/New_York',
-                HasVerifiedEndTimeZone__c = false,
-                HasVerifiedStartTimeZone__c = true,
-                SlackUserId__c = 'bugs',
-                SlackTeamId__c = 'acme',
-                StartTime__c = Datetime.newInstanceGmt(2018, 2, 12, 17, 15, 0),
-                StartTimeZoneSidKey__c = 'America/Los_Angeles');
-
-        TimeEntry__c bugs2018Feb13NineFifteenAmLondon = new TimeEntry__c(
-                Contact__c = bugs.Id,
-                EndTime__c = Datetime.newInstanceGmt(2018, 2, 13, 15, 0, 0),
-                EndTimeZoneSidKey__c = 'Asia/Jerusalem',
-                HasVerifiedEndTimeZone__c = false,
-                HasVerifiedStartTimeZone__c = false,
-                SlackUserId__c = 'bugs',
-                SlackTeamId__c = 'acme',
-                StartTime__c = Datetime.newInstanceGmt(2018, 2, 13, 9, 15, 0),
-                StartTimeZoneSidKey__c = 'Europe/London');
-
-        TimeEntry__c bugs2018Feb14NineFifteenAmTaipei = new TimeEntry__c(
-                Contact__c = bugs.Id,
-                EndTime__c = null,
-                EndTimeZoneSidKey__c = null,
-                HasVerifiedEndTimeZone__c = false,
-                HasVerifiedStartTimeZone__c = false,
-                SlackUserId__c = 'bugs',
-                SlackTeamId__c = 'acme',
-                StartTime__c = Datetime.newInstanceGmt(2018, 2, 14, 1, 15, 0),
-                StartTimeZoneSidKey__c = 'Asia/Taipei');
-
-        List<TimeEntry__c> timeEntries = new List<TimeEntry__c>();
-        timeEntries.add(bugs2018Feb12NineFifteenAmLosAngeles);
-        timeEntries.add(bugs2018Feb13NineFifteenAmLondon);
-        timeEntries.add(bugs2018Feb14NineFifteenAmTaipei);
-        insert timeEntries;
-    }
-
     /**
      * Given a contact in the "America/New_York" time zone who has
      * the following unverified time entries, when the entries are
@@ -90,13 +23,17 @@ private class TimeEntryVerifyTimeZoneJobTest {
     @isTest
     private static void verifyTimeZoneNewYork() {
 
+        // Test setup
+        TestService thisTest = TestService.getInstance();
+        thisTest.setupTimeEntryVerifyTimeZoneJobTest();
+
         // Given
         Contact bugs = thisTest.getContact('Bunny (TEST)');
 
         System.assertEquals('America/Los_Angeles', bugs.TimeZoneSidKey__c,
                 Schema.SObjectType.Contact.fields.TimeZoneSidKey__c.label);
 
-        List<TimeEntry__c> givenEntries = getTimeEntries(bugs);
+        List<TimeEntry__c> givenEntries = thisTest.getTimeEntries(bugs);
 
         // Start Time: 2/12/2018 9:15am America/Los_Angeles (verified)
         System.assertEquals(
@@ -208,7 +145,7 @@ private class TimeEntryVerifyTimeZoneJobTest {
         System.assertEquals('America/New_York', bugs.TimeZoneSidKey__c,
                 Schema.SObjectType.Contact.fields.TimeZoneSidKey__c.label);
 
-        List<TimeEntry__c> thenEntries = getTimeEntries(bugs);
+        List<TimeEntry__c> thenEntries = thisTest.getTimeEntries(bugs);
 
         // Start Time: 2/12/2018 9:15am America/Los_Angeles (verified)
         System.assertEquals(
@@ -244,8 +181,8 @@ private class TimeEntryVerifyTimeZoneJobTest {
 
         // Start Time: 2/13/2018 9:15am America/New_York (verified)
         System.assertEquals(
-                format(Datetime.newInstanceGmt(2018, 2, 13, 14, 15, 0), 'America/New_York'),
-                format(thenEntries[1].StartTime__c, 'America/New_York'),
+                TestService.format(Datetime.newInstanceGmt(2018, 2, 13, 14, 15, 0), 'America/New_York'),
+                TestService.format(thenEntries[1].StartTime__c, 'America/New_York'),
                 Schema.SObjectType.TimeEntry__c.fields.StartTime__c.label);
 
         System.assertEquals(
@@ -260,8 +197,8 @@ private class TimeEntryVerifyTimeZoneJobTest {
 
         // End Time: 2/13/2018 5:00pm America/New_York (verified)
         System.assertEquals(
-                format(Datetime.newInstanceGmt(2018, 2, 13, 22, 0, 0), 'America/New_York'),
-                format(thenEntries[1].EndTime__c, 'America/New_York'),
+                TestService.format(Datetime.newInstanceGmt(2018, 2, 13, 22, 0, 0), 'America/New_York'),
+                TestService.format(thenEntries[1].EndTime__c, 'America/New_York'),
                 Schema.SObjectType.TimeEntry__c.fields.EndTime__c.label);
 
         System.assertEquals(
@@ -276,8 +213,8 @@ private class TimeEntryVerifyTimeZoneJobTest {
 
         // Start Time: 2/14/2018 9:15am America/New_York (verified)
         System.assertEquals(
-                format(Datetime.newInstanceGmt(2018, 2, 14, 14, 15, 0), 'America/New_York'),
-                format(thenEntries[2].StartTime__c, 'America/New_York'),
+                TestService.format(Datetime.newInstanceGmt(2018, 2, 14, 14, 15, 0), 'America/New_York'),
+                TestService.format(thenEntries[2].StartTime__c, 'America/New_York'),
                 Schema.SObjectType.TimeEntry__c.fields.StartTime__c.label);
 
         System.assertEquals(
@@ -305,28 +242,5 @@ private class TimeEntryVerifyTimeZoneJobTest {
                 false,
                 thenEntries[2].HasVerifiedEndTimeZone__c,
                 Schema.SObjectType.TimeEntry__c.fields.HasVerifiedEndTimeZone__c.label);
-    }
-
-    private static String format(Datetime value, String timeZoneSidKey) {
-        return value.format('yyyy-MM-dd HH:mm:ss z', timeZoneSidKey);
-    }
-
-    private static List<TimeEntry__c> getTimeEntries(Contact contact) {
-        return [
-            SELECT
-                Contact__c,
-                EndTime__c,
-                EndTimeZoneSidKey__c,
-                HasVerifiedEndTimeZone__c,
-                HasVerifiedStartTimeZone__c,
-                SlackUserId__c,
-                SlackTeamId__c,
-                StartTime__c,
-                StartTimeZoneSidKey__c,
-                Id
-            FROM TimeEntry__c
-            WHERE Contact__c = :contact.Id
-            ORDER BY StartTime__c
-        ];
     }
 }

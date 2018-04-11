@@ -4,6 +4,9 @@ private class SlashclockUtilTest {
     @isTest
     private static void formatEntry() {
 
+        // Test setup
+        TestService.getInstance().setup();
+
         // Given
         TimeEntry__c openEntry = new TimeEntry__c(
                 SlackUserId__c = 'em',
@@ -51,6 +54,9 @@ private class SlashclockUtilTest {
 
     @isTest
     private static void emcee20170703SevenDayReportItems() {
+
+        // Test setup
+        TestService.getInstance().setup();
 
         // Given
         String userId = 'em';
@@ -100,10 +106,5 @@ private class SlashclockUtilTest {
         System.assertEquals('Fri *0h*', items[4].format());
         System.assertEquals('Sat *0h*', items[5].format());
         System.assertEquals('Sun *0h*', items[6].format());
-    }
-
-    @testSetup
-    private static void setup() {
-        TestService.getInstance().setup();
     }
 }

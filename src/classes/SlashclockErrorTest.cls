@@ -10,6 +10,8 @@ public with sharing class SlashclockErrorTest {
         Test.setMock(HttpCalloutMock.class, new SlackApiServiceMockSuite());
         
         // Given
+        TestService.getInstance().setup();
+        
         String slackUserId = 'em';
         String slackTeamId = 'cee';
 
@@ -54,10 +56,5 @@ public with sharing class SlashclockErrorTest {
                 'Bad command: /clock in xyz',
                 result.getMessage(),
                 'result.getMessage()');
-    }
-
-    @testSetup
-    private static void setup() {
-        TestService.getInstance().setup();
     }
 }

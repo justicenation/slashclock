@@ -11,8 +11,7 @@ public virtual class SmartHttpCalloutMockSuite implements SmartHttpCalloutMock {
     }
 
     public virtual List<Type> getMockTypes() {
-        System.assert(false, 'override expected');
-        return null;
+        return new List<Type>();
     }
 
     public Boolean handles(HttpRequest req) {
@@ -47,6 +46,24 @@ public virtual class SmartHttpCalloutMockSuite implements SmartHttpCalloutMock {
         }
 
         return res;
+    }
+
+    public class SampleCalloutMock implements SmartHttpCalloutMock {
+        public Boolean handles(HttpRequest req) {
+            return true;
+        }
+
+        public HttpResponse respond(HttpRequest req) {
+            return new HttpResponse();
+        }
+    }
+
+    public class SampleCalloutMockSuite extends SmartHttpCalloutMockSuite {
+        public override List<Type> getMockTypes() {
+            return new List<Type> {
+                SampleCalloutMock.class
+            };
+        }
     }
 
     public class UnknownRequestException extends System.Exception {

@@ -8,6 +8,8 @@ private class SlashclockHelpCommandTest {
     private static void clockHelp() {
         
         // Given
+        TestService.getInstance().setup();
+        
         String slackUserId = 'em';
         String slackTeamId = 'cee';
 
@@ -52,6 +54,8 @@ private class SlashclockHelpCommandTest {
     private static void clockHelpIn() {
         
         // Given
+        TestService.getInstance().setup();
+        
         String slackUserId = 'em';
         String slackTeamId = 'cee';
 
@@ -96,6 +100,8 @@ private class SlashclockHelpCommandTest {
     private static void clockHelpOut() {
         
         // Given
+        TestService.getInstance().setup();
+        
         String slackUserId = 'em';
         String slackTeamId = 'cee';
 
@@ -140,6 +146,8 @@ private class SlashclockHelpCommandTest {
     private static void clockHelpReport() {
         
         // Given
+        TestService.getInstance().setup();
+        
         String slackUserId = 'em';
         String slackTeamId = 'cee';
 
@@ -184,6 +192,8 @@ private class SlashclockHelpCommandTest {
     private static void clockHelpSlice() {
         
         // Given
+        TestService.getInstance().setup();
+        
         String slackUserId = 'em';
         String slackTeamId = 'cee';
 
@@ -228,6 +238,8 @@ private class SlashclockHelpCommandTest {
     private static void clockHelpEntries() {
         
         // Given
+        TestService.getInstance().setup();
+        
         String slackUserId = 'em';
         String slackTeamId = 'cee';
 
@@ -272,6 +284,8 @@ private class SlashclockHelpCommandTest {
     private static void clockHelpStrike() {
         
         // Given
+        TestService.getInstance().setup();
+        
         String slackUserId = 'em';
         String slackTeamId = 'cee';
 
@@ -307,10 +321,5 @@ private class SlashclockHelpCommandTest {
                 'Content for */clock help strike*',
                 result.getMessage(),
                 'result.getMessage()');
-    }
-
-    @testSetup
-    private static void setup() {
-        TestService.getInstance().setup();
     }
 }

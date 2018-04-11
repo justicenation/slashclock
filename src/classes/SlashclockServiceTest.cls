@@ -10,6 +10,9 @@ private class SlashclockServiceTest {
     @isTest
     private static void clockInSuccess() {
 
+        // Test setup
+        TestService.getInstance().setup();
+
         // Given
         DateTime commandTime = DateTime.now();
         DateTime startTime = DateTimeUtil.truncate(commandTime);
@@ -62,6 +65,9 @@ private class SlashclockServiceTest {
     @isTest
     private static void clockInError() {
 
+        // Test setup
+        TestService.getInstance().setup();
+        
         // Given
         DateTime startTime = DateTime.now();
         String userId = 'flip';
@@ -113,10 +119,5 @@ private class SlashclockServiceTest {
                 'one open time entry expected');
         System.assertEquals(existingOpenEntries[0].Id, finalOpenEntries[0].Id,
                 'existing open entry expected');
-    }
-
-    @testSetup
-    private static void setup() {
-        TestService.getInstance().setup();
     }
 }
