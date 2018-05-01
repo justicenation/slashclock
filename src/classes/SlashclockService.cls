@@ -133,6 +133,33 @@ public with sharing class SlashclockService {
     }
 
     /**
+     * Given a piece of feedback, create a task with the comments in the 
+     * body of the task, assigned to the account owner for review. The
+     * task should be associated with the contact who submitted the feedback.
+     *
+     * @param message The content of the feedback
+     *
+     * @param reviewByDate
+     *            The date by which the feedback should be reviewed
+     *
+     * @return the Task ID of the created task
+     */
+    public String feedback(String message, Date reviewByDate) {
+
+        // Construct the task
+        Task newTask = new Task(
+                OwnerId = this.teamAccount.OwnerId,
+                WhoId = this.userContact.Id,
+                Subject = Label.SlashclockFeedbackTaskSubject,
+                Description = message,
+                ActivityDate = reviewByDate);
+
+        // Create the task
+        insert newTask;
+        return newTask.Id;
+    }
+
+    /**
      * Given a list of time entries, format the time entries for display as
      * a successful response to a `/clock entries` command
      *

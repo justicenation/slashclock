@@ -103,6 +103,7 @@ public with sharing class SlackService {
         List<Account> teamAccounts = [
             SELECT
                 Name,
+                OwnerId,
                 SlackAccessToken__c,
                 SlackTeamId__c,
                 Id
@@ -132,6 +133,7 @@ public with sharing class SlackService {
             List<Contact> userContacts = [
                 SELECT
                     Account.Name,
+                    Account.OwnerId,
                     Account.SlackTeamId__c,
                     Account.SlackAccessToken__c,
                     AccountId,

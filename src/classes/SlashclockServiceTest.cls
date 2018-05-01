@@ -120,4 +120,65 @@ private class SlashclockServiceTest {
         System.assertEquals(existingOpenEntries[0].Id, finalOpenEntries[0].Id,
                 'existing open entry expected');
     }
+
+    @isTest
+    private static void feedbackSuccess() {
+
+        // Test setup
+        TestService.getInstance().setup();
+        
+        // Given
+        Date threeDaysFromNow = Date.today().addDays(3);
+        String userId = 'flip';
+        String teamId = 'board';
+
+        // Find the contact for the Slack user
+        SlackService slacker = SlackService.getInstance(teamId);
+        Contact userContact = slacker.findOrCreateContact(userId);
+        Account teamAccount = [
+            SELECT
+                OwnerId,
+                Id
+            FROM Account
+            WHERE SlackTeamId__c = :teamId
+        ];
+
+        // When
+        Test.startTest();
+
+        Id feedbackTaskId =
+                SlashclockService.getInstance(
+                        userContact).feedback('test okay', threeDaysFromNow);
+
+        // Then
+        Test.stopTest();
+
+        Task feedbackTask = [
+            SELECT
+                ActivityDate,
+                Description,
+                OwnerId,
+                Subject,
+                WhoId,
+                Id
+            FROM Task
+            WHERE Id = :feedbackTaskId
+        ];
+
+        System.assertEquals(threeDaysFromNow, feedbackTask.ActivityDate,
+                Schema.SObjectType.Task.fields.ActivityDate.label);
+
+        System.assertEquals('test okay', feedbackTask.Description,
+                Schema.SObjectType.Task.fields.Description.label);
+
+        System.assertEquals(teamAccount.OwnerId, feedbackTask.OwnerId,
+                Schema.SObjectType.Task.fields.OwnerId.label);
+
+        System.assertEquals(
+                Label.SlashclockFeedbackTaskSubject, feedbackTask.Subject,
+                Schema.SObjectType.Task.fields.Subject.label);
+
+        System.assertEquals(userContact.Id, feedbackTask.WhoId,
+                Schema.SObjectType.Task.fields.WhoId.label);
+    }
 }
