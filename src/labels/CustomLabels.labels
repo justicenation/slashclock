@@ -17,6 +17,22 @@
         <value>Here&apos;s what you&apos;ve clocked over the last seven days.</value>
     </labels>
     <labels>
+        <fullName>SlashclockFeedbackNoMessage</fullName>
+        <categories>slashclock</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>SlashclockFeedbackNoMessage</shortDescription>
+        <value>Sorry... we didn&apos;t receive a message with your feedback. Can you try again?</value>
+    </labels>
+    <labels>
+        <fullName>SlashclockFeedbackSuccess</fullName>
+        <categories>slashclock</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>SlashclockFeedbackSuccess</shortDescription>
+        <value>Thank you for your feedback!</value>
+    </labels>
+    <labels>
         <fullName>SlashclockFeedbackTaskSubject</fullName>
         <categories>slashclock</categories>
         <language>en_US</language>

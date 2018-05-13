@@ -35,6 +35,8 @@
         <members>SlashclockEntriesCommandTest</members>
         <members>SlashclockErrorTest</members>
         <members>SlashclockException</members>
+        <members>SlashclockFeedbackCommand</members>
+        <members>SlashclockFeedbackCommandTest</members>
         <members>SlashclockHelpCommand</members>
         <members>SlashclockHelpCommandTest</members>
         <members>SlashclockInCommand</members>
