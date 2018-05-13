@@ -21,6 +21,7 @@ public with sharing class SlashclockUtil {
             new SlashclockSliceCommand(),
             new SlashclockEntriesCommand(),
             new SlashclockStrikeCommand(),
+            new SlashclockFeedbackCommand(),
             new SlashclockUnknownCommand()
         };
     }
