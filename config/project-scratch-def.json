@@ -1,0 +1,10 @@
+{
+    "orgName": "slashClock",
+    "edition": "Enterprise",
+    "features": [
+        "Communities"
+    ],
+    "orgPreferences" : {
+        "enabled": ["S1DesktopEnabled"]
+    }
+}
