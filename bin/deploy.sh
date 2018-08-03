@@ -26,6 +26,6 @@ fi
 mkdir -p $MDAPI_OUTPUT_DIR
 
 # Convert the source and deploy
-sfdx force:source:convert -d mdapi_output
-sfdx force:mdapi:deploy -d mdapi_output -w 5 -u "$1" \
+sfdx force:source:convert -d "$MDAPI_OUTPUT_DIR"
+sfdx force:mdapi:deploy -d "$MDAPI_OUTPUT_DIR" -w 5 -u "$1" \
         -l "RunLocalTests"
