@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>TimeEntry__c</fullName>
+    <externalId>false</externalId>
+    <label>Time Entry</label>
+    <referenceTo>TimeEntry__c</referenceTo>
+    <relationshipLabel>Time Slices</relationshipLabel>
+    <relationshipName>TimeSlices</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>

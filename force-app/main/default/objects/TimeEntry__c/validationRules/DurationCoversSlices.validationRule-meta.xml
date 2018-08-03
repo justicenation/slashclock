@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DurationCoversSlices</fullName>
+    <active>true</active>
+    <description>When a time entry is closed, make sure the duration covers all sliced time. It doesn&#39;t make sense for the total duration of time slices to exceed the time entry&#39;s duration.</description>
+    <errorConditionFormula>AND(
+  NOT( ISBLANK( EndTime__c ) ) ,
+  DurationMinutes__c &lt; NumberOfSlicedMinutes__c
+)</errorConditionFormula>
+    <errorDisplayField>EndTime__c</errorDisplayField>
+    <errorMessage>Duration cannot be shorter than the sum of all time slices</errorMessage>
+</ValidationRule>

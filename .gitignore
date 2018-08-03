@@ -18,13 +18,13 @@ archive/
 .project
 salesforce.schema
 
-# MavensMate
-config/
-deploy/
-*.zip
-
-# Sublime Text
-*.sublime*
-
 # Mac OS X
 .DS_Store
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Salesforce DX
+.mdapi/
+.sfdx/

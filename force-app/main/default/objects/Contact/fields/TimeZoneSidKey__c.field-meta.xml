@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>TimeZoneSidKey__c</fullName>
+    <defaultValue>&#39;America/New_York&#39;</defaultValue>
+    <description>Time zone in which the contact is located, used to determine cutoff dates for weekly time reports</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Time zone in which the contact is located, used to determine cutoff dates for weekly time reports</inlineHelpText>
+    <label>Time Zone</label>
+    <required>true</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetName>TimeZoneSidKey</valueSetName>
+    </valueSet>
+</CustomField>

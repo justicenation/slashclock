@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>HasVerifiedStartTimeZone__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Whether the Start Time Zone has been verified with the source of truth for the user&#39;s time zone</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Whether the Start Time Zone has been verified with the source of truth for the user&#39;s time zone</inlineHelpText>
+    <label>Verified Start Time Zone</label>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

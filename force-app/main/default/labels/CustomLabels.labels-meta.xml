@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>SlashclockEntriesNoEntries</fullName>
+        <categories>slashclock</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>SlashclockEntriesNoEntries</shortDescription>
+        <value>I couldn&#39;t find any time entries for you from the last seven days!</value>
+    </labels>
+    <labels>
+        <fullName>SlashclockEntriesOpening</fullName>
+        <categories>slashclock</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>SlashclockEntriesOpening</shortDescription>
+        <value>Here&#39;s what you&#39;ve clocked over the last seven days.</value>
+    </labels>
+    <labels>
+        <fullName>SlashclockFeedbackNoMessage</fullName>
+        <categories>slashclock</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>SlashclockFeedbackNoMessage</shortDescription>
+        <value>Sorry... we didn&#39;t receive a message with your feedback. Can you try again?</value>
+    </labels>
+    <labels>
+        <fullName>SlashclockFeedbackSuccess</fullName>
+        <categories>slashclock</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>SlashclockFeedbackSuccess</shortDescription>
+        <value>Thank you for your feedback!</value>
+    </labels>
+    <labels>
+        <fullName>SlashclockFeedbackTaskSubject</fullName>
+        <categories>slashclock</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>SlashclockFeedbackTaskSubject</shortDescription>
+        <value>Review user feedback</value>
+    </labels>
+    <labels>
+        <fullName>SlashclockReportOpening</fullName>
+        <categories>slashclock</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>SlashclockReportOpening</shortDescription>
+        <value>Below are your stats for the week.</value>
+    </labels>
+    <labels>
+        <fullName>SlashclockSliceSuccess</fullName>
+        <categories>slashclock</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>SlashclockSliceSuccess</shortDescription>
+        <value>Time sliced!</value>
+    </labels>
+    <labels>
+        <fullName>SlashclockStrikeSuccess</fullName>
+        <categories>slashclock</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>SlashclockStrikeSuccess</shortDescription>
+        <value>Entry deleted.
+{0}</value>
+    </labels>
+</CustomLabels>
