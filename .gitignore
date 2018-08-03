@@ -34,4 +34,5 @@ deploy/
 *.code-workspace
 
 # Salesforce DX
+.mdapi/
 .sfdx/
