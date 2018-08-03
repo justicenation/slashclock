@@ -1,5 +1,0 @@
-The command you typed looks a bit funny...
-
-> {0}
-
-Can you take a look and try again? Try */clock help* if you're stuck!

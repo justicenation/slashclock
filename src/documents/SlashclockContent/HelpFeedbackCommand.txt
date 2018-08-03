@@ -1,5 +1,0 @@
-Send your :thumbsup: or :thumbsdown: feedback to the product team. We love hearing from users!
-
-    /clock feedback As a ... I want ... so that ...
-
-Go ahead, give it a try. :wink:
