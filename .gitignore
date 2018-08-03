@@ -28,3 +28,6 @@ deploy/
 
 # Mac OS X
 .DS_Store
+
+# Salesforce DX
+.sfdx/
