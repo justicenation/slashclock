@@ -1,0 +1,9 @@
+*slashClock* helps you track your time, clocking in, clocking out and running reports. For more detailed help on specific commands, try the following.
+
+    /clock help *entries*
+    /clock help *feedback*
+    /clock help *in*
+    /clock help *out*
+    /clock help *report*
+    /clock help *slice*
+    /clock help *strike*

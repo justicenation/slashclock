@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Command__c</fullName>
+    <description>Exact slash command, issued by the user. For example, &quot;/clock&quot;, &quot;/join&quot;.</description>
+    <externalId>false</externalId>
+    <label>Command</label>
+    <length>40</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>
