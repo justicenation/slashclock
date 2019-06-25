@@ -29,6 +29,13 @@ public with sharing class DatabaseJockey {
     }
 
     /**
+     * @return a fresh jockey to perform DML operations
+     */
+    public static DatabaseJockey newInstance() {
+        return new DatabaseJockey();
+    }
+
+    /**
      * Modifies one or more existing sObject records, such as individual
      * accounts or contacts, in your organization’s data.
      *
@@ -40,12 +47,5 @@ public with sharing class DatabaseJockey {
      */
     public List<Database.SaveResult> upd(List<SObject> recordsToUpdate) {
         return Database.update(recordsToUpdate, true);
-    }
-
-    /**
-     * @return a fresh jockey to perform DML operations
-     */
-    public static DatabaseJockey newInstance() {
-        return new DatabaseJockey();
     }
 }
