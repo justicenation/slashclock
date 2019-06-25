@@ -53,4 +53,40 @@ private class DatabaseJockeyTest {
             'New jockey should not be the same as given jockey'
         );
     }
+
+    /**
+     * Confirm that a jockey can edit an account.
+     */
+    @isTest
+    private static void updateAccount() {
+
+        // Given
+        Account givenAcme = new Account(
+            Name = 'Acme, Inc. (TEST)'
+        );
+
+        insert givenAcme;
+
+        // When
+        Test.startTest();
+
+        Account newAcme = new Account(
+            Id = givenAcme.Id,
+            Name = 'Acme Corporation (TEST)'
+        );
+
+        DatabaseJockey jockey = DatabaseJockey.newInstance();
+
+        List<Database.SaveResult> results = jockey.upd(
+            new List<Account> { newAcme }
+        );
+
+        // Then
+        Test.stopTest();
+
+        System.assert(
+            results.get(0).isSuccess(),
+            'Update failed: ' + results.get(0).getErrors()
+        );
+    }
 }
