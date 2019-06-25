@@ -15,6 +15,20 @@ public with sharing class DatabaseJockey {
     }
     
     /**
+     * Adds an sObject, such as an individual account or contact,
+     * to your organization's data.
+     *
+     * @param recordToInsert
+     *
+     * @return result from the DML operation
+     *
+     * @see https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_methods_system_database.htm
+     */
+    public Database.SaveResult ins(SObject recordToInsert) {
+        return Database.insert(recordToInsert, true);
+    }
+    
+    /**
      * Adds one or more sObjects, such as individual accounts or contacts,
      * to your organization’s data.
      *
@@ -33,6 +47,20 @@ public with sharing class DatabaseJockey {
      */
     public static DatabaseJockey newInstance() {
         return new DatabaseJockey();
+    }
+
+    /**
+     * Modifies an existing sObject record, such as an individual account
+     * or contact, in your organization's data.
+     *
+     * @param recordToUpdate
+     *
+     * @return result from the DML operation
+     *
+     * @see https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_methods_system_database.htm
+     */
+    public Database.SaveResult upd(SObject recordToUpdate) {
+        return Database.update(recordToUpdate, true);
     }
 
     /**
