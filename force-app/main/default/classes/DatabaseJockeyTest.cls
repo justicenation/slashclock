@@ -2,6 +2,37 @@
 private class DatabaseJockeyTest {
 
     /**
+     * Confirm that a jockey can delete an account.
+     */
+    @isTest
+    private static void deleteAccount() {
+
+        // Given
+        Account givenAcme = new Account(
+            Name = 'Acme, Inc. (TEST)'
+        );
+
+        insert givenAcme;
+
+        // When
+        Test.startTest();
+
+        DatabaseJockey jockey = DatabaseJockey.newInstance();
+
+        List<Database.DeleteResult> results = jockey.del(
+            new List<Account> { givenAcme }
+        );
+
+        // Then
+        Test.stopTest();
+
+        System.assert(
+            results.get(0).isSuccess(),
+            'Delete failed: ' + results.get(0).getErrors()
+        );
+    }
+
+    /**
      * Confirm that a jockey can create an account.
      */
     @isTest
