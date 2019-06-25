@@ -1,6 +1,34 @@
 @isTest
 private class DatabaseJockeyTest {
 
+    /**
+     * Confirm that a jockey can create an account.
+     */
+    @isTest
+    private static void insertAccount() {
+
+        // Given
+        Account acme = new Account(
+            Name = 'Acme, Inc. (TEST)'
+        );
+
+        // When
+        Test.startTest();
+
+        DatabaseJockey jockey = DatabaseJockey.newInstance();
+        List<Database.SaveResult> results = jockey.ins(
+            new List<Account> { acme }
+        );
+
+        // Then
+        Test.stopTest();
+
+        System.assert(
+            results.get(0).isSuccess(),
+            'Insert failed: ' + results.get(0).getErrors()
+        );
+    }
+
     /** 
      * Confirm that `newInstance` always returns a different instance
      * of `DatabaseJockey`.
