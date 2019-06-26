@@ -18,6 +18,8 @@ private class SlackServiceTest {
         System.assertEquals(0, givenAccounts.size(),
                 'no existing accounts expected');
 
+        DatabaseJockey jockey = DatabaseJockeyMock.newInstance();
+
         // Stub the SlackApiService instance
         TestService.SlackApiServiceStubProvier slackApiStubProvider =
                 new TestService.SlackApiServiceStubProvier();
@@ -29,32 +31,24 @@ private class SlackServiceTest {
         // When
         Test.startTest();
 
-        SlackService slack = new SlackService(null, slackApi);
+        SlackService slack = new SlackService(null, slackApi, jockey);
 
         SlackApi.TeamInfoResponse teamInfo = slack.activateTeam('test');
 
         // then
         Test.stopTest();
-
-        List<Account> thenAccounts = [
-            SELECT
-                SlackAccessToken__c,
-                SlackTeamId__c,
-                Id
-            FROM Account
-        ];
-
-        System.assertEquals(1, thenAccounts.size(),
-                'one account should have been created');
+        
+        Account insertedAccount =
+                (Account)SimpleStubProvider.calls.get(0).args.get(0);
 
         System.assertEquals(
                 'test-access-token',
-                thenAccounts[0].SlackAccessToken__c,
+                insertedAccount.SlackAccessToken__c,
                 Schema.SObjectType.Account.fields.SlackAccessToken__c.label);
 
         System.assertEquals(
                 'test-team-id',
-                thenAccounts[0].SlackTeamId__c,
+                insertedAccount.SlackTeamId__c,
                 Schema.SObjectType.Account.fields.SlackTeamId__c.label);
     }
 

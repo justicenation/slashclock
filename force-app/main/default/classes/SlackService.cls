@@ -15,6 +15,8 @@ public with sharing class SlackService {
      */
     public static Map<String, SlackService> instanceMap =
             new Map<String, SlackService>();
+    
+    private DatabaseJockey jockey;
 
     private String teamId;
 
@@ -29,9 +31,19 @@ public with sharing class SlackService {
     }
 
     public SlackService(String teamId, SlackApiService slackApi) {
+        this(teamId, slackApi, DatabaseJockey.newInstance());
+    }
+
+    @TestVisible
+    private SlackService(
+        String teamId,
+        SlackApiService slackApi,
+        DatabaseJockey jockey
+    ) {
         this.contactMap = new Map<String, Contact>();
         this.teamId = teamId;
         this.slackApi = slackApi;
+        this.jockey = jockey;
     }
 
     /**
@@ -68,7 +80,7 @@ public with sharing class SlackService {
                 Name = teamId,
                 SlackTeamId__c = teamId);
 
-        insert teamAccount;
+        this.jockey.ins(teamAccount);
         return teamAccount;
     }
 
@@ -84,7 +96,7 @@ public with sharing class SlackService {
                 TimeZoneSidKey__c = DEFAULT_TIME_ZONE_SID_KEY,
                 SlackUserId__c = userId);
 
-        insert userContact;
+        this.jockey.ins(userContact);
 
         // Set the reference object for convenient reference
         userContact.Account = teamAccount;
@@ -198,7 +210,7 @@ public with sharing class SlackService {
     public Account storeAccessToken(String accessToken, String teamId) {
         Account teamAccount = this.findOrCreateAccount(teamId);
         teamAccount.SlackAccessToken__c = accessToken;
-        update teamAccount;
+        this.jockey.upd(teamAccount);
         return teamAccount;
     }
 }
